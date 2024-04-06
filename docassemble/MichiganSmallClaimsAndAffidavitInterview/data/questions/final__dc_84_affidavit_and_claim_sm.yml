@@ -2,667 +2,216 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.ALAnyState:any_state.yml
+  - docassemble.mlhframework:mlh_interview_framework.yml
 ---
 metadata:
-  title: |
-    Small Claims Affidavit and Claim
-  short title: |
-    Small Claims - Claim
+  title: Response to Motion Regarding Change of Domicile
+  short title: Response to Change of Domicile Motion
+  subtitle: Helps you write a motion asking the court to allow a change in where your child lives.
+  description: |
+    If there is a custody or parenting time order for your child, you must get the court’s approval before moving his or her domicile from Michigan.
   tags:
-    - Other
+    - "Family"
+    - "Domicile"
   authors:
-    - Zani Doumbia
-    - Rebecca Izzo
+    - Pratibha Bharti
+    - Naveen Boddeda
 ---
-mandatory: True
-comment: |
-  Global interview metadata
-variable name: interview_metadata["final__dc_84_affidavit_and_claim_sm"]
-data:
-  al_weaver_version: "1.10.0a2"
-  generated on: "2023-04-09"
-  title: >-
-    Small Claims Affidavit and Claim
-  short title: >-
-    Small Claims - Claim
-  description: |-
-    This interview helps someone in Michigan start a case in Small Claims Court.
-  allowed courts: []
-  categories:
-    - "Small Claims"
-  typical role: "plaintiff"
-  generate download screen: True
----
-code: |
-  interview_metadata['main_interview_key'] =  'final__dc_84_affidavit_and_claim_sm'
----
-code: |
-  # This controls the default country and list of states in address field questions
-  AL_DEFAULT_COUNTRY = "US"
----
-code: |
-  # This controls the default state in address field questions
-  AL_DEFAULT_STATE = "MI"
----
-code: |
-  github_repo_name =  'docassemble-FinalDc84AffidavitAndClaimSm'
----
-code: |
-  interview_short_title = "Start a case in Small Claims Court"
----
-code: |
-  al_form_type = "starts_case" 
----
-objects:
-  - users: ALPeopleList.using(ask_number=True,target_number=1)
+features:
+  labels above fields: True
 ---
 sections:
-  - review_final__dc_84_affidavit_and_claim_sm: Review your answers
+  - review_intro: "Introduction"
 ---
-#################### Interview order #####################
-comment: |
-  Controls order and branching logic for questions specific to this form
-id: interview_order_final__dc_84_affidavit_and_claim_sm
-code: |
-  # Set the allowed courts for this interview
-  allowed_courts = interview_metadata["final__dc_84_affidavit_and_claim_sm"]["allowed courts"]
-  nav.set_section("review_final__dc_84_affidavit_and_claim_sm")
-  user_role = "plaintiff"
-  user_ask_role = "plaintiff"
-  Do_you_have_a_claim_for_Small_Claims_Court
-  set_progress(10)
-  plaintiffs.gather()
-  defendants.gather()
-  set_progress(20)
-  Previously_Filed_Civil_Action
-  set_progress(30)
-  Describe_the_reasons_for_the_claim
-  set_progress(50)
-  Provide_your_personal_information
-  Tell_me_about_yourself
-  set_progress(70)
-  Provide_the_defendants_information
-  Tell_me_about_the_defendant
-  Protection_of_servicemembers_against_default_judgement
-  set_progress(90)
-  interview_order_final__dc_84_affidavit_and_claim_sm = True
----
-###################### Main order ######################
-comment: |
-  This block includes the logic for standalone interviews.
-  Delete mandatory: True to include in another interview
+id: interview_order_response_to_motion_regarding_change_of_domicile
 mandatory: True
 code: |
-  al_intro_screen
-  final__dc_84_affidavit_and_claim_sm_intro
-  interview_order_final__dc_84_affidavit_and_claim_sm
-  signature_date
-  # Store anonymous data for analytics / statistics
-  store_variables_snapshot(
-      persistent=True,
-      data={
-          "zip": showifdef("users[0].address.zip"),
-          "reached_interview_end": True,
-      },
-  )
-  final__dc_84_affidavit_and_claim_sm_download
+  nav.set_section("review_intro")
+  intro_screen
+  intro_screen_2
+  if not personal_info_checking:
+    existing_case_kickout
+  else: 
+    start_the_claim
+    if are_you_filing:
+      if is_lawyer_representing:
+        existing_case_kickout
+      else: 
+        if want_to_have_jury_trial:
+          existing_case_kickout
+        else:
+          if amount_claim:
+            if warning_for_claim == "I would like to exit.":
+              existing_case_kickout
+            else:
+              if claim_for_damages:
+                if claim_for_damages_yes:
+                  if(claims_suit_against_state and warning_for_claim):
+                    claims_suit_against_state_exit
+    else:
+      Who_are_you_filing_claim_for
+
 ---
-comment: |
-  This question is used to introduce your interview. Please customize
-id: Small_Claims_Affidavit_and_Claim
-continue button field: final__dc_84_affidavit_and_claim_sm_intro
+id: intro_screen
 question: |
-  Welcome to Michigan Legal Help’s Do-It-Yourself Small Claims Affidavit and Claim tool
+  Welcome to Michigan Legal Help’s Do-It-Yourself Small Claims Affidavit and Claim tool.
 subquestion: |
   This tool helps you prepare the forms you need to file a new Small Claims case in Michigan.
-  
-  If you have an ongoing case related to this issue in another court, gather the following information:
-  
-  1. Court of the ongoing case
-  2. Case Number
-  3. Judge Assigned to the Case
-  
-  It should take you between 5 and 10 minutes to finish answering the questions. 
+continue button field: intro_screen
 ---
-id: Do you have a claim for Small Claims Court
+id: intro_screen_2
 question: |
-  What amount of damages are you asking for?
+  Your personalized *Affidavit and Claim and a partially completed Small Claims Judgment* will be ready to print after you have answered all the questions.
 subquestion: |
-  You can continue with the case even if you're asking for more money, but you won't be able to get more than $6,500.
-  
-  If you want to sue for more than $6,500, you should file a claim in District Court. You may want to talk to a lawyer about starting a case in District Court.
+  It should take you between 15 and 30 minutes to finish answering the questions.
+continue button field: intro_screen_2
+---
+id: personal_info
+question: |
+  To protect privacy, you cannot include personal identifying information in public documents that are filed in court.
+subquestion: |
+  Personal identifying information includes:
+
+  * Date of birth
+  * Social security or national identification number
+  * Driver’s license or state identification number
+  * Passport number
+  * Financial account numbers
+
+  **If a question doesn't specifically ask for personal identifying information, do not include it in your answers.** When this information is necessary, this tool will specifically ask for the information and it will go on a separate non-public form that you will file along with the other documents. This DIY tool will automatically produce that form if you need it.
 fields:
-  - "Amount of money claimed:": amount_of_money_claimed
-    datatype: currency
-    min: 50
-    max: 6500
-continue button field: Do_you_have_a_claim_for_Small_Claims_Court
+  - Do you understand that you should not enter any personal identifying information unless this tool specifically asks for it?: personal_info_checking
+    datatype: yesnoradio
+continue button field: personal_info
 ---
-terms:
-  someone caused harm on purpose: |
-    You cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery in small claims court. You may want to talk to a lawyer about filing this claim in District or Circuit Court. This includes things such as: fraud (someone deceived you on purpose); libel or slander (someone made an untrue statement about you that hurts your reputation); assault & battery (someone threatened you and/or hurt you); malicious destruction of property (someone damaged or destroyed your property on purpose).
----
-id: Describe the reasons for the claim
+id: start_the_claim
 question: |
-  Why do you want to file a complaint in Small Claims court?
+  Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case.
+continue button field: start_the_claim
+---
+id: existing_case_kickout
+event: existing_case_kickout
+question: |
+  % if not personal_info_checking:
+  You cannot continue with this tool unless you understand that you should not enter any personal identifying information that the tool does not specifically ask for.
+  % elif is_lawyer_representing:
+  You can't have a lawyer in a small claims case.
+  % elif want_to_have_jury_trial:
+  You can't have a jury trial in a small claims case. If you want a jury trial, file a claim in District Court. You may want to talk to a lawyer about starting a case in District Court.
+  % else:
+  You have clicked the option to exit.
+  % endif
 subquestion: |
-  Please note that cases in which {someone caused harm on purpose} cannot usually be filed in small claims court. You may want to talk to a lawyer about filing this claim in District or Circuit Court.
+  % if not personal_info_checking:
+  If you made a mistake, click the **Undo** button to change your answer. Otherwise, click **Exit**. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  to search for a lawyer or legal services in your area.
+  % else:
+  If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  % endif
+
+buttons:
+  - Exit: exit
+    url: https://michiganlegalhelp.org/
+---
+id: claims_suit_against_state
+event: claims_suit_against_state_exit
+question: |
+  You can't file a Small Claims case against the state or a state agency.
+subquestion: |
+  If you want to sue the State of Michigan or a state agency, you may want to talk to a lawyer about what other options you have.
+
+  If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+buttons:
+  - Exit: exit
+    url: https://michiganlegalhelp.org/
+---
+id: are_you_filing
+question: |
+  Are you filing this claim for yourself as an individual?
 fields:
-  - "When did it happen?": date_claim_arose
-    datatype: date
-  - "What happened between you and the defendant?:": claim_reason_1
-    maxlength: 67
-    hint: e.g., Landlord is withholding my security deposit
-  - "Claim reason 2:": claim_reason_2
-    maxlength: 178
-    required: False
-  - "Claim reason 3:": claim_reason_3
-    maxlength: 178
-    required: False
-  - "Additional reasons:": claim_reason_4
-    input type: area
-    required: False
-continue button field: Describe_the_reasons_for_the_claim
+  - no label: are_you_filing
+    datatype: yesnoradio
 ---
-id: Previously Filed Civil Action
+id: is_lawyer_representing
 question: |
-  Previously Filed Civil Action
-subquestion: |
-  Have you previously filed a civil action in court related to this issue? Select each of the following that apply.
+  Is a lawyer representing you in this case?
 fields:
-  - "I have previously filed an action in court related to this claim": has_prev_action
-    datatype: yesno
-  - "I filed the previous action in Small Claims Court": has_this_court
-    datatype: yesno
-  - "I filed the previous action in another court": has_other_court
-    datatype: yesno
-  - "What is the name of that court you previously filed in?": other_court_name
-    maxlength: 74
-    show if: has_other_court
-  - "What is the case number for the previous action?": prev_action_case_number
-    maxlength: 44
-    show if: has_prev_action
-  - "What is the name of the judge that was assigned to the previous action?":  prev_action_assigned_judge
-    maxlength: 58
-    show if: has_prev_action
-  - "The previous action ongoing": has_prev_action_remains
-    datatype: yesno
-  - "The previous action is no longer pending": has_prev_action_no_longer_pending
-    datatype: yesno
-continue button field: Previously_Filed_Civil_Action
+  - no label: is_lawyer_representing
+    datatype: yesnoradio
 ---
-id: Provide your personal information
+id: want_to_have_jury_trial
 question: |
-  Provide your personal contact information as the Plaintiff
-subquestion: |
-  Enter your Address, City, State, Zip Code and Telephone Number.
+  Do you want to have a jury trial?
 fields:
-  - "Address:": plaintiff_address
-    maxlength: 86
-  - "City, State, Zip Code:": plaintiff_city_state_zip
-    maxlength: 64
-  - "Telephone Number:": plaintiff_telephone_no
-    maxlength: 26
-continue button field: Provide_your_personal_information
+  - no label: want_to_have_jury_trial
+    datatype: yesnoradio
 ---
-id: Provide the defendant s information
+id: amount_claim
 question: |
-  Provide the Defendant's contact information
-subquestion: |
-  Enter the Defendant's Address, City, State, Zip Code and Telephone Number.
+  Are you asking for more than $7,000 in the small claims suit?
 fields:
-  - "Address:": defendant_address
-    maxlength: 86
-  - "City, State, Zip Code:": defendant_city_state_zip
-    maxlength: 64
-  - "Telephone Number:": defendant_telephone_no
-    maxlength: 26
-continue button field: Provide_the_defendants_information
+  - no label: amount_claim
+    datatype: yesnoradio
 ---
-id: Protection of servicemembers against default judgements
+id: warning_for_claim
 question: |
-  Defendant's mental competency and military service history
+  Warning:
 subquestion: |
-  Select each item that applies in your case. By answering the questions below you are certifying that you have knowledge or belief about all the facts stated.
+  You can continue with the case even if you're asking for more money, but you won't be able to get more than $7,000.
+
+  If you want to sue for more than $7,000, you should file a claim in District Court. You may want to talk to a lawyer about starting a case in District Court.
 fields:
-  - "I believe the defendant is mentally competent": has_mentally_competent
-    datatype: yesno
-  - "I believe the defendant is NOT mentally competent": has_not_mentally_competent
-    datatype: yesno
-  - "I believe the defendant is 18 years or older": has_18_years_old
-    datatype: yesno
-  - "I believe the defendant under the age of 18": has_not_18_years_old
-    datatype: yesno
-  - "I do not know whether the defendant has military service": has_do_not_know_military_service
-    datatype: yesno
-  - "I know the defendant does NOT have military service": has_not_military_service
-    datatype: yesno
-  - "I know the defendant has military service": has_military_service
-    datatype: yesno
-continue button field: Protection_of_servicemembers_against_default_judgement
+  - Please select one of the following two options:: warning_for_claim
+    input type: radio
+    choices:
+      - I would like to exit.
+      - I understand that I can't get more than $7,000 in a small claims case, but I would like to continue.
 ---
-id: Tell me about youself
+id: start_the_claim
 question: |
-  Are you filing the claim for yourself?
+  Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case.
+continue button field: start_the_claim
+---
+id: claim for damages
+question: |
+  Is the claim for damages done to you by someone who harmed you on purpose?
 subquestion: |
-  Select each item that applies in your case. By answering the questions below you are certifying that you have knowledge or belief about all the facts stated.
+  This includes things such as:
+
+  * fraud (someone deceived you on purpose)
+  * libel or slander (someone made an untrue statement about you that hurts your reputation)
+  * assault & battery (someone threatened you and/or hurt you)
+  * malicious destruction of property (someone damaged or destroyed your property on purpose)
+yesnomaybe: claim_for_damages
+---
+id: claim_for_damages_yes
+question: |
+  Cases in which someone caused harm on purpose cannot usually be filed in small claims court.
+subquestion: |
+  There is an exception if the damage is because of:
+
+  * a dishonored check (a check someone wrote to you that the bank did not pay)
+  * a consumer protection violation (harm by someone's deceptive business practices)
+  * a recreational trespass (someone trespassed while engaging in a recreational activity)
+
+  Does the claim involved one of those exceptions?
 fields:
-  - "I am the plaintiff": has_i_am_the_plaintiff
-    datatype: yesno
-  - "I am the plaintiff's partner": has_i_am_partner
-    datatype: yesno
-  - "I am a full time employee": has_i_am_full_time_employee
-    datatype: yesno
-  - "The plaintif is an individual": has_plaintif_individual
-    datatype: yesno
-  - "The plaintiff is a partnership": has_plaintiff_partnership
-    datatype: yesno
-  - "The plaintiff is a corporation": has_plaintiff_corporation
-    datatype: yesno
-  - "The plaintiff is a sole proprietor": has_plaintiff_sole_proprietor
-    datatype: yesno
-  - "I would like to include additional details about the plaintiff": has_plaintiff_other
-    datatype: yesno
-  - "Additional details about the plaintiff:": plaintiff_other
-    maxlength: 32
-    required: False
-continue button field: Tell_me_about_yourself
+  - no label: claim_for_damages_yes
+    datatype: yesnoradio
 ---
-id: Tell me about the defendant
+id: claims_suit_against_state
 question: |
-  Tell us more about the defendant
-subquestion: |
-  Select each item that applies in your case. By answering the questions below you are certifying that you have knowledge or belief about all the facts stated.
+  Is this small claims suit against the State of Michigan or a state agency?
 fields:
-  - "The defendant is an individual": has_defendant_individual
-    datatype: yesno
-  - "The defendant is a partnership": has_defendant_partnership
-    datatype: yesno
-  - "The defendant a corporation": has_defendant_corporation
-    datatype: yesno
-  - "The defendant is a sole proprietor": has_defendant_sole_proprietor
-    datatype: yesno
-  - "I would like to include additional details about the defendant": has_defendant_other
-    datatype: yesno
-  - "Additional details about the defendant:": defendant_other
-    maxlength: 32
-    required: False
-continue button field: Tell_me_about_the_defendant
+  - no label: claims_suit_against_state
+    datatype: yesnoradio
 ---
-id: preview final__dc_84_affidavit_and_claim_sm
+id: Who_are_you_filing_claim_for
 question: |
-  Preview your form before you sign it
-subquestion: |
-  Here is a preview of the form you will sign on the next page.  
-  
-  ${ al_court_bundle.as_pdf(key='preview') }
-
-  Click the image to open it in a new tab. Click the "Edit answers" button
-  to edit your answers.
-
-  ${ action_button_html(url_action('review_final__dc_84_affidavit_and_claim_sm'), label='Edit answers', color='info') }
-  
-  Remember to come back to this window to continue and sign your form.
-continue button field: final__dc_84_affidavit_and_claim_sm_preview_question    
----
-code: |
-  signature_fields = ['plaintiffs[0].signature']
----
-code: |
-  state_of_michigan = DAEmpty()
----
-code: |
-  # This is a placeholder for the addresses that will be searched
-  # for matching address to court. Edit if court venue is based on 
-  # a different address than the user's
-  [user.address.address for user in users.complete_elements()]
-  addresses_to_search = [user.address for user in users.complete_elements()]
----
-id: final dc 84 affidavit and claim sm review screen
-event: review_final__dc_84_affidavit_and_claim_sm
-question: |
-  Review your answers
-review:
-  - Edit: state_of_michigan
-    button: |
-      **State of Michigan**:
-      ${ state_of_michigan }
-  - Edit: case_no
-    button: |
-      **Case Number**:
-      ${ case_no }
-  - Edit: judge_no
-    button: |
-      **Judge**:
-      ${ judge_no }
-  - Edit: court_address
-    button: |
-      **Court Address**:
-      ${ court_address }
-  - Edit: court_telephone_no
-    button: |
-      **Court Telephone Number**:
-      ${ court_telephone_no }
-  - Edit: plaintiffs.revisit
-    button: |
-      **Plaintiffs**
-
-      % for item in plaintiffs:
-        * ${ item }
-      % endfor
-  - Edit: plaintiff_address
-    button: |
-      **Plaintiff's Address**:
-      ${ plaintiff_address }
-  - Edit: plaintiff_city_state_zip
-    button: |
-      **Plaintiff's City, State, and Zip Code**:
-      ${ plaintiff_city_state_zip }
-  - Edit: plaintiff_telephone_no
-    button: |
-      **Plaintiff's Telephone Number**:
-      ${ plaintiff_telephone_no }
-  - Edit: defendants.revisit
-    button: |
-      **Defendants**
-
-      % for item in defendants:
-        * ${ item }
-      % endfor
-  - Edit: defendant_address
-    button: |
-      **Defendant's Address**:
-      ${ defendant_address }
-  - Edit: defendant_city_state_zip
-    button: |
-      **Defendant's City, State, and Zip Code**:
-      ${ defendant_city_state_zip }
-  - Edit: defendant_telephone_no
-    button: |
-      **Defendant's Telephone Number**:
-      ${ defendant_telephone_no }
-  - Edit: has_prev_action
-    button: |
-      **Has Previously Filed Action**:
-      ${ word(yesno(has_prev_action)) }
-  - Edit: other_court_name
-    button: |
-      **Other Court Name**:
-      ${ other_court_name }
-  - Edit: has_this_court
-    button: |
-      **Has this court**:
-      ${ word(yesno(has_this_court)) }
-  - Edit: has_other_court
-    button: |
-      **Has Other Court**:
-      ${ word(yesno(has_other_court)) }
-  - Edit: prev_action_case_number
-    button: |
-      **Previously Filed Action Case Number**:
-      ${ prev_action_case_number }
-  - Edit: prev_action_assigned_judge
-    button: |
-      **Previously Filed Action Assigned Judge**:
-      ${ prev_action_assigned_judge }
-  - Edit: has_prev_action_remains
-    button: |
-      **Has Previously Filed Action Remains**:
-      ${ word(yesno(has_prev_action_remains)) }
-  - Edit: has_prev_action_no_longer_pending
-    button: |
-      **Has Previously Filed Action No Longer Pending**:
-      ${ word(yesno(has_prev_action_no_longer_pending)) }
-  - Edit: has_i_am_the_plaintiff
-    button: |
-      **Has I am the plaintiff**:
-      ${ word(yesno(has_i_am_the_plaintiff)) }
-  - Edit: has_i_am_partner
-    button: |
-      **Has I am partner**:
-      ${ word(yesno(has_i_am_partner)) }
-  - Edit: has_i_am_full_time_employee
-    button: |
-      **Has I am full time employee**:
-      ${ word(yesno(has_i_am_full_time_employee)) }
-  - Edit: plaintiff_other
-    button: |
-      **Plaintiff other**:
-      ${ plaintiff_other }
-  - Edit: has_plaintif_individual
-    button: |
-      **Has plaintif individual**:
-      ${ word(yesno(has_plaintif_individual)) }
-  - Edit: has_plaintiff_partnership
-    button: |
-      **Has plaintiff partnership**:
-      ${ word(yesno(has_plaintiff_partnership)) }
-  - Edit: has_plaintiff_corporation
-    button: |
-      **Has plaintiff corporation**:
-      ${ word(yesno(has_plaintiff_corporation)) }
-  - Edit: has_plaintiff_sole_proprietor
-    button: |
-      **Has plaintiff sole proprietor**:
-      ${ word(yesno(has_plaintiff_sole_proprietor)) }
-  - Edit: has_plaintiff_other
-    button: |
-      **Has plaintiff other**:
-      ${ word(yesno(has_plaintiff_other)) }
-  - Edit: defendant_other
-    button: |
-      **Defendant other**:
-      ${ defendant_other }
-  - Edit: has_defendant_individual
-    button: |
-      **Has defendant individual**:
-      ${ word(yesno(has_defendant_individual)) }
-  - Edit: has_defendant_partnership
-    button: |
-      **Has defendant partnership**:
-      ${ word(yesno(has_defendant_partnership)) }
-  - Edit: has_defendant_corporation
-    button: |
-      **Has defendant corporation**:
-      ${ word(yesno(has_defendant_corporation)) }
-  - Edit: has_defendant_sole_proprietor
-    button: |
-      **Has defendant sole proprietor**:
-      ${ word(yesno(has_defendant_sole_proprietor)) }
-  - Edit: has_defendant_other
-    button: |
-      **Has defendant other**:
-      ${ word(yesno(has_defendant_other)) }
-  - Edit: date_claim_arose
-    button: |
-      **Date claim arose**:
-      ${ date_claim_arose }
-  - Edit: amount_of_money_claimed
-    button: |
-      **Amount of money claimed**:
-      ${ currency(amount_of_money_claimed) }
-  - Edit: claim_reason_1
-    button: |
-      **Claim reason 1**:
-      ${ claim_reason_1 }
-  - Edit: claim_reason_2
-    button: |
-      **Claim reason 2**:
-      ${ claim_reason_2 }
-  - Edit: claim_reason_3
-    button: |
-      **Claim reason 3**:
-      ${ claim_reason_3 }
-  - Edit: claim_reason_4
-    button: |
-      **Claim reason 4**:
-      > ${ single_paragraph(claim_reason_4) }
-  - Edit: has_mentally_competent
-    button: |
-      **Has mentally competent**:
-      ${ word(yesno(has_mentally_competent)) }
-  - Edit: has_not_mentally_competent
-    button: |
-      **Has not mentally competent**:
-      ${ word(yesno(has_not_mentally_competent)) }
-  - Edit: has_18_years_old
-    button: |
-      **Has 18 years old**:
-      ${ word(yesno(has_18_years_old)) }
-  - Edit: has_not_18_years_old
-    button: |
-      **Has not 18 years old**:
-      ${ word(yesno(has_not_18_years_old)) }
-  - Edit: has_do_not_know_military_service
-    button: |
-      **Has do not know military service**:
-      ${ word(yesno(has_do_not_know_military_service)) }
-  - Edit: has_not_military_service
-    button: |
-      **Has Not Military Service**:
-      ${ word(yesno(has_not_military_service)) }
-  - Edit: has_military_service
-    button: |
-      **Has Military Service**:
-      ${ word(yesno(has_military_service)) }
----
-continue button field: plaintiffs.revisit
-question: |
-  Edit plaintiffs
-subquestion: |
-  ${ plaintiffs.table }
-
-  ${ plaintiffs.add_action() }
----
-table: plaintiffs.table
-rows: plaintiffs
-columns:
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-  - Signature: |
-      row_item.signature if defined("row_item.signature") else ""
-edit:
-  - name.first
-  - signature
-confirm: True
-
----
-continue button field: defendants.revisit
-question: |
-  Edit defendants
-subquestion: |
-  ${ defendants.table }
-
-  ${ defendants.add_action() }
----
-table: defendants.table
-rows: defendants
-columns:
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-edit:
-  - name.first
-confirm: True
-
----
-id: download final__dc_84_affidavit_and_claim_sm
-event: final__dc_84_affidavit_and_claim_sm_download
-question: |
-  All done
-subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
-  
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
-
-  ${ action_button_html(url_action('review_final__dc_84_affidavit_and_claim_sm'), label='Edit answers', color='info') }
-  
-  
-  ${ al_user_bundle.download_list_html() }
-  
-
-  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
-
-progress: 100
----
-# ALDocument objects specify the metadata for each template
-objects:
-  - final__dc_84_affidavit_and_claim_sm_Post_interview_instructions: ALDocument.using(title="Instructions", filename="final__dc_84_affidavit_and_claim_sm_next_steps.docx", enabled=True, has_addendum=False)
-  - final__dc_84_affidavit_and_claim_sm_attachment: ALDocument.using(title="Small Claims Affidavit and Claim", filename="final__dc_84_affidavit_and_claim_sm", enabled=True, has_addendum=True, default_overflow_message=AL_DEFAULT_OVERFLOW_MESSAGE)
----
-# Bundles group the ALDocuments into separate downloads, such as for court and for the user
-objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[final__dc_84_affidavit_and_claim_sm_Post_interview_instructions, final__dc_84_affidavit_and_claim_sm_attachment], filename="final__dc_84_affidavit_and_claim_sm", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[final__dc_84_affidavit_and_claim_sm_attachment],  filename="final__dc_84_affidavit_and_claim_sm", title="All forms to deliver to court", enabled=True)
----
-# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
-# used for "preview" and "final" keys, and logic in the template checks the value of 
-# `i` to show or hide the user's signature
-attachment:
-  name: Post-interview-Instructions
-  filename: final__dc_84_affidavit_and_claim_sm_next_steps
-  docx template file: final__dc_84_affidavit_and_claim_sm_next_steps.docx
-  variable name: final__dc_84_affidavit_and_claim_sm_Post_interview_instructions[i]
-  skip undefined: True
----
-attachment:
-  name: final  dc 84 affidavit and claim sm
-  filename: final__dc_84_affidavit_and_claim_sm
-  variable name: final__dc_84_affidavit_and_claim_sm_attachment[i]
-  skip undefined: True
-  pdf template file: final__dc_84_affidavit_and_claim_sm.pdf
-  fields:
-      - "state_of_michigan": ${ state_of_michigan }
-      - "case_no": ${ case_no }
-      - "judge_no": ${ judge_no }
-      - "court_address": ${ court_address }
-      - "court_telephone_no": ${ court_telephone_no }
-      - "plaintiff_name": ${ plaintiffs[0] }
-      - "plaintiff_address": ${ plaintiff_address }
-      - "plaintiff_city_state_zip": ${ plaintiff_city_state_zip }
-      - "plaintiff_telephone_no": ${ plaintiff_telephone_no }
-      - "defendant_name": ${ defendants[0] }
-      - "defendant_address": ${ defendant_address }
-      - "defendant_city_state_zip": ${ defendant_city_state_zip }
-      - "defendant_telephone_no": ${ defendant_telephone_no }
-      - "has_prev_action": ${ has_prev_action }
-      - "other_court_name": ${ other_court_name }
-      - "has_this_court": ${ has_this_court }
-      - "has_other_court": ${ has_other_court }
-      - "prev_action_case_number": ${ prev_action_case_number }
-      - "prev_action_assigned_judge": ${ prev_action_assigned_judge }
-      - "has_prev_action_remains": ${ has_prev_action_remains }
-      - "has_prev_action_no_longer_pending": ${ has_prev_action_no_longer_pending }
-      - "has_i_am_the_plaintiff": ${ has_i_am_the_plaintiff }
-      - "has_i_am_partner": ${ has_i_am_partner }
-      - "has_i_am_full_time_employee": ${ has_i_am_full_time_employee }
-      - "plaintiff_other": ${ plaintiff_other }
-      - "has_plaintif_individual": ${ has_plaintif_individual }
-      - "has_plaintiff_partnership": ${ has_plaintiff_partnership }
-      - "has_plaintiff_corporation": ${ has_plaintiff_corporation }
-      - "has_plaintiff_sole_proprietor": ${ has_plaintiff_sole_proprietor }
-      - "has_plaintiff_other": ${ has_plaintiff_other }
-      - "defendant_other": ${ defendant_other }
-      - "has_defendant_individual": ${ has_defendant_individual }
-      - "has_defendant_partnership": ${ has_defendant_partnership }
-      - "has_defendant_corporation": ${ has_defendant_corporation }
-      - "has_defendant_sole_proprietor": ${ has_defendant_sole_proprietor }
-      - "has_defendant_other": ${ has_defendant_other }
-      - "date_claim_arose": ${ date_claim_arose.format() }
-      - "amount_of_money_claimed": ${ currency(amount_of_money_claimed) }
-      - "claim_reason_1": ${ claim_reason_1 }
-      - "claim_reason_2": ${ claim_reason_2 }
-      - "claim_reason_3": ${ claim_reason_3 }
-      - "claim_reason_4": ${ final__dc_84_affidavit_and_claim_sm_attachment.safe_value("claim_reason_4") }
-      - "has_mentally_competent": ${ has_mentally_competent }
-      - "has_not_mentally_competent": ${ has_not_mentally_competent }
-      - "has_18_years_old": ${ has_18_years_old }
-      - "has_not_18_years_old": ${ has_not_18_years_old }
-      - "has_do_not_know_military_service": ${ has_do_not_know_military_service }
-      - "has_not_military_service": ${ has_not_military_service }
-      - "has_military_service": ${ has_military_service }
-      - "plaintiff_signature": ${ plaintiffs[0].signature }
----
-code: |
-  final__dc_84_affidavit_and_claim_sm_attachment.overflow_fields["claim_reason_4"].overflow_trigger = 178
-  final__dc_84_affidavit_and_claim_sm_attachment.overflow_fields["claim_reason_4"].label = "Claim reason 4"
-  final__dc_84_affidavit_and_claim_sm_attachment.overflow_fields.gathered = True
+  Who are you filing this claim for?
+field: Who_are_you_filing_claim_for
+choices:
+  - Another person
+  - A sole proprietor (a business that is not a corporation, but is owned by one person)
+  - A partnership (a business that is not a corporation, but is owned by two or more people)
+  - A corporation
+  - Other
