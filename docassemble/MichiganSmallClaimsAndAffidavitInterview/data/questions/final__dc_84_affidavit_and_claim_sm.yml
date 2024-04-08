@@ -23,6 +23,10 @@ features:
 sections:
   - review_intro: "Introduction"
 ---
+objects:
+  - users: ALPeopleList.using(auto_gather=True, complete_attribute="complete", target_number=1)
+  - defendant: ALPeopleList.using(auto_gather=True, complete_attribute="complete", target_number=1)
+---
 id: interview_order_response_to_motion_regarding_change_of_domicile
 mandatory: True
 code: |
@@ -48,9 +52,53 @@ code: |
                 if claim_for_damages_yes:
                   if(claims_suit_against_state and warning_for_claim):
                     claims_suit_against_state_exit
+                  else:
+                    if claim_against_local_government:
+                      if governmental_immunity:
+                        if five_small_claims_cases:
+                          if cannot_file_case:
+                            if directly_involved_transaction_or_dispute:
+                              if need_some_more_information:
+                                users.gather()
+                                defendant_information
+                                if defendant_is == "An individual":
+                                  defendant.gather()
+                                  age_years_or_older
+                                  military_service
+                                  where_should_file_claim
+                                  Small_claims_cases_info
+                                  county_choice
+                                  if past_or_current_court_case:
+                                    if about_same_thing_as_this_case:
+                                      is_the_case_over
+                                      if case_filed_in_same_court:
+                                        know_case_number_of_the_other_case
+                                        case_number
+                                        judge
+                                        amount
+                                        reasons_for_your_claim
+                                        list_all_dates
+                                        completing_this_process_does_not_file
+                                        
+                    
     else:
       Who_are_you_filing_claim_for
 
+---
+generic object: ALIndividual
+code: |
+  x.name.first
+  x.address.address
+  x.phone_number
+  x.complete = True
+---
+# NOTE: ensures there is only 1 party on both sides
+code: |
+  users.there_is_another = False
+---
+# NOTE: ensures there is only 1 party on both sides
+code: |
+  defendant.there_is_another = False
 ---
 id: intro_screen
 question: |
@@ -202,8 +250,214 @@ id: claims_suit_against_state
 question: |
   Is this small claims suit against the State of Michigan or a state agency?
 fields:
+  - note: |
+      A state agency is a department or agency of the State of Michigan. It is not a municipality or local government.
   - no label: claims_suit_against_state
     datatype: yesnoradio
+---
+id: claim_against_local_government
+question: |
+  Is this claim against a local government?
+fields:
+  - no label: claim_against_local_government
+    datatype: yesnoradio
+---
+id: governmental_immunity
+question: |
+  With a few exceptions, the government cannot be sued for activities that are part of its work. This is called governmental immunity.
+subquestion: |
+  The exceptions include injuries caused by:
+
+  * Employee negligence when operating a government owned vehicle
+  * Failure to maintain public roads or publicly owned buildings
+  * Proprietary or profit-making activities by the government
+
+  Does the claim involve one of those exceptions?
+yesnomaybe: governmental_immunity
+---
+id: five_small_claims_cases
+question: |
+  Have you filed five small claims cases in the past week?
+fields:
+  - no label: five_small_claims_cases
+    datatype: yesnoradio
+---
+id: cannot_file_case
+question: |
+  You cannot file this case now.
+subquestion: |
+  You can only file five cases a week in Small Claims Court. You can continue this interview if you wait at least a week before filing this case.
+fields:
+  - Will you wait a week before filing this Affidavit and Claim?: cannot_file_case
+    datatype: yesnoradio
+---
+id: directly_involved_transaction_or_dispute
+question: |
+  Were you directly involved in the transaction or dispute of this case?
+fields:
+  - no label: directly_involved_transaction_or_dispute
+    datatype: yesnoradio
+help: |
+  Sometimes a contract benefits someone who is not part of the agreement.
+
+  That person is called a "third-party beneficiary." If you buy a car for your adult child, you are a party to the sales agreement. Your child is the "third-party beneficiary." You can sue the person who sold you the car in Small Claims Court based on the sales contract, but your child cannot.
+
+  Sometimes, the right to collect a debt is sold or transferred. Creditors do this when they sell debts to collection agencies. A collection agency is not a party to the original transaction, and cannot sue a debtor in Small Claims Court.
+---
+id: need_some_more_information
+question: |
+  We need some more information about you.
+continue button field: need_some_more_information
+---
+id: defendant_information
+question: |
+  Next, we need information about the defendant. The defendant is the person or organization you claim owes you money.
+continue button field: defendant_information
+---
+id: defendant_is
+question: |
+  Is the defendant:
+fields:
+  - Please select one of the following two options:: defendant_is
+    input type: radio
+    choices:
+      - An individual
+      - A partnership
+      - A corporation
+      - A sole proprietor
+      - Other
+help: |
+  An "other" type of defendant could be a: county, city, village, township, or local or intermediate school district.
+---
+id: mentally_competent
+question: |
+  As far as you know, is ${ defendant[0].name } mentally competent?
+fields:
+  - no label: mentally_competent
+    datatype: yesnoradio
+---
+id: age_years_or_older
+question: |
+  As far as you know, is ${ defendant[0].name } 18 years or older?
+fields:
+  - no label: age_years_or_older
+    datatype: yesnoradio
+---
+id: military_service
+question: |
+  As far as you know, is ${ defendant[0].name } in military service?
+yesnomaybe: military_service
+---
+id: where_should_file_claim
+question: |
+  The next step is to figure out where you should file your claim.
+subquestion: |
+  You must file your claim in the right court, or your case may be dismissed. If your case is dismissed you will lose you filing fee and have to file again in the right court.
+continue button field: where_should_file_claim
+---
+id: Small_claims_cases_info
+question: |
+  Small claims cases must be filed either where the person or business you are suing is located.
+subquestion: |
+  (for example, where the defendant resides or is employed), or where the cause of action arose (for example, where the transaction or dispute took place).
+continue button field: Small_claims_cases_info
+---
+id: past_or_current_court_case
+question: |
+  Is there a past or current court case between you and ${ defendant[0].name }?
+fields:
+  - no label: past_or_current_court_case
+    datatype: yesnoradio
+---
+id: about_same_thing_as_this_case
+question: |
+  Was it about the same thing as this case?
+fields:
+  - no label: about_same_thing_as_this_case
+    datatype: yesnoradio
+---
+id: is_the_case_over
+question: |
+  Is the case over?
+fields:
+  - no label: is_the_case_over
+    datatype: yesnoradio
+---
+id: case_filed_in_same_court
+question: |
+  Was that case filed in the same court as this case?
+fields:
+  - no label: case_filed_in_same_court
+    datatype: yesnoradio
+  - note: |
+      If both cases were filed in the same District Court for the same county, click Yes. Otherwise, click No.
+---
+id: know_case_number_of_the_other_case
+question: |
+  Do you know the case number of that other case?
+fields:
+  - no label: know_case_number_of_the_other_case
+    datatype: yesnoradio
+---
+id: case_number
+question: |
+  What was the case number?
+fields:
+  - no label: case_number
+---
+id: case_number
+question: |
+  If you know the name of the judge for the previous case, enter it here. Otherwise, just click Continue.
+subquestion: |
+  *Do not include the word "judge."*
+fields:
+  - Hon.: judge
+    required: False
+---
+id: amount
+question: |
+  How much money are you asking for?
+fields:
+  - no label: amount
+    datatype: currency
+help: |
+  **What if I want to sue for more than $7,000?**
+
+  You can only get up to $7,000 in Small Claims Court. You can continue with your case even if you're asking for more money, but you won't be able to get more than $7,000.
+
+  If you want to sue for more than $7,000, you should file a claim in District Court.
+
+  You may want to talk to a lawyer about starting a case in District Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  on Michigan Legal Help to find a lawyer or a legal services office near you.
+---
+id: reasons_for_your_claim
+question: |
+  What are the reasons for your claim?
+subquestion: |
+  Briefly and accurately describe what you think happened, what you think should happen in court, and why. Write in complete sentences. What you type will appear on the Affidavit exactly as you write it.
+
+  Include information such as:
+
+  * if you and the defendant had an agreement, what the agreement was;
+  * if you have anything in writing, state that and attach a copy;
+  * what happened that caused the dispute;
+  * when and where the dispute happened.
+fields:
+  - no label: reasons_for_your_claim
+    datatype: area
+---
+id: list_all_dates
+question: |
+  When did this happen? List all dates.
+fields:
+  - no label: list_all_dates
+    datatype: area
+---
+id: completing_this_process_does_not_file
+question: |
+  Completing this process does not file your forms with the court.
+subquestion: |
+  You need to file them at court in person, by mail, or by e-filing. If you are e-filing, you must use [MiFILE](https://mifile.courts.michigan.gov/) . Read the instructions that you will get with your forms for more information.
+continue button field: completing_this_process_does_not_file
 ---
 id: Who_are_you_filing_claim_for
 question: |
