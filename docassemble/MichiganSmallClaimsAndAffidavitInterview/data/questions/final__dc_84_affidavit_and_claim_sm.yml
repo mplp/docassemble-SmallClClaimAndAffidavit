@@ -15,7 +15,6 @@ metadata:
     - "Domicile"
   authors:
     - Pratibha Bharti
-    - Naveen Boddeda
 ---
 features:
   labels above fields: True
@@ -58,8 +57,10 @@ code: |
     else:
       if Who_are_you_filing_claim_for == "Another person":
         Who_you_filing_claim
-        has_court_appointed_you_as
-        lawyer_representing_block_condition()
+        if has_court_appointed_you_as:
+          lawyer_representing_block_condition()
+        else:
+          has_court_appointed_you_as_kick_out
                               
       elif Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" or Who_are_you_filing_claim_for == "A corporation": 
         filing_claim_block_condition()
@@ -68,127 +69,6 @@ code: |
         filing_claim_block_condition()
 ---
 code: |
-  def filing_claim_block_condition():
-        if who_are_you: 
-          name_of_business
-          if is_lawyer_representing:
-            existing_case_kickout
-          else:
-            if want_to_have_jury_trial:
-              existing_case_kickout
-            else:
-              if amount_claim:
-                if warning_for_claim == "I would like to exit.":
-                  existing_case_kickout
-                else:
-                  if claim_for_damages:
-                    if claim_for_damages_yes:
-                      if claims_suit_against_state:
-                        claims_kick_out
-                      else:
-                        if claim_against_local_government:
-                          if governmental_immunity:
-                            if five_small_claims_cases:
-                              if cannot_file_case:
-                                if directly_involved_transaction_or_dispute:
-                                  if need_some_more_information:
-                                    users.gather()
-                                    nav.set_section("defendant_information")
-                                    defendant_information
-                                    if defendant_is == "Other":
-                                      type_of_entity
-                                      defendants[0].address.address
-                                    if defendant_is == "An individual":
-                                      defendants.gather()
-                                    else:
-                                      defendant_name
-                                      defendants[0].address.address
-                                    age_years_or_older
-                                    military_service
-                                    nav.set_section("claim_information")
-                                    where_should_file_claim
-                                    Small_claims_cases_info
-                                    county_choice
-                                    if past_or_current_court_case:
-                                      if about_same_thing_as_this_case:
-                                        is_the_case_over
-                                        if not case_filed_in_same_court:
-                                          what_court_was_case_in
-                                        know_case_number_of_the_other_case
-                                        case_number
-                                        judge
-                                    amount
-                                    reasons_for_your_claim
-                                    list_all_dates
-                                    nav.set_section("conclusion")
-                                    efile_notice
-                                    congratulations_you_have_finished_all_questions
-                                else:
-                                  claims_kick_out
-                              else:
-                                command('leave', url='https://michiganlegalhelp.org/', new_window=True)
-        else:
-          if fulltime_salaried_employee_of_partnership:
-            name_of_business
-            if is_lawyer_representing:
-              existing_case_kickout
-            else:
-              if want_to_have_jury_trial:
-                existing_case_kickout
-              else:
-                if amount_claim:
-                  if warning_for_claim == "I would like to exit.":
-                    existing_case_kickout
-                  else:
-                    if claim_for_damages:
-                      if claim_for_damages_yes:
-                        if claims_suit_against_state:
-                          claims_kick_out
-                        else:
-                          if claim_against_local_government:
-                            if governmental_immunity:
-                              if five_small_claims_cases:
-                                if cannot_file_case:
-                                  if directly_involved_transaction_or_dispute:
-                                    if need_some_more_information:
-                                      users.gather()
-                                      nav.set_section("defendant_information")
-                                      defendant_information
-                                      if defendant_is == "Other":
-                                        type_of_entity
-                                        defendants[0].address.address
-                                      if defendant_is == "An individual":
-                                        defendants.gather()
-                                      else:
-                                        defendant_name
-                                        defendants[0].address.address
-                                      age_years_or_older
-                                      military_service
-                                      nav.set_section("claim_information")
-                                      where_should_file_claim
-                                      Small_claims_cases_info
-                                      county_choice
-                                      if past_or_current_court_case:
-                                        if about_same_thing_as_this_case:
-                                          is_the_case_over
-                                          if not case_filed_in_same_court:
-                                            what_court_was_case_in
-                                          know_case_number_of_the_other_case
-                                          case_number
-                                          judge
-                                      amount
-                                      reasons_for_your_claim
-                                      list_all_dates
-                                      nav.set_section("conclusion")
-                                      efile_notice
-                                      congratulations_you_have_finished_all_questions
-                                  else:
-                                    claims_kick_out
-                                else:
-                                  command('leave', url='https://michiganlegalhelp.org/', new_window=True)
-          else:
-            fulltime_salaried_employee_of_partnership_kick_out
-            
   def lawyer_representing_block_condition():
       if is_lawyer_representing:
         existing_case_kickout
@@ -196,6 +76,16 @@ code: |
         if want_to_have_jury_trial:
           existing_case_kickout
         else:
+          if not amount_claim:
+            if claim_for_damages:
+              if not claim_for_damages_yes:
+                claim_for_damages_yes_kickout
+              else:
+                claims_suit_block_condition()
+            elif claim_for_damages == None:
+              claim_for_damages_dont_know
+            if not claim_for_damages:
+              claims_suit_block_condition()
           if amount_claim:
             if warning_for_claim == "I would like to exit.":
               existing_case_kickout
@@ -207,91 +97,140 @@ code: |
                   else:
                     if claim_against_local_government:
                       if governmental_immunity:
+                        if not five_small_claims_cases:
+                          directly_involved_code_block()
                         if five_small_claims_cases:
                           if cannot_file_case:
-                            if directly_involved_transaction_or_dispute:
-                              if need_some_more_information:
-                                users.gather()
-                                nav.set_section("defendant_information")
-                                defendant_information
-                                if defendant_is == "Other":
-                                  type_of_entity
-                                  defendants[0].address.address
-                                if defendant_is == "An individual":
-                                  defendants.gather()
-                                else:
-                                  defendant_name
-                                  defendants[0].address.address
-                                age_years_or_older
-                                military_service
-                                nav.set_section("claim_information")
-                                where_should_file_claim
-                                Small_claims_cases_info
-                                county_choice
-                                if past_or_current_court_case:
-                                  if about_same_thing_as_this_case:
-                                    is_the_case_over
-                                    if not case_filed_in_same_court:
-                                      what_court_was_case_in
-                                    know_case_number_of_the_other_case
-                                    case_number
-                                    judge
-                                amount
-                                reasons_for_your_claim
-                                list_all_dates
-                                nav.set_section("conclusion")
-                                efile_notice
-                                congratulations_you_have_finished_all_questions
-                            else:
-                              claims_kick_out
+                            directly_involved_code_block()
                           else:
                             command('leave', url='https://michiganlegalhelp.org/', new_window=True)
-                            
+
+  def filing_claim_block_condition():
+        if who_are_you: 
+          name_of_business
+          if is_lawyer_representing:
+            existing_case_kickout
+          else:
+            if want_to_have_jury_trial:
+              existing_case_kickout
+            else:
+              if not amount_claim:
+                if claim_for_damages:
+                  if not claim_for_damages_yes:
+                    claim_for_damages_yes_kickout
+                  else:
+                    claims_suit_block_condition()
+                elif claim_for_damages == None:
+                  claim_for_damages_dont_know
+                if not claim_for_damages:
+                  claims_suit_block_condition()
+              if amount_claim:
+                if warning_for_claim == "I would like to exit.":
+                  existing_case_kickout
+                else:
+                  if claim_for_damages:
+                    if claim_for_damages_yes:
+                      if claims_suit_against_state:
+                        claims_kick_out
+                      else:
+                        if claim_against_local_government:
+                          if governmental_immunity:
+                            if not five_small_claims_cases:
+                              directly_involved_code_block()
+                            if five_small_claims_cases:
+                              if cannot_file_case:
+                                directly_involved_code_block()
+                              else:
+                                command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+        else:
+          if fulltime_salaried_employee_of_partnership:
+            name_of_business
+            if is_lawyer_representing:
+              existing_case_kickout
+            else:
+              if want_to_have_jury_trial:
+                existing_case_kickout
+              else:
+                if not amount_claim:
+                  if claim_for_damages:
+                    if not claim_for_damages_yes:
+                      claim_for_damages_yes_kickout
+                    else:
+                      claims_suit_block_condition()
+                  elif claim_for_damages == None:
+                    claim_for_damages_dont_know
+                  if not claim_for_damages:
+                    claims_suit_block_condition()
+                if amount_claim:
+                  if warning_for_claim == "I would like to exit.":
+                    existing_case_kickout
+                  else:
+                    if claim_for_damages:
+                      if claim_for_damages_yes:
+                        if claims_suit_against_state:
+                          claims_kick_out
+                        else:
+                          if claim_against_local_government:
+                            if governmental_immunity:
+                              if not five_small_claims_cases:
+                                directly_involved_code_block()
+                              if five_small_claims_cases:
+                                if cannot_file_case:
+                                  directly_involved_code_block()
+                                else:
+                                  command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+          else:
+            fulltime_salaried_employee_of_partnership_kick_out
+
   def claims_suit_block_condition():
                       if claims_suit_against_state:
                         claims_kick_out
                       else:
                         if claim_against_local_government:
                           if governmental_immunity:
+                            if not five_small_claims_cases:
+                              directly_involved_code_block()
                             if five_small_claims_cases:
                               if cannot_file_case:
-                                if directly_involved_transaction_or_dispute:
-                                  if need_some_more_information:
-                                    users.gather()
-                                    nav.set_section("defendant_information")
-                                    defendant_information
-                                    if defendant_is == "Other":
-                                      type_of_entity
-                                      defendants[0].address.address
-                                    if defendant_is == "An individual":
-                                      defendants.gather()
-                                    else:
-                                      defendant_name
-                                      defendants[0].address.address
-                                    age_years_or_older
-                                    military_service
-                                    nav.set_section("claim_information")
-                                    where_should_file_claim
-                                    Small_claims_cases_info
-                                    county_choice
-                                    if past_or_current_court_case:
-                                      if about_same_thing_as_this_case:
-                                        is_the_case_over
-                                        if not case_filed_in_same_court:
-                                          what_court_was_case_in
-                                        know_case_number_of_the_other_case
-                                        case_number
-                                        judge
-                                    amount
-                                    reasons_for_your_claim
-                                    list_all_dates
-                                    nav.set_section("conclusion")
-                                    efile_notice
-                                    congratulations_you_have_finished_all_questions
-                                else:
-                                  claims_kick_out
+                                directly_involved_code_block()
                               else:
                                 command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+  def directly_involved_code_block():
+    if directly_involved_transaction_or_dispute:
+      if need_some_more_information:
+        users.gather()
+        nav.set_section("defendant_information")
+        defendant_information
+        if defendant_is == "Other":
+          type_of_entity
+          defendants[0].address.address
+        if defendant_is == "An individual":
+          defendants.gather()
+        else:
+          defendant_name
+          defendants[0].address.address
+        age_years_or_older
+        military_service
+        nav.set_section("claim_information")
+        where_should_file_claim
+        Small_claims_cases_info
+        county_choice
+        if past_or_current_court_case:
+          if about_same_thing_as_this_case:
+            is_the_case_over
+            if not case_filed_in_same_court:
+              what_court_was_case_in
+            know_case_number_of_the_other_case
+            case_number
+            judge
+        amount
+        reasons_for_your_claim
+        list_all_dates
+        nav.set_section("conclusion")
+        efile_notice
+        congratulations_you_have_finished_all_questions
+    else:
+      claims_kick_out
 ---
 generic object: ALIndividual
 code: |
@@ -318,7 +257,8 @@ code: |
     text_in_para = Who_you_filing.name 
   elif not are_you_filing and (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" or Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other"):  
     text_in_para = name_of_business
-    
+---
+code: |
   if defendant_is == "An individual":
     defendants_name_text = defendants[0].name
   else:
@@ -435,12 +375,32 @@ buttons:
 id: fulltime_salaried_employee_of_partnership_claims_kick_out
 event: fulltime_salaried_employee_of_partnership_kick_out
 question: |
-  % if fulltime_salaried_employee_of_partnership:
+  % if not fulltime_salaried_employee_of_partnership:
   You cannot file an Affidavit and Claim to start this Small Claims case because you are not the owner or a full-time salaried employee of the owner who knows the facts of the claim.
   % else:
   You cannot file an Affidavit and Claim to start a Small Claims case because you are not one of the partners or a full-time salaried employee of the partnership who knows the facts of the claim.
   % endif
 subquestion: |
+  If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+buttons:
+  - Exit: exit
+    url: https://michiganlegalhelp.org/
+---
+id: has_court_appointed_you_as_kick_out
+event: has_court_appointed_you_as_kick_out
+question: |
+  % if not has_court_appointed_you_as:
+  You cannot file an Affidavit and Claim to start a Small Claims case for this person. 
+  % elif not fulltime_salaried_employee_of_partnership:
+  You cannot file an Affidavit and Claim to start this Small Claims case because you are not the owner or a full-time salaried employee of the owner who knows the facts of the claim.
+  % else:
+  You cannot file an Affidavit and Claim to start a Small Claims case because you are not one of the partners or a full-time salaried employee of the partnership who knows the facts of the claim.
+  % endif
+subquestion: |
+  % if not has_court_appointed_you_as:
+  If you are filing for another individual, you must be the individual's guardian, conservator, or next friend.
+  % endif
+
   If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
