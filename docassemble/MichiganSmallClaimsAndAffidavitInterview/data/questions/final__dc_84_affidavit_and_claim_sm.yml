@@ -15,6 +15,7 @@ metadata:
     - "Domicile"
   authors:
     - Pratibha Bharti
+    - Naveen Boddeda
 ---
 features:
   labels above fields: True
@@ -52,7 +53,8 @@ code: |
             claims_suit_block_condition()
         elif claim_for_damages == None:
           claim_for_damages_dont_know
-        if not claim_for_damages:
+          proceed_with_interview()
+        else:
           claims_suit_block_condition()
     else:
       if Who_are_you_filing_claim_for == "Another person":
@@ -67,6 +69,8 @@ code: |
       else:
         elected_or_appointed
         filing_claim_block_condition()
+
+  claim_and_affidavit_download
 ---
 code: |
   def lawyer_representing_block_condition():
@@ -84,7 +88,8 @@ code: |
                 claims_suit_block_condition()
             elif claim_for_damages == None:
               claim_for_damages_dont_know
-            if not claim_for_damages:
+              proceed_with_interview()
+            else:
               claims_suit_block_condition()
           if amount_claim:
             if warning_for_claim == "I would like to exit.":
@@ -104,7 +109,32 @@ code: |
                             directly_involved_code_block()
                           else:
                             command('leave', url='https://michiganlegalhelp.org/', new_window=True)
-
+                      elif governmental_immunity == False:
+                        governmental_immunity_no
+                      else:
+                        governmental_immunity_dont_know
+                        if not five_small_claims_cases:
+                          directly_involved_code_block()
+                        if five_small_claims_cases:
+                          if cannot_file_case:
+                            directly_involved_code_block()
+                          else:
+                            command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+                    else:
+                      if five_small_claims_cases:
+                        if cannot_file_case:
+                          directly_involved_code_block()
+                        else:
+                          command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+                      else:
+                        directly_involved_code_block()
+                else:
+                  claim_for_damages_yes_kickout 
+              elif claim_for_damages == None:
+                claim_for_damages_dont_know
+                proceed_with_interview()
+              else:
+                claims_suit_block_condition()
   def filing_claim_block_condition():
         if who_are_you: 
           name_of_business
@@ -122,7 +152,8 @@ code: |
                     claims_suit_block_condition()
                 elif claim_for_damages == None:
                   claim_for_damages_dont_know
-                if not claim_for_damages:
+                  proceed_with_interview()
+                else:
                   claims_suit_block_condition()
               if amount_claim:
                 if warning_for_claim == "I would like to exit.":
@@ -142,6 +173,33 @@ code: |
                                 directly_involved_code_block()
                               else:
                                 command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+                          elif governmental_immunity == False:
+                            governmental_immunity_no      
+                          else:
+                            governmental_immunity_dont_know
+                            if not five_small_claims_cases:
+                              directly_involved_code_block()
+                            if five_small_claims_cases:
+                              if cannot_file_case:
+                                directly_involved_code_block()
+                              else:
+                                command('leave', url='https://michiganlegalhelp.org/', new_window=True)    
+                        else:
+                          if five_small_claims_cases:
+                            if cannot_file_case:
+                              directly_involved_code_block()
+                            else:
+                              command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+                          else:
+                            directly_involved_code_block()
+                    else:
+                      claim_for_damages_yes_kickout
+                
+                  elif claim_for_damages == None:
+                    claim_for_damages_dont_know
+                    proceed_with_interview()
+                  else:
+                    claims_suit_block_condition()
         else:
           if fulltime_salaried_employee_of_partnership:
             name_of_business
@@ -159,7 +217,8 @@ code: |
                       claims_suit_block_condition()
                   elif claim_for_damages == None:
                     claim_for_damages_dont_know
-                  if not claim_for_damages:
+                    proceed_with_interview()
+                  else:
                     claims_suit_block_condition()
                 if amount_claim:
                   if warning_for_claim == "I would like to exit.":
@@ -179,22 +238,69 @@ code: |
                                   directly_involved_code_block()
                                 else:
                                   command('leave', url='https://michiganlegalhelp.org/', new_window=True)
-          else:
-            fulltime_salaried_employee_of_partnership_kick_out
-
-  def claims_suit_block_condition():
-                      if claims_suit_against_state:
-                        claims_kick_out
-                      else:
-                        if claim_against_local_government:
-                          if governmental_immunity:
-                            if not five_small_claims_cases:
-                              directly_involved_code_block()
+                            elif governmental_immunity == False:
+                              governmental_immunity_no    
+                            else:
+                              governmental_immunity_dont_know
+                              if not five_small_claims_cases:
+                                directly_involved_code_block()
+                              if five_small_claims_cases:
+                                if cannot_file_case:
+                                  directly_involved_code_block()
+                                else:
+                                  command('leave', url='https://michiganlegalhelp.org/', new_window=True)      
+                          else:
                             if five_small_claims_cases:
                               if cannot_file_case:
                                 directly_involved_code_block()
                               else:
                                 command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+                            else:
+                              directly_involved_code_block()        
+                      else:
+                        claim_for_damages_yes_kickout
+                    
+                    elif claim_for_damages == None:
+                      claim_for_damages_dont_know
+                      proceed_with_interview()
+                    else:
+                      claims_suit_block_condition()    
+          else:
+            fulltime_salaried_employee_of_partnership_kick_out
+
+  def claims_suit_block_condition():
+    if claims_suit_against_state:
+      claims_kick_out
+    else:
+      if claim_against_local_government:
+        if governmental_immunity:
+          if not five_small_claims_cases:
+            directly_involved_code_block()
+          if five_small_claims_cases:
+            if cannot_file_case:
+              directly_involved_code_block()
+            else:
+              command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+        elif governmental_immunity == False:
+          governmental_immunity_no
+        else:
+          governmental_immunity_dont_know
+          if not five_small_claims_cases:
+            directly_involved_code_block()
+          if five_small_claims_cases:
+            if cannot_file_case:
+              directly_involved_code_block()
+            else:
+              command('leave', url='https://michiganlegalhelp.org/', new_window=True)      
+      else:
+        if five_small_claims_cases:
+          if cannot_file_case:
+            directly_involved_code_block()
+          else:
+            command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+        else:
+          directly_involved_code_block()
+                          
   def directly_involved_code_block():
     if directly_involved_transaction_or_dispute:
       if need_some_more_information:
@@ -209,6 +315,7 @@ code: |
         else:
           defendant_name
           defendants[0].address.address
+        is_mentally_competent
         age_years_or_older
         military_service
         nav.set_section("claim_information")
@@ -220,8 +327,8 @@ code: |
             is_the_case_over
             if not case_filed_in_same_court:
               what_court_was_case_in
-            know_case_number_of_the_other_case
-            case_number
+            if know_case_number_of_the_other_case:
+              case_number
             judge
         amount
         reasons_for_your_claim
@@ -229,8 +336,43 @@ code: |
         nav.set_section("conclusion")
         efile_notice
         congratulations_you_have_finished_all_questions
+        claim_and_affidavit_download
     else:
       claims_kick_out
+      
+      
+  def proceed_with_interview():
+    if claims_suit_against_state:
+      claims_kick_out
+    else:
+      if claim_against_local_government:
+        if governmental_immunity:
+          if not five_small_claims_cases:
+            directly_involved_code_block()
+          if five_small_claims_cases:
+            if cannot_file_case:
+              directly_involved_code_block()
+            else:
+              command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+        elif governmental_immunity == False:
+          governmental_immunity_no
+        else:
+          governmental_immunity_dont_know
+          if not five_small_claims_cases:
+            directly_involved_code_block()
+          if five_small_claims_cases:
+            if cannot_file_case:
+              directly_involved_code_block()
+            else:
+              command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+      else:
+        if five_small_claims_cases:
+          if cannot_file_case:
+            directly_involved_code_block()
+          else:
+            command('leave', url='https://michiganlegalhelp.org/', new_window=True)
+        else:
+          directly_involved_code_block()
 ---
 generic object: ALIndividual
 code: |
@@ -267,6 +409,7 @@ code: |
 code: |
   def common_interview_flow():
     defendants.gather()
+    is_mentally_competent
     age_years_or_older
     military_service
     nav.set_section("claim_information")
@@ -278,8 +421,8 @@ code: |
         is_the_case_over
         if not case_filed_in_same_court:
           what_court_was_case_in
-        know_case_number_of_the_other_case
-        case_number
+        if know_case_number_of_the_other_case:
+          case_number
         judge
     amount
     reasons_for_your_claim
@@ -287,6 +430,7 @@ code: |
     nav.set_section("conclusion")
     efile_notice
     congratulations_you_have_finished_all_questions
+    claim_and_affidavit_download
 ---
 id: intro_screen
 question: |
@@ -542,6 +686,31 @@ subquestion: |
   Does the claim involve one of those exceptions?
 yesnomaybe: governmental_immunity
 ---
+id: governmental_immunity_no
+question: |
+  You cannot sue a local government if it has governmental immunity.
+subquestion: |
+  You may want to talk to a lawyer about starting this case in District or Circuit court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  on Michigan Legal Help to find a lawyer or a legal services office in your area.
+
+  If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the Exit button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/) .
+continue button field: governmental_immunity_no
+buttons:
+  - Exit: exit
+    url: https://michiganlegalhelp.org/
+---
+id: governmental_immunity_dont_know
+question: |
+  If you are not sure whether your case involves governmental immunity, you may want talk to a lawyer.
+subquestion: |
+  If your case involves governmental immunity, it will be dismissed and there will be no refund of the money paid to file this Affidavit and Claim or any related costs.
+
+  Would you like to proceed with this interview and finish your Affidavit and Claim, or would you like to exit this interview??
+buttons:
+  - Proceed with Interview: continue
+  - Exit this Interview: exit
+    url: https://michiganlegalhelp.org/
+continue button field: governmental_immunity_dont_know
+---
 id: five_small_claims_cases
 question: |
   Have you filed five small claims cases in the past week?
@@ -601,6 +770,13 @@ question: |
   As far as you know, is ${ defendants_name_text } mentally competent?
 fields:
   - no label: mentally_competent
+    datatype: yesnoradio
+---
+id: is_mentally_competent
+question: |
+  As far as you know, is ${ defendants_name_text } mentally competent?
+fields:
+  - no label: is_mentally_competent
     datatype: yesnoradio
 ---
 id: age_years_or_older
@@ -858,9 +1034,103 @@ fields:
   - no label: fulltime_salaried_employee_of_partnership
     datatype: yesnoradio
 ---
+code: |
+  if military_service:
+    has_military_service = True
+    has_not_military_service = False
+    has_do_not_know_military_service = False
+  elif military_service is None:
+    has_military_service = False
+    has_not_military_service = False
+    has_do_not_know_military_service = True
+  else:
+    has_military_service = False
+    has_not_military_service = True
+    has_do_not_know_military_service = False
+---
 id: elected_or_appointed
 question: |
   Are you an elected or appointed officer or employee of the county, city, village, township, or local or intermediate school district who has knowledge of the facts of the claim?
 fields:
   - no label: elected_or_appointed
     datatype: yesnoradio
+---
+objects:
+  - rmrcd_main: ALDocument.using(title="Claim and Affidavit", filename="final__dc_84_affidavit_and_claim_sm.pdf", enabled=True, has_addendum=False, default_overflow_message=" (Continued in Attachment)")
+---
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[rmrcd_main], filename="final__dc_84_affidavit_and_claim_sm.pdf", title="All forms to download for your records", enabled=True)
+---
+id: download screen
+event: claim_and_affidavit_download
+question: |
+  Thank you  Your form is ready to download and deliver.
+
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_form'), label='Edit answers', color='info') }
+
+  ${ al_user_bundle.download_list_html() }
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+---
+attachments:
+  name: foc_116
+  filename: foc_116
+  variable name: rmrcd_main[i]
+  editable: False
+  pdf template file: final__dc_84_affidavit_and_claim_sm.pdf
+  fields:
+    - "state_of_michigan": ${county_choice}
+    - "case_no": ${case_number if know_case_number_of_the_other_case else ''}
+    - "judge_no": ${judge if judge!= '' else ''}
+    - "court_telephone_no": something
+    - "court_address": something
+    - "plaintiff_name": ${users[0].name}
+    - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
+    - "plaintiff_telephone_no": ${users[0].phone_number}
+    - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
+    - "defendant_name": ${ defendant_name }
+    - "defendant_address": ${defendants[0].address.address+" "+defendants[0].address.unit}
+    - "defendant_telephone_no": ${defendants[0].phone_number}
+    - "defendant_city_state_zip": ${defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip}
+    - "has_prev_action": ${past_or_current_court_case}
+    - "has_this_court": ${case_filed_in_same_court if (past_or_current_court_case and about_same_thing_as_this_case ) else False}
+    - "other_court_name": ${what_court_was_case_in if (past_or_current_court_case and case_filed_in_same_court == False) else ''}
+    - "has_other_court": ${True if (past_or_current_court_case and case_filed_in_same_court == False) else False}
+    - "prev_action_assigned_judge": ${judge}
+    - "prev_action_case_number": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
+    - "has_prev_action_remains": ${True if(past_or_current_court_case and is_the_case_over==False) else False}
+    - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and is_the_case_over) else False}
+    - "has_i_am_full_time_employee": ${True if ((are_you_filing) and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and fulltime_salaried_employee_of_partnership) else False}
+    - "has_i_am_the_plaintiff": ${True if(not(are_you_filing) and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as ) else False}
+    - "has_i_am_partner": ${True if ((are_you_filing) and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and are_you_one_of_partners) else False}
+    - "has_plaintiff_partnership": ${True if (not(are_you_filing) and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)') else False}
+    - "has_plaintif_individual": ${True if are_you_filing else False}
+    - "has_plaintiff_other": ${True if (not(are_you_filing) and Who_are_you_filing_claim_for=='Other') else False}
+    - "plaintiff_other": something
+    - "has_plaintiff_sole_proprietor": ${True if (not(are_you_filing) and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)') else False}
+    - "has_plaintiff_corporation": ${True if (not(are_you_filing) and Who_are_you_filing_claim_for=='A corporation') else False}
+    - "has_defendant_sole_proprietor": ${True if (defendant_is=='A sole proprietor') else False}
+    - "has_defendant_partnership": ${True if (defendant_is=='A partnership') else False}
+    - "has_defendant_individual": ${True if (defendant_is=='An individual') else False}
+    - "has_defendant_other": ${True if (defendant_is=='Other') else False}
+    - "defendant_other": ${type_of_entity if (defendant_is=='Other') else ''}
+    - "has_defendant_corporation": ${True if (defendant_is=='A corporation') else False}
+    - "date_claim_arose": ${list_all_dates}
+    - "amount_of_money_claimed": ${amount}
+    - "claim_reason_1": ${reasons_for_your_claim}
+    - "claim_reason_2": ${reasons_for_your_claim}
+    - "claim_reason_3": ${reasons_for_your_claim}
+    - "claim_reason_4": ${reasons_for_your_claim}
+    - "`43": ""
+    - "has_mentally_competent": ${is_mentally_competent}
+    - "has_not_mentally_competent": ${not(is_mentally_competent)}
+    - "has_18_years_old": ${age_years_or_older}
+    - "has_not_18_years_old": ${not(age_years_or_older)}
+    - "has_do_not_know_military_service": ${has_do_not_know_military_service}
+    - "has_not_military_service": ${has_not_military_service}
+    - "has_military_service": ${has_military_service}
+    - "plaintiff_signature": something
+---
+
