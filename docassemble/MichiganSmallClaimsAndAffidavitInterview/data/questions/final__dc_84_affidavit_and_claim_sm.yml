@@ -16,6 +16,7 @@ metadata:
     - "Domicile"
   authors:
     - Pratibha Bharti
+    - Naveen Boddeda
 ---
 features:
   labels above fields: True
@@ -72,10 +73,10 @@ code: |
           lawyer_representing_block_condition()
         if elected_or_appointed:
           filing_claim_block_condition()
-
+  
   claim_and_affidavit_download
 ---
-code: |
+code: |            
   def lawyer_representing_block_condition():
       if is_lawyer_representing:
         existing_case_kickout
@@ -424,32 +425,32 @@ code: |
 ---
 id: intro_screen
 question: |
-  Welcome to Michigan Legal Help’s Do-It-Yourself Small Claims Affidavit and Claim tool.
+  Welcome to Michigan Legal Help’s Do-It-Yourself Small Claims Affidavit and Claim tool. 
 subquestion: |
-  This tool helps you prepare the forms you need to file a new Small Claims case in Michigan.
+  This tool helps you prepare the forms you need to file a new Small Claims case in Michigan. 
 continue button field: intro_screen
 ---
 id: intro_screen_2
 question: |
-  Your personalized *Affidavit and Claim* and a partially completed *Small Claims Judgment* will be ready to print after you have answered all the questions.
+ Your personalized *Affidavit and Claim* and a partially completed *Small Claims Judgment* will be ready to print after you have answered all the questions. 
 subquestion: |
-  It should take you between 15 and 30 minutes to finish answering the questions.
+  It should take you between 15 and 30 minutes to finish answering the questions.  
 continue button field: intro_screen_2
 ---
 id: personal_info
 question: |
-  To protect privacy, you cannot include personal identifying information in public documents that are filed in court.
-subquestion: |
+  To protect privacy, you cannot include personal identifying information in public documents that are filed in court. 
+subquestion: |  
   Personal identifying information includes:
-
+  
   * Date of birth
   * Social security or national identification number
   * Driver’s license or state identification number
   * Passport number
   * Financial account numbers
-
+  
   *If a question doesn't specifically ask for personal identifying information, do not include it in your answers.* When this information is necessary, this tool will specifically ask for the information and it will go on a separate non-public form that you will file along with the other documents. This DIY tool will automatically produce that form if you need it.
-
+  
   Do you understand that you should not enter any personal identifying information unless this tool specifically asks for it?
 fields:
   - no label: personal_info_checking
@@ -458,7 +459,7 @@ continue button field: personal_info
 ---
 id: start_the_claim
 question: |
-  Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case.
+ Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case. 
 continue button field: start_the_claim
 ---
 id: Choose a court
@@ -476,7 +477,7 @@ template: help_user_choose_court_template
 subject: |
   Can I look for my district court on a map?
 content: |
-  You can look for your district court on a map (be sure to look at the second page of the map) which you can review by clicking [here](https://michiganlegalhelp.org/sites/default/files/courtsbycountyanddistrictcourtdetail.pdf).
+  You can look for your district court on a map (be sure to look at the second page of the map) which you can review by clicking [here](https://michiganlegalhelp.org/sites/default/files/courtsbycountyanddistrictcourtdetail.pdf). 
 ---
 id: existing_case_kickout
 event: existing_case_kickout
@@ -500,9 +501,10 @@ subquestion: |
   % elif not is_lawyer_representing and want_to_have_jury_trial:
   If you want a jury trial, file a claim in District Court. You may want to talk to a lawyer about starting a case in District Court.
   % endif
-
+  
   If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
-
+  
+  
 buttons:
   - Exit: exit
     url: https://michiganlegalhelp.org/
@@ -521,7 +523,7 @@ subquestion: |
   % else:
   If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, you may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % endif
-
+  
   If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
@@ -559,7 +561,7 @@ subquestion: |
   % if not has_court_appointed_you_as:
   If you are filing for another individual, you must be the individual's guardian, conservator, or next friend.
   % endif
-
+  
   If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
@@ -608,7 +610,7 @@ subquestion: |
   You can continue with the case even if you're asking for more money, but you won't be able to get more than $7,000.
 
   If you want to sue for more than $7,000, you should file a claim in District Court. You may want to talk to a lawyer about starting a case in District Court.
-
+  
   Please select one of the following two options:
 fields:
   - no label: warning_for_claim
@@ -619,7 +621,7 @@ fields:
 ---
 id: start_the_claim
 question: |
-  Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case.
+ Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case. 
 continue button field: start_the_claim
 ---
 id: claim for damages
@@ -627,7 +629,7 @@ question: |
   Is the claim for damages done to you by someone who harmed you on purpose?
 subquestion: |
   This includes things such as:
-
+  
   * fraud (someone deceived you on purpose)
   * libel or slander (someone made an untrue statement about you that hurts your reputation)
   * assault & battery (someone threatened you and/or hurt you)
@@ -639,11 +641,11 @@ question: |
   Cases in which someone caused harm on purpose cannot usually be filed in small claims court.
 subquestion: |
   There is an exception if the damage is because of:
-
+  
   * a dishonored check (a check someone wrote to you that the bank did not pay)
   * a consumer protection violation (harm by someone's deceptive business practices)
   * a recreational trespass (someone trespassed while engaging in a recreational activity)
-
+  
   Does the claim involve one of those exceptions?
 fields:
   - no label: claim_for_damages_yes
@@ -664,10 +666,10 @@ continue button field: claim_for_damages_dont_know
 ---
 id: claim_for_damages_yes_kickout
 question: |
-  ${text_in_para} cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery in small claims court.
+  ${text_in_para} cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery in small claims court. 
 subquestion: |
   You may want to talk to a lawyer about filing this claim in District or Circuit Court.
-
+  
   If you think you made a mistake, click **Undo**. This will take you back you to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to (Michigan Legal Help)[https://michiganlegalhelp.org/] .
 buttons:
   - Exit: exit
@@ -711,7 +713,7 @@ question: |
   With a few exceptions, the government cannot be sued for activities that are part of its work. This is called governmental immunity.
 subquestion: |
   The exceptions include injuries caused by:
-
+  
   * Employee negligence when operating a government owned vehicle
   * Failure to maintain public roads or publicly owned buildings
   * Proprietary or profit-making activities by the government
@@ -756,7 +758,7 @@ question: |
   You cannot file this case now.
 subquestion: |
   You can only file five cases a week in Small Claims Court. You can continue this interview if you wait at least a week before filing this case.
-
+  
   Will you wait a week before filing this Affidavit and Claim?
 fields:
   - no label: cannot_file_case
@@ -780,16 +782,16 @@ content: |
   That person is called a "third-party beneficiary." If you buy a car for your adult child, you are a party to the sales agreement. Your child is the "third-party beneficiary." You can sue the person who sold you the car in Small Claims Court based on the sales contract, but your child cannot.
 
   Sometimes, the right to collect a debt is sold or transferred. Creditors do this when they sell debts to collection agencies. A collection agency is not a party to the original transaction, and cannot sue a debtor in Small Claims Court.
-
+  
 ---
 id: need_some_more_information
 question: |
-  We need some more information about you.
+ We need some more information about you. 
 continue button field: need_some_more_information
 ---
 id: defendant_information
 question: |
-  Next, we need information about the defendant. The defendant is the person or organization you claim owes you money.
+ Next, we need information about the defendant. The defendant is the person or organization you claim owes you money.
 continue button field: defendant_information
 ---
 id: defendant_is
@@ -797,7 +799,7 @@ question: |
   Is the defendant:
 subquestion: |
   ${ collapse_template(type_of_defendant_explanation) }
-
+  
   Please select one of the following two options:
 fields:
   - no label: defendant_is
@@ -813,7 +815,7 @@ template: type_of_defendant_explanation
 subject: |
   What are examples of an "other" type of defendant?
 content: |
-  An "other" type of defendant could be a: county, city, village, township, or local or intermediate school district.
+  An "other" type of defendant could be a: county, city, village, township, or local or intermediate school district. 
 ---
 id: mentally_competent
 question: |
@@ -909,7 +911,7 @@ question: |
   If you know the name of the judge, enter it here
 subquestion: |
   Otherwise, just click **Continue**. 
-
+  
   *Do not include the word "judge."*
 fields:
   - Hon.: judge
@@ -923,7 +925,7 @@ subquestion: |
 fields:
   - no label: amount
     datatype: currency
-
+ 
 ---
 template: amount_explanation
 subject: |
@@ -940,9 +942,9 @@ question: |
   What are the reasons for your claim?
 subquestion: |
   Briefly and accurately describe what you think happened, what you think should happen in court, and why. Write in complete sentences. What you type will appear on the Affidavit exactly as you write it.
-
+  
   Include information such as:
-
+  
   * if you and the defendant had an agreement, what the agreement was;
   * if you have anything in writing, state that and attach a copy;
   * what happened that caused the dispute;
@@ -969,7 +971,7 @@ subquestion: |
   ${ collapse_template(am_i_going_to_efile) }
 
   This tool will create separate forms so you can more easily e-file using MiFILE, if you plan to e-file.
-
+  
   This means that **you may need to download multiple files to get all of the forms you will need**. At the end of this interview you will see a list of documents to download. Make sure you download each of them. 
 
   You will also be able to get all forms you need by clicking the **Download Your Form(s)** button on the page at the end of this tool.
@@ -989,7 +991,7 @@ content: |
 ---
 id: congratulations_you_have_finished_all_questions
 question: |
-  Congratulations, you have finished all the questions needed to fill out your forms!
+  Congratulations, you have finished all the questions needed to fill out your forms! 
 subquestion: |
   If you didn't already, create a username and password on the LawHelp Interactive website to save your answers. This will allow you to make changes to your form without starting over. Be sure to write down your username and password.
 
@@ -1017,38 +1019,38 @@ question: |
   What is the defendant's name?
 fields:
   - First: defendants[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "An individual"
   - Middle: defendants[0].name.middle
     required: False
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "An individual"
   - Last: defendants[0].name.last
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "An individual"
   - Suffix: defendants[0].name.suffix
     required: False
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "An individual"
   - no label: defendants[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "A partnership"
   - no label: defendants[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "A corporation"
   - no label: defendants[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "A sole proprietor"
   - no label: defendants[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         defendant_is == "Other"
 ---
 id: Who_are_you_filing_claim_for
@@ -1061,7 +1063,7 @@ choices:
   - A partnership (a business that is not a corporation, but is owned by two or more people)
   - A corporation
   - Other
-
+  
 ---
 id: Who_you_filing
 question: |
@@ -1117,26 +1119,26 @@ question: |
   % endif
 fields:
   - no label: users[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         not are_you_filing
   - First: users[0].name.first
-    show if:
-      code: |
+    show if: 
+      code : |
         are_you_filing
   - Middle: users[0].name.middle
     required: False
-    show if:
-      code: |
+    show if: 
+      code : |
         are_you_filing
   - Last: users[0].name.last
-    show if:
-      code: |
+    show if: 
+      code : |
         are_you_filing
   - Suffix: users[0].name.suffix
     required: False
-    show if:
-      code: |
+    show if: 
+      code : |
         are_you_filing
 ---
 id: are_you_one_of_partners
@@ -1186,6 +1188,7 @@ code: |
     has_military_service = False
     has_not_military_service = True
     has_do_not_know_military_service = False
+    
 ---
 id: elected_or_appointed
 question: |
@@ -1236,52 +1239,51 @@ attachment:
   variable name: claim_affidavit_additional[i]
   pdf template file: dc_85.pdf
   fields:
-    - "District": ${county_choice}
-    - "CASE NO": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
-    - "Judge": ${judge if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case and case_number and judge!= '') else ''}
-    - "Court telephone no":
-    - "Court address":
-    - "JUDGMENT": No
-    - "For 1":
-    - "For 2":
-    - "Plaintiffs name and address": |
-        ${users[0].name} 
-        ${users[0].address}
-    - "Personal service": No
-    - "Against 1":
-    - "Against 2":
-    - "After trial": No
-    - "Consent": No
-    - "Nonappearance default": No
-    - "Defendants name and address": |
-        ${ defendants[0].name}
-        ${defendants[0].address}
-    - "DISMISSAL": No
-    - "Personal service_2": No
-    - "Without prejudice": No
-    - "With prejudice": No
-    - "undefined":
-    - "undefined_2":
-    - "Other specify":
-    - "undefined_3":
-    - "undefined_4":
-    - "1 The defendant must pay the judgment to": No
-    - "full": No
-    - "Name type or print":
-    - "installments of": No
-    - "weekly": No
-    - "biweekly": No
-    - "monthly starting": No
-    - "undefined_5":
-    - "Date":
-    - "3 Other": No
-    - "Other":
-    - "Date_2":
-    - "Text3":
-    - "Date_3":
-    - "Text4":
+      - "District": ${county_choice}
+      - "CASE NO": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
+      - "Judge": ${judge if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case and case_number and judge!= '') else ''}
+      - "Court telephone no": 
+      - "Court address": 
+      - "JUDGMENT": No
+      - "For 1": 
+      - "For 2": 
+      - "Plaintiffs name and address": |
+          ${users[0].name} 
+          ${users[0].address}
+      - "Personal service": No
+      - "Against 1": 
+      - "Against 2": 
+      - "After trial": No
+      - "Consent": No
+      - "Nonappearance default": No
+      - "Defendants name and address": |
+          ${ defendants[0].name}
+          ${defendants[0].address}
+      - "DISMISSAL": No
+      - "Personal service_2": No
+      - "Without prejudice": No
+      - "With prejudice": No
+      - "undefined": 
+      - "undefined_2": 
+      - "Other specify": 
+      - "undefined_3": 
+      - "undefined_4": 
+      - "1 The defendant must pay the judgment to": No
+      - "full": No
+      - "Name type or print": 
+      - "installments of": No
+      - "weekly": No
+      - "biweekly": No
+      - "monthly starting": No
+      - "undefined_5": 
+      - "Date": 
+      - "3 Other": No
+      - "Other": 
+      - "Date_2": 
+      - "Text3": 
+      - "Date_3": 
+      - "Text4": 
 ---
-
 ---
 attachments:
   name: foc_116
@@ -1290,56 +1292,55 @@ attachments:
   editable: False
   pdf template file: final__dc_84_affidavit_and_claim_sm.pdf
   fields:
-    - "state_of_michigan": ${county_choice}
-    - "case_no": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
-    - "judge_no": ${judge if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case and case_number and judge!= '') else ''}
-    - "court_telephone_no":
-    - "court_address":
-    - "plaintiff_name": ${users[0].name}
-    - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
-    - "plaintiff_telephone_no": ${users[0].phone_number}
-    - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
-    - "defendant_name": ${ defendants[0].name.first }
-    - "defendant_address": ${defendants[0].address.address+" "+defendants[0].address.unit}
-    - "defendant_telephone_no": ${defendants[0].phone_number}
-    - "defendant_city_state_zip": ${defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip}
-    - "has_prev_action": ${past_or_current_court_case}
-    - "has_this_court": ${case_filed_in_same_court if (past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over) else False}
-    - "other_court_name": ${what_court_was_case_in if (past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over and case_filed_in_same_court == False) else ''}
-    - "has_other_court": ${True if (past_or_current_court_case and is_the_case_over and is_the_case_over and case_filed_in_same_court == False) else False}
-    - "prev_action_assigned_judge": ${judge if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case and case_number and judge!= '') else ''}
-    - "prev_action_case_number": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
-    - "has_prev_action_remains": ${True if(past_or_current_court_case and is_the_case_over==False) else False}
-    - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and is_the_case_over) else False}
-    - "has_i_am_full_time_employee": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and fulltime_salaried_employee_of_partnership else False}
-    - "has_i_am_the_plaintiff": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-    - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
-    - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
-    - "has_plaintif_individual": ${True if are_you_filing else False}
-    - "has_plaintiff_other": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Other' else False}
-    - "plaintiff_other":
-    - "has_plaintiff_sole_proprietor": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False}
-    - "has_plaintiff_corporation": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A corporation' else False}
-    - "has_defendant_sole_proprietor": ${True if (defendant_is=='A sole proprietor') else False}
-    - "has_defendant_partnership": ${True if (defendant_is=='A partnership') else False}
-    - "has_defendant_individual": ${True if (defendant_is=='An individual') else False}
-    - "has_defendant_other": ${True if (defendant_is=='Other') else False}
-    - "defendant_other": ${type_of_entity if (defendant_is=='Other') else ''}
-    - "has_defendant_corporation": ${True if (defendant_is=='A corporation') else False}
-    - "date_claim_arose": ${list_all_dates}
-    - "amount_of_money_claimed": ${amount}
-    - "claim_reason_1": ${reasons_for_your_claim}
-    - "claim_reason_2": ${reasons_for_your_claim}
-    - "claim_reason_3":
-    - "claim_reason_4":
-    - "`43": ""
-    - "has_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
-    - "has_not_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
-    - "has_18_years_old": ${age_years_or_older if defendant_is == "An individual" else ""}
-    - "has_not_18_years_old": ${not(age_years_or_older) if defendant_is == "An individual" else ""}
-    - "has_do_not_know_military_service": ${has_do_not_know_military_service if defendant_is == "An individual" else ""}
-    - "has_not_military_service": ${has_not_military_service if defendant_is == "An individual" else ""}
-    - "has_military_service": ${has_military_service if defendant_is == "An individual" else ""}
-    - "plaintiff_signature":
+      - "state_of_michigan": ${county_choice}
+      - "case_no": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
+      - "judge_no": ${judge if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case and case_number and judge!= '') else ''}
+      - "court_telephone_no": 
+      - "court_address": 
+      - "plaintiff_name": ${users[0].name}
+      - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
+      - "plaintiff_telephone_no": ${users[0].phone_number}
+      - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
+      - "defendant_name": ${ defendants[0].name.first }
+      - "defendant_address": ${defendants[0].address.address+" "+defendants[0].address.unit}
+      - "defendant_telephone_no": ${defendants[0].phone_number}
+      - "defendant_city_state_zip":  ${defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip}
+      - "has_prev_action": ${past_or_current_court_case}
+      - "has_this_court": ${case_filed_in_same_court if (past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over) else False}
+      - "other_court_name": ${what_court_was_case_in if (past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over and case_filed_in_same_court == False) else ''}
+      - "has_other_court": ${True if (past_or_current_court_case and is_the_case_over and is_the_case_over and case_filed_in_same_court == False) else False}
+      - "prev_action_assigned_judge": ${judge if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case and case_number and judge!= '') else ''}
+      - "prev_action_case_number": ${case_number if (past_or_current_court_case and case_filed_in_same_court == False and know_case_number_of_the_other_case) else ''}
+      - "has_prev_action_remains": ${True if(past_or_current_court_case and is_the_case_over==False) else False}
+      - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and is_the_case_over) else False}
+      - "has_i_am_full_time_employee": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and fulltime_salaried_employee_of_partnership else False}
+      - "has_i_am_the_plaintiff": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
+      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
+      - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
+      - "has_plaintif_individual": ${True if are_you_filing else False}
+      - "has_plaintiff_other": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Other' else False}
+      - "plaintiff_other": 
+      - "has_plaintiff_sole_proprietor": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False}
+      - "has_plaintiff_corporation": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A corporation' else False}
+      - "has_defendant_sole_proprietor": ${True if (defendant_is=='A sole proprietor') else False}
+      - "has_defendant_partnership": ${True if (defendant_is=='A partnership') else False}
+      - "has_defendant_individual": ${True if (defendant_is=='An individual') else False}
+      - "has_defendant_other": ${True if (defendant_is=='Other') else False}
+      - "defendant_other": ${type_of_entity if (defendant_is=='Other') else ''}
+      - "has_defendant_corporation": ${True if (defendant_is=='A corporation') else False}
+      - "date_claim_arose": ${list_all_dates}
+      - "amount_of_money_claimed": ${amount}
+      - "claim_reason_1": ${reasons_for_your_claim}
+      - "claim_reason_2": ${reasons_for_your_claim}
+      - "claim_reason_3": 
+      - "claim_reason_4": 
+      - "`43": ''
+      - "has_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
+      - "has_not_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
+      - "has_18_years_old": ${age_years_or_older if defendant_is == "An individual" else ""}
+      - "has_not_18_years_old": ${not(age_years_or_older) if defendant_is == "An individual" else ""}
+      - "has_do_not_know_military_service": ${has_do_not_know_military_service if defendant_is == "An individual" else ""}
+      - "has_not_military_service": ${has_not_military_service if defendant_is == "An individual" else ""}
+      - "has_military_service": ${has_military_service if defendant_is == "An individual" else ""}
+      - "plaintiff_signature": 
 ---
-
