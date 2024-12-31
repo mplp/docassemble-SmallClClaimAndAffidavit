@@ -415,7 +415,13 @@ code: |
 ---
 # Tells court_index which court to choose
 code: |
-  court_index = next(court_list.filter_courts_by_2([county_choice], ['circuit'], column_1='address_county', column_2='type'))[0]
+  if court_count > 1:
+    court_index = court_index_for_multi_district
+  else:
+    court_index = next(court_list.filter_courts_by_2([county_choice], ['district'], column_1='address_county', column_2='type'))[0]
+---
+code: |
+  court_count = len(list(court_list.filter_courts_by_2([county_choice], ['district'], column_1='address_county', column_2='type')))
 ---
 code: |
   defendants[i].name.first
@@ -481,6 +487,16 @@ subquestion: |
 fields:
   - County: county_choice
     code: court_list._load_courts()["address_county"].unique()
+---
+id: county court choice
+question: Which District Court in ${ county_choice } County do you need to file this case in?
+subquestion: |
+  % if al_form_type != 'starts_case':
+  ${ collapse_template(help_user_choose_court_template) }
+  % endif
+fields:
+  - Select a Court: court_index_for_multi_district
+    code: court_list.filter_courts_by_2([county_choice], ['district'], column_1='address_county', column_2='type')
 ---
 template: help_user_choose_court_template
 subject: |
@@ -1348,7 +1364,7 @@ attachment:
       - "other_court_name": ${what_court_was_case_in if (past_or_current_court_case and about_same_thing_as_this_case and case_filed_in_same_court == False) else ''}
       - "has_other_court": ${True if (past_or_current_court_case and about_same_thing_as_this_case and case_filed_in_same_court == False) else False}
       - "prev_action_assigned_judge": ${judge if (past_or_current_court_case and about_same_thing_as_this_case ) else ''}
-      - "prev_action_case_number": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else 'Unknown'}
+      - "prev_action_case_number": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else ''}
       - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
       - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
