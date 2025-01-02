@@ -398,6 +398,10 @@ code: |
         list_all_dates
 ---
 code: |
+  resource_page_url_only = "https://michiganlegalhelp.org/node/1617"
+  resource_page_name = "Small Claims"
+---
+code: |
   survey_link_url_only = "https://www.surveymonkey.com/EXAMPLE_URL"
 ---
 template: survey_embed_script
@@ -453,7 +457,7 @@ subquestion: |
    
   1. Neither side can have a lawyer. This includes not being allowed to get help from a lawyer if you win the case and you need to collect the judgment.
   1. You can only ask for money. If you want to ask for something of yours to be returned -- like your car or your dog -- you might be able to use a claim and delivery case. You can [search for a lawyer](https://michiganlegalhelp.org/resources/going-court/limited-scope-representation-lsr-more-affordable-way-hire-lawyer) or use the [Claim and Delivery](https://www.courts.michigan.gov/4a6ed0/siteassets/forms/scao-approved/mc35.pdf) court form. 
-  1. You can only ask for up to $6500. If the other person owes more than $6500, you can still use small claims, but the court can only order up to $6500 in the judgment. If you want to ask for more, you can search for a lawyer to help you or use the [SCAO forms page](https://www.courts.michigan.gov/SCAO-forms/) to find out if there is a form for your kind of case.
+  1. You can only ask for up to $7000. If the other person owes more than $7000, you can still use small claims, but the court can only order up to $7000 in the judgment. If you want to ask for more, you can search for a lawyer to help you or use the [SCAO forms page](https://www.courts.michigan.gov/SCAO-forms/) to find out if there is a form for your kind of case.
   1. You can't appeal decisions in Small Claims Court unless the court has a magistrate on the case. If a magistrate makes the decision in your case, you are allowed to make a very limited appeal to a Small Claims judge.
   1. You can't have a jury trial.
 
@@ -1256,11 +1260,13 @@ subquestion: |
 continue button field: sign_your_claim
 ---
 objects:
+  - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
   - claim_affidavit: ALDocument.using(title="Claim and Affidavit", filename="final__dc_84_affidavit_and_claim_sm.pdf", enabled=True, has_addendum=True, default_overflow_message="(See '7. Date(s) Claim Arose' in Addendum)")
   - claim_affidavit_additional: ALDocument.using(title="Claim and Affidavit DC 85", filename="dc_85_affidavit_and_claim_sm.pdf", enabled=True, has_addendum=False, default_overflow_message=" (See '7. Date(s) Claim Arose' in Addendum)")
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_additional], filename="final__dc_84_affidavit_and_claim_sm.pdf", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_additional], filename="final__dc_84_affidavit_and_claim_sm.pdf", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_additional], filename="final__dc_84_affidavit_and_claim_sm.pdf", title="All forms to download for your records", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
@@ -1276,6 +1282,12 @@ subquestion: |
   ${ al_user_bundle.download_list_html(format='pdf') }
 
   ${ al_user_bundle.send_button_html(show_editable_checkbox=False) }
+---
+attachment:
+  - name: instructions
+    variable name: instructions[i]        
+    docx template file: small_claims_checklist.docx
+    tagged pdf: True
 ---
 attachment:
   variable name: claim_affidavit.addendum
