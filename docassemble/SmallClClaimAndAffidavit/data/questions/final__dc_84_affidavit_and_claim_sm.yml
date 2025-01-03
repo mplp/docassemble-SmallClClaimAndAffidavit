@@ -19,6 +19,9 @@ metadata:
     - Naveen Boddeda
     - Kelly McGuire
 ---
+code:  |
+  github_repo_name = 'docassemble-SmallClClaimAndAffidavit' if get_config('debug') else 'docassemble-UserFeedback'
+---
 features:
   labels above fields: True
 ---
