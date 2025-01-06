@@ -43,7 +43,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
                 out.setdefault(package, []).append(prefix+name)
     return out
 
-setup(name='docassemble.MichiganSmallClaimsAndAffidavitInterview',
+setup(name='docassemble.SmallClClaimAndAffidavit',
       version='1.0',
       description=('Small Claims Affidavit and Claim'),
       long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nZani Doumbia\r\nRebecca Izzo\r\n\r\n',
@@ -56,6 +56,6 @@ setup(name='docassemble.MichiganSmallClaimsAndAffidavitInterview',
       namespace_packages=['docassemble'],
       install_requires=['docassemble.ALAnyState', 'docassemble.AssemblyLine>=2.22.1'],
       zip_safe=False,
-      package_data=find_package_data(where='docassemble/MichiganSmallClaimsAndAffidavitInterview/', package='docassemble.MichiganSmallClaimsAndAffidavitInterview'),
+      package_data=find_package_data(where='docassemble/SmallClClaimAndAffidavit/', package='docassemble.SmallClClaimAndAffidavit'),
      )
 
