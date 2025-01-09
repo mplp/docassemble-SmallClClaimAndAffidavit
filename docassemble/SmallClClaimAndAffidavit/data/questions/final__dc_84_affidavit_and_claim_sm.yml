@@ -682,8 +682,6 @@ id: claim for damages
 question: |
   Is this claim for damages to ${text_in_para if text_in_para != 'You' else 'you'} by someone who harmed ${text_in_para if text_in_para != 'You' else 'you'} on purpose?
 subquestion: |
-  ${ collapse_template(claim_for_damages_help_template) }
-  
   This includes things such as:
   
   * fraud (someone tricked or deceived ${text_in_para if text_in_para != 'You' else 'you'} on purpose)
@@ -693,6 +691,8 @@ subquestion: |
 fields:
   - Is this claim for harm done to you on purpose, like the examples listed above?: claim_for_damages
     datatype: yesnoradio
+under: |
+  ${ collapse_template(claim_for_damages_help_template) }
 ---
 id: claim_for_damages_help_template
 template: claim_for_damages_help_template
@@ -706,8 +706,6 @@ id: claim_for_damages_yes
 question: |
   Cases in which someone caused harm on purpose cannot usually be filed in small claims court.
 subquestion: |
-  ${ collapse_template(claim_for_damages_help_template) }
-  
   There is an exception if the damage is because of:
   
   * a dishonored check (a check someone wrote to ${text_in_para if text_in_para != 'You' else 'you'} that the bank did not pay)
@@ -717,6 +715,8 @@ subquestion: |
 fields:
   - Does the claim involve one of those exceptions?: claim_for_damages_yes
     datatype: yesnoradio
+under: |
+  ${ collapse_template(claim_for_damages_help_template) }
 ---
 id: claim_for_damages_dont_know
 question: |
