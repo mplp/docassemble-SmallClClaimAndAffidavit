@@ -44,11 +44,11 @@ code: |
   nav.set_section('review_full')
   nav.set_section('signpost_intro')
   MLH_standard_intro_pages
+  start_the_claim
   understands_rules
   if not understands_rules:
     does_not_agree_to_rules_kickout
   nav.set_section('signpost_your_info')
-  start_the_claim
   if are_you_filing:
     lawyer_representing_block_condition()
     if not amount_claim:
@@ -405,13 +405,26 @@ code: |
   resource_page_name = "Small Claims"
 ---
 code: |
-  survey_link_url_only = "https://www.surveymonkey.com/EXAMPLE_URL"
+  survey_link_url_only = "https://www.surveymonkey.com/r/YX7ZGDL"
 ---
 template: survey_embed_script
 content: |
   <script>
-    UNIQUE SCRIPT GOES HERE
+    (function(t,e,s,n){var o,a,c;t.SMCX=t.SMCX||[],e.getElementById(n)||(o=e.getElementsByTagName(s),a=o[o.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,[c.id](http://c.id/)=n,c.src="https://widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgd2C6oaazs_2FKEic68eg1zyTBSqNkSJxYUBb5q5KkayJTo.js",a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");
   </script>
+---
+# set intro landing screen variables
+code: |
+  MLH_form_type = "forms"
+  MLH_time_min = 15
+  MLH_time_max = 30
+---
+# override default welcome message
+template: MLH_welcome_message     
+content: |
+  Welcome to the ${ MLH_interview_short_title } tool.
+
+  This tool will help you prepare an *Affidavit and Claim* and a partially completed *Small Claims Judgment*. You can use these forms to start a new small claims case in Michigan.
 ---
 generic object: ALIndividual
 code: |
@@ -454,15 +467,15 @@ code: |
 ---
 id: understands_rules
 question: |
-  Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case.
+  Small Claims Rules
 subquestion: |
   There are some special rules in Small Claims Court. Carefully read the list below so that you can make sure this process is right for you. In small claims:
    
-  1. Neither side can have a lawyer. This includes not being allowed to get help from a lawyer if you win the case and you need to collect the judgment.
-  1. You can only ask for money. If you want to ask for something of yours to be returned -- like your car or your dog -- you might be able to use a claim and delivery case. You can [search for a lawyer](https://michiganlegalhelp.org/resources/going-court/limited-scope-representation-lsr-more-affordable-way-hire-lawyer) or use the [Claim and Delivery](https://www.courts.michigan.gov/4a6ed0/siteassets/forms/scao-approved/mc35.pdf) court form. 
-  1. You can only ask for up to $7000. If the other person owes more than $7000, you can still use small claims, but the court can only order up to $7000 in the judgment. If you want to ask for more, you can search for a lawyer to help you or use the [SCAO forms page](https://www.courts.michigan.gov/SCAO-forms/) to find out if there is a form for your kind of case.
-  1. You can't appeal decisions in Small Claims Court unless the court has a magistrate on the case. If a magistrate makes the decision in your case, you are allowed to make a very limited appeal to a Small Claims judge.
-  1. You can't have a jury trial.
+  1. **Neither side can have a lawyer.** This includes not being allowed to get help from a lawyer if you win the case and you need to collect the judgment.
+  1. **You can only ask for money.** If you want to ask for something of yours to be returned -- like your car or your dog -- you might be able to use a claim and delivery case. You can [search for a lawyer](https://michiganlegalhelp.org/resources/going-court/limited-scope-representation-lsr-more-affordable-way-hire-lawyer) or use the [Claim and Delivery](https://www.courts.michigan.gov/4a6ed0/siteassets/forms/scao-approved/mc35.pdf) court form. 
+  1. **You can only ask for up to $7000.** If the other person owes more than $7000, you can still use small claims, but the court can only order up to $7000 in the judgment. If you want to ask for more, you can search for a lawyer to help you or use the [SCAO forms page](https://www.courts.michigan.gov/SCAO-forms/) to find out if there is a form for your kind of case.
+  1. **You can't appeal decisions** in Small Claims Court unless the court has a magistrate on the case. If a magistrate makes the decision in your case, you are allowed to make a very limited appeal to a Small Claims judge.
+  1. **You can't have a jury trial.**
 
 fields:
   - Do you understand and want to continue?: understands_rules
@@ -473,7 +486,7 @@ event: does_not_agree_to_rules_kickout
 question: |
   You cannot continue with this tool unless you understand and agree to the limits in Small Claims Court.
 subquestion: |
-  If you made a mistake, click the **Undo** button to change your answer. Otherwise, click Exit. You can use the Guide to Legal Help to search for a lawyer or legal services in your area. 
+  If you made a mistake, tap the **Undo** button to change your answer. Otherwise, tap Exit. You can use the Guide to Legal Help to search for a lawyer or legal services in your area. 
 
 buttons:
   - Exit: exit
@@ -509,7 +522,7 @@ template: help_user_choose_court_template
 subject: |
   Can I look for my district court on a map?
 content: |
-  You can look for your district court on a map (be sure to look at the second and third pages of the map) which you can review by clicking [here](https://michiganlegalhelp.org/sites/default/files/2024-12/trial-court-map-w-regions.pdf). 
+  You can look for your district court on a map (be sure to look at the second and third pages of the map) which you can review by tapping [here](https://michiganlegalhelp.org/sites/default/files/2024-12/trial-court-map-w-regions.pdf). 
 ---
 id: existing_case_kickout
 event: existing_case_kickout
@@ -523,15 +536,15 @@ question: |
   % elif want_to_have_jury_trial:
   ${text_in_para} can't have a jury trial in a small claims case. 
   % else:
-  You have clicked the option to exit.
+  You have tapped the option to exit.
   % endif
 subquestion: |
   % if not is_lawyer_representing and want_to_have_jury_trial:
   If you want a jury trial, file a claim in District Court. You may want to talk to a lawyer about starting a case in District Court.
   
-  If you made a mistake, click the **Undo** button to change your answer. Otherwise, click **Exit**.
+  If you made a mistake, tap the **Undo** button to change your answer. Otherwise, tap **Exit**.
   % else:
-  If you think you made a mistake, click **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
   % endif
   
 buttons:
@@ -544,9 +557,9 @@ question: |
   % if claims_suit_against_state:
   ${text_in_para} can't file a Small Claims case against the state or a state agency.
   % elif are_you_filing:
-  ${text_in_para} cannot file this case in Small Claims Court because ${text_in_para} were not directly involved in the transaction or dispute.
+  ${text_in_para} cannot file this case in Small Claims Court because ${text_in_para if text_in_para != 'You' else 'you'} were not directly involved in the transaction or dispute.
   % else:
-  ${text_in_para} cannot file this case in Small Claims Court because ${text_in_para} was not directly involved in the transaction or dispute.
+  ${text_in_para} cannot file this case in Small Claims Court because ${text_in_para if text_in_para != 'You' else 'you'} was not directly involved in the transaction or dispute.
   % endif
 subquestion: |
   % if claims_suit_against_state:
@@ -554,10 +567,10 @@ subquestion: |
   % elif are_you_filing:
   If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, you may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % else:
-  If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${text_in_para} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  on Michigan Legal Help to find a lawyer or a legal services office in your area.
+  If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${text_in_para if text_in_para != 'You' else 'you'} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % endif
   
-  If you think you made a mistake, click **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
     url: https://michiganlegalhelp.org/
@@ -575,7 +588,7 @@ question: |
   You cannot file a Small Claims case for this county, city, village, township, or local or intermediate school district because you are not its full-time salaried employee, authorized to file the claim who knows the facts of the claim.
   % endif
 subquestion: |
-  If you think you made a mistake, click **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
     url: https://michiganlegalhelp.org/
@@ -595,7 +608,7 @@ subquestion: |
   If you are filing for another individual, you must be the individual's guardian, conservator, or next friend.
   % endif
   
-  If you think you made a mistake, click **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
     url: https://michiganlegalhelp.org/
@@ -648,9 +661,9 @@ id: warning_for_claim
 question: |
   Warning:
 subquestion: |
-  ${text_in_para} can continue with the case even if you're asking for more money, but ${text_in_para} won't be able to get more than $7,000.
+  ${text_in_para} can continue with the case even if you're asking for more money, but ${text_in_para if text_in_para != 'You' else 'you'} won't be able to get more than $7,000.
   
-  If you want to sue for more than $7,000, ${text_in_para} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
+  If you want to sue for more than $7,000, ${text_in_para if text_in_para != 'You' else 'you'} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
   
   Please select one of the following two options:
 fields:
@@ -667,29 +680,42 @@ continue button field: start_the_claim
 ---
 id: claim for damages
 question: |
-  Is a claim for damages to ${text_in_para} by someone who harmed ${text_in_para} on purpose?
+  Is this claim for damages to ${text_in_para if text_in_para != 'You' else 'you'} by someone who harmed ${text_in_para if text_in_para != 'You' else 'you'} on purpose?
 subquestion: |
+  ${ collapse_template(claim_for_damages_help_template) }
+  
   This includes things such as:
   
-  * fraud (someone tricked or deceived ${text_in_para} on purpose)
-  * libel or slander (someone made an untrue statement about ${text_in_para} that hurts your reputation)
-  * assault & battery (someone threatened or hurt ${text_in_para})
-  * malicious destruction of property (someone damaged or destroyed ${text_in_para}'s property on purpose)
-yesnomaybe: claim_for_damages
+  * fraud (someone tricked or deceived ${text_in_para if text_in_para != 'You' else 'you'} on purpose)
+  * libel or slander (someone made an untrue statement about ${text_in_para if text_in_para != 'You' else 'you'} that hurts your reputation)
+  * assault & battery (someone threatened or hurt ${text_in_para if text_in_para != 'You' else 'you'})
+  * malicious destruction of property (someone damaged or destroyed ${'your' if text_in_para == 'You' else text_in_para}${"'s" if text_in_para != 'You' else ""} property on purpose)
+fields:
+  - Is this claim for harm done to you on purpose, like the examples listed above?: claim_for_damages
+    datatype: yesnoradio
+---
+id: claim_for_damages_help_template
+template: claim_for_damages_help_template
+subject: What if I'm not sure?
+content: |
+  If this case involves intentional wrongdoing and does **not** fit one of the exceptions, it will be dismissed and there will be no refund of court filing fees or any related costs.
+
+  If you are not sure whether your case involves intentional wrongdoing, you may want to talk to a lawyer. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) to find a lawyer or a legal services office in your area.
 ---
 id: claim_for_damages_yes
 question: |
   Cases in which someone caused harm on purpose cannot usually be filed in small claims court.
 subquestion: |
+  ${ collapse_template(claim_for_damages_help_template) }
+  
   There is an exception if the damage is because of:
   
-  * a dishonored check (a check someone wrote to ${text_in_para} that the bank did not pay)
+  * a dishonored check (a check someone wrote to ${text_in_para if text_in_para != 'You' else 'you'} that the bank did not pay)
   * a consumer protection violation (harm by someone's deceptive business practices)
-  * a recreational trespass (someone went on ${text_in_para}’s property without permission during a recreational activity)
+  * a recreational trespass (someone went on ${'your' if text_in_para == 'You' else text_in_para}${"'s" if text_in_para != 'You' else ""} property without permission during a recreational activity)
   
-  Does the claim involve one of those exceptions?
 fields:
-  - no label: claim_for_damages_yes
+  - Does the claim involve one of those exceptions?: claim_for_damages_yes
     datatype: yesnoradio
 ---
 id: claim_for_damages_dont_know
@@ -711,7 +737,7 @@ question: |
 subquestion: |
   You may want to talk to a lawyer about filing this claim in District or Circuit Court.
   
-  If you think you made a mistake, click **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Exit: exit
     url: https://michiganlegalhelp.org/
@@ -760,7 +786,9 @@ subquestion: |
   * Proprietary or profit-making activities by the government
 
   Does the claim involve one of those exceptions?
-yesnomaybe: governmental_immunity
+fields:
+  - no label: governmental_immunity
+    datatype: yesnoradio
 ---
 id: governmental_immunity_no
 question: |
@@ -768,7 +796,7 @@ question: |
 subquestion: |
   You may want to talk to a lawyer about starting this case in District or Circuit court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help)  on Michigan Legal Help to find a lawyer or a legal services office in your area.
 
-  If you think you made a mistake, click **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, click the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 continue button field: governmental_immunity_no
 buttons:
   - Exit: exit
@@ -790,7 +818,7 @@ continue button field: governmental_immunity_dont_know
 id: five_small_claims_cases
 question: |
   % if are_you_filing:
-  Have ${text_in_para} filed five small claims cases in the past week?
+  Have you filed five small claims cases in the past week?
   % else:
   Has ${text_in_para} filed five small claims cases in the past week?
   % endif
@@ -816,7 +844,7 @@ fields:
 id: directly_involved_transaction_or_dispute
 question: |
   % if are_you_filing:
-  Were ${text_in_para} directly involved in the transaction or dispute in this case?
+  Were you directly involved in the transaction or dispute in this case?
   % else:
   Was ${text_in_para} directly involved in the transaction or dispute in this case?
   % endif
@@ -848,7 +876,9 @@ continue button field: need_some_more_information
 ---
 id: defendant_information
 question: |
- Next, we need information about the defendant. The defendant is the person or organization that owes you money.
+ Next, we need information about the defendant.
+subquestion: |
+  The defendant is the person or organization that owes you money.
 continue button field: defendant_information
 ---
 id: defendant_is
@@ -896,7 +926,9 @@ fields:
 id: military_service
 question: |
   As far as you know, is ${ defendants[0].name.first } in military service?
-yesnomaybe: military_service
+fields:
+  - no label: military_service
+    datatype: yesnoradio
 ---
 id: where_should_file_claim
 question: |
@@ -925,7 +957,7 @@ continue button field: Small_claims_cases_info
 ---
 id: past_or_current_court_case
 question: |
-  Is there a past or current court case between ${text_in_para} and ${ defendants[0].name.first }?
+  Is there a past or current court case between ${text_in_para if text_in_para != 'You' else 'you'} and ${ defendants[0].name.first }?
 fields:
   - no label: past_or_current_court_case
     datatype: yesnoradio
@@ -957,7 +989,7 @@ template: case_filed_in_same_court_explanation
 subject: |
   How do I know?
 content: |
-  If both cases were filed in the same District Court for the same county, click **Yes**. Otherwise, click **No**.
+  If both cases were filed in the same District Court for the same county, tap **Yes**. Otherwise, tap **No**.
 ---
 id: know_case_number_of_the_other_case
 question: |
@@ -976,7 +1008,7 @@ id: judge
 question: |
   If you know the name of the judge for the other case, enter it here
 subquestion: |
-  Otherwise, just click **Continue**. 
+  Otherwise, just tap **Continue**. 
   
   *Do not include the word "judge."*
 fields:
@@ -1278,7 +1310,7 @@ question: |
 subquestion: |
   Thank you ${users}. Your form is ready to download and deliver.
 
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+  View, download and send your form below. tap the "Edit answers" button to fix any mistakes.
 
   ${ action_button_html(url_action('review_form'), label='Edit answers', color='info') }
 
