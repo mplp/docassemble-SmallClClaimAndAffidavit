@@ -1296,12 +1296,12 @@ continue button field: sign_your_claim
 ---
 objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
-  - claim_affidavit: ALDocument.using(title="Claim and Affidavit", filename="final__dc_84_affidavit_and_claim_sm.pdf", enabled=True, has_addendum=True, default_overflow_message="(See '7. Date(s) Claim Arose' in Addendum)")
-  - claim_affidavit_additional: ALDocument.using(title="Claim and Affidavit DC 85", filename="dc_85_affidavit_and_claim_sm.pdf", enabled=True, has_addendum=False, default_overflow_message=" (See '7. Date(s) Claim Arose' in Addendum)")
+  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True, default_overflow_message="(See '7. Date(s) Claim Arose' in Addendum)")
+  - claim_affidavit_additional: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False, default_overflow_message=" (See '7. Date(s) Claim Arose' in Addendum)")
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_additional], filename="final__dc_84_affidavit_and_claim_sm.pdf", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_additional], filename="final__dc_84_affidavit_and_claim_sm.pdf", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_additional], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_additional], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
@@ -1334,11 +1334,11 @@ code: |
   claim_affidavit.overflow_fields.gathered = True
 ---
 attachment:
-  name: dc_85
-  filename: dc_85
+  name: Judgment - DC 85
+  filename: Judgment - DC 85
   variable name: claim_affidavit_additional[i]
   editable: False
-  pdf template file: dc_85.pdf
+  pdf template file: Judgment_-_DC_85.pdf
   fields:
       - "District": ${ the_court.number }
       - "CASE NO": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else ''}
@@ -1386,11 +1386,11 @@ attachment:
       - "Text4": 
 ---
 attachment:
-  name: foc_116
-  filename: foc_116
+  name: Affidavit and Claim - DC 84
+  filename: Affidavit and Claim - DC 84
   variable name: claim_affidavit[i]
   editable: False
-  pdf template file: final__dc_84_affidavit_and_claim_sm.pdf
+  pdf template file: Affidavit_and_Claim_-_DC_84.pdf
   fields:
       - "state_of_michigan": ${ the_court.number }
       - "case_no": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else ''}
