@@ -89,9 +89,6 @@ code: |
   ### ensure user can continue with interview ###
   interview_order_claim_qualifiers
 
-  ### gather rest of user info ###
-  
-
   ### gather defendant info ###
   nav.set_section('signpost_other_info')
   defendant_information
