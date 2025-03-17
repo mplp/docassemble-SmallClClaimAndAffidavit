@@ -1111,7 +1111,7 @@ continue button field: sign_your_claim
 ---
 objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
-  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True, default_overflow_message="[PLEASE SEE ADDENDUM.]")
+  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True)
   - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
 ---
 objects:
@@ -1144,10 +1144,12 @@ attachment:
   docx template file: claim_affidavit_Addendum.docx
 ---
 code: |
-  claim_affidavit.overflow_fields['list_all_dates'].overflow_trigger = 30
+  claim_affidavit.overflow_fields['list_all_dates'].overflow_trigger = 70
   claim_affidavit.overflow_fields['list_all_dates'].label = "7. The date(s) the claim arose is/are"
-  claim_affidavit.overflow_fields['reasons_for_your_claim'].overflow_trigger = 250
+  
+  claim_affidavit.overflow_fields['reasons_for_your_claim'].overflow_trigger = 1
   claim_affidavit.overflow_fields['reasons_for_your_claim'].label = "9. The reasons for the claim are"
+  claim_affidavit.overflow_fields['reasons_for_your_claim'].input_width = 1
   
   claim_affidavit.overflow_fields.gathered = True
 ---
@@ -1186,7 +1188,7 @@ attachment:
       - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
       - "defendant_name": ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first}
       - "defendant_address": ${defendants[0].address.address+" "+defendants[0].address.unit}
-      - "defendant_telephone_no": ${"Unknown phone" if defendants[0].no_phone_number else phone_number_formatted(defendants[0].phone_number)}
+      - "defendant_telephone_no": ${"Unknown" if defendants[0].no_phone_number else phone_number_formatted(defendants[0].phone_number)}
       - "defendant_city_state_zip":  ${defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip}
       - "has_prev_action": ${True if(past_or_current_court_case and about_same_thing_as_this_case) else False}
       - "has_this_court": ${case_filed_in_same_court if (past_or_current_court_case and about_same_thing_as_this_case ) else False}
@@ -1211,9 +1213,9 @@ attachment:
       - "has_defendant_other": ${True if (defendant_is=='Other') else False}
       - "defendant_other": ${type_of_entity if (defendant_is=='Other') else ''}
       - "has_defendant_corporation": ${True if (defendant_is=='A corporation') else False}
-      - "date_claim_arose": ${ claim_affidavit.safe_value('list_all_dates') }
+      - "date_claim_arose": ${ claim_affidavit.original_or_overflow_message("list_all_dates", "See attachment.") }
       - "amount_of_money_claimed": ${thousands(amount,show_decimals=True)}
-      - "claim_reason": ${ claim_affidavit.safe_value('reasons_for_your_claim') }
+      - "claim_reason": ${ claim_affidavit.original_or_overflow_message("reasons_for_your_claim", "See attachment.") }
       - "`43": ''
       - "has_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
       - "has_not_mentally_competent": ${not(is_mentally_competent) if defendant_is == "An individual" else ""}
