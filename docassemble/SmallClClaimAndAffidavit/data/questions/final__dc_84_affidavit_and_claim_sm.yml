@@ -162,7 +162,7 @@ code: |
 
   ### claim amount limitations ###
   amount
-  if amount:
+  if amount > 7000.00:
     warning_for_claim
     if warning_for_claim == "I would like to exit.":
       existing_case_kickout
@@ -237,11 +237,11 @@ code: |
 ---
 code: |
   if are_you_filing:
-    text_in_para = "You"
+    user_alt_label = "You"
   elif not are_you_filing and Who_are_you_filing_claim_for == "Another person": 
-    text_in_para = users[0].name
+    user_alt_label = users[0].name
   elif not are_you_filing and (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" or Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other"):  
-    text_in_para = users[0].name.first
+    user_alt_label = users[0].name.first
 ---
 id: understands_rules
 question: |
@@ -309,10 +309,10 @@ question: |
     % if are_you_filing: 
     You can't have a lawyer in a small claims case.
     % else: 
-    ${text_in_para} can't have a lawyer in a small claims case.
+    ${user_alt_label} can't have a lawyer in a small claims case.
     % endif 
   % elif want_to_have_jury_trial:
-  ${text_in_para} can't have a jury trial in a small claims case. 
+  ${user_alt_label} can't have a jury trial in a small claims case. 
   % else:
   You have tapped the option to exit.
   % endif
@@ -333,11 +333,11 @@ id: claims_kick_out
 event: claims_kick_out
 question: |
   % if claims_suit_against_state:
-  ${text_in_para} can't file a Small Claims case against the state or a state agency.
+  ${user_alt_label} can't file a Small Claims case against the state or a state agency.
   % elif are_you_filing:
-  ${text_in_para} cannot file this case in Small Claims Court because ${text_in_para if text_in_para != 'You' else 'you'} were not directly involved in the transaction or dispute.
+  ${user_alt_label} cannot file this case in Small Claims Court because ${user_alt_label if user_alt_label != 'You' else 'you'} were not directly involved in the transaction or dispute.
   % else:
-  ${text_in_para} cannot file this case in Small Claims Court because ${text_in_para if text_in_para != 'You' else 'you'} was not directly involved in the transaction or dispute.
+  ${user_alt_label} cannot file this case in Small Claims Court because ${user_alt_label if user_alt_label != 'You' else 'you'} was not directly involved in the transaction or dispute.
   % endif
 subquestion: |
   % if claims_suit_against_state:
@@ -345,7 +345,7 @@ subquestion: |
   % elif are_you_filing:
   If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, you may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % else:
-  If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${text_in_para if text_in_para != 'You' else 'you'} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
+  If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${user_alt_label if user_alt_label != 'You' else 'you'} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % endif
   
   If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Exit** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
@@ -413,7 +413,7 @@ fields:
       % if are_you_filing:
       Is a lawyer representing you in this case?
       % else: 
-      Is a lawyer representing ${ text_in_para } in this case?
+      Is a lawyer representing ${ user_alt_label } in this case?
       % endif
     field: is_lawyer_representing
     datatype: yesnoradio
@@ -426,7 +426,7 @@ fields:
       % if are_you_filing:
       Do you want to have a jury trial?
       % else: 
-      Does ${ text_in_para } want to have a jury trial?
+      Does ${ user_alt_label } want to have a jury trial?
       % endif
     field: want_to_have_jury_trial
     datatype: yesnoradio
@@ -435,9 +435,9 @@ id: warning_for_claim
 question: |
   Warning:
 subquestion: |
-  ${text_in_para} can continue with the case even if you're asking for more money, but ${text_in_para if text_in_para != 'You' else 'you'} won't be able to get more than $7,000.
+  ${user_alt_label} can continue with the case even if you're asking for more money, but ${user_alt_label if user_alt_label != 'You' else 'you'} won't be able to get more than $7,000.
   
-  If you want to sue for more than $7,000, ${text_in_para if text_in_para != 'You' else 'you'} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
+  If you want to sue for more than $7,000, ${user_alt_label if user_alt_label != 'You' else 'you'} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
   
 fields:
   - Please select one of the following two options:: warning_for_claim
@@ -453,14 +453,14 @@ continue button field: start_the_claim
 ---
 id: claim for damages
 question: |
-  Is this claim for damages to ${text_in_para if text_in_para != 'You' else 'you'} by someone who harmed ${text_in_para if text_in_para != 'You' else 'you'} on purpose?
+  Is this claim for damages to ${user_alt_label if user_alt_label != 'You' else 'you'} by someone who harmed ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose?
 subquestion: |
   This includes things such as:
   
-  * fraud (someone tricked or deceived ${text_in_para if text_in_para != 'You' else 'you'} on purpose)
-  * libel or slander (someone made an untrue statement about ${text_in_para if text_in_para != 'You' else 'you'} that hurts your reputation)
-  * assault & battery (someone threatened or hurt ${text_in_para if text_in_para != 'You' else 'you'})
-  * malicious destruction of property (someone damaged or destroyed ${'your' if text_in_para == 'You' else text_in_para}${"'s" if text_in_para != 'You' else ""} property on purpose)
+  * fraud (someone tricked or deceived ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose)
+  * libel or slander (someone made an untrue statement about ${user_alt_label if user_alt_label != 'You' else 'you'} that hurts your reputation)
+  * assault & battery (someone threatened or hurt ${user_alt_label if user_alt_label != 'You' else 'you'})
+  * malicious destruction of property (someone damaged or destroyed ${'your' if user_alt_label == 'You' else user_alt_label}${"'s" if user_alt_label != 'You' else ""} property on purpose)
 fields:
   - Is this claim for harm done to you on purpose, like the examples listed above?: claim_for_damages
     datatype: yesnoradio
@@ -481,9 +481,9 @@ question: |
 subquestion: |
   There is an exception if the damage is because of:
   
-  * a dishonored check (a check someone wrote to ${text_in_para if text_in_para != 'You' else 'you'} that the bank did not pay)
+  * a dishonored check (a check someone wrote to ${user_alt_label if user_alt_label != 'You' else 'you'} that the bank did not pay)
   * a consumer protection violation (harm by someone's deceptive business practices)
-  * a recreational trespass (someone went on ${'your' if text_in_para == 'You' else text_in_para}${"'s" if text_in_para != 'You' else ""} property without permission during a recreational activity)
+  * a recreational trespass (someone went on ${'your' if user_alt_label == 'You' else user_alt_label}${"'s" if user_alt_label != 'You' else ""} property without permission during a recreational activity)
   
 fields:
   - Does the claim involve one of those exceptions?: claim_for_damages_yes
@@ -514,7 +514,7 @@ continue button field: claim_for_damages_dont_know
 ---
 id: claim_for_damages_yes_kickout
 question: |
-  ${text_in_para} cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery. 
+  ${user_alt_label} cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery. 
 subquestion: |
   You may want to talk to a lawyer about filing this claim in District or Circuit Court.
   
@@ -523,16 +523,6 @@ buttons:
   - Exit: exit
     url: https://michiganlegalhelp.org/
 continue button field: claim_for_damages_yes_kickout
----
-id: your contact information
-question: |
-  % if are_you_filing:
-  What is your phone number?
-  % else:
-  What is ${text_in_para}'s phone number?
-  % endif
-fields:
-  - Mobile number: x.phone_number
 ---
 id: claims_suit_against_state
 question: |
@@ -613,7 +603,7 @@ fields:
       % if are_you_filing:
       Have you filed five small claims cases in the past week?
       % else:
-      Has ${text_in_para} filed five small claims cases in the past week?
+      Has ${user_alt_label} filed five small claims cases in the past week?
       % endif
     field: five_small_claims_cases
     datatype: yesnoradio
@@ -623,7 +613,7 @@ question: |
   % if are_you_filing:
   You cannot file this case now.
   % else:
-  ${text_in_para} cannot file this case now.
+  ${user_alt_label} cannot file this case now.
   % endif
 subquestion: |
   You can only file five cases a week in Small Claims Court. You can continue this interview if you wait at least a week before filing this case.
@@ -652,7 +642,7 @@ fields:
       % if are_you_filing:
       Were you directly involved in the transaction or dispute in this case?
       % else:
-      Was ${text_in_para} directly involved in the transaction or dispute in this case?
+      Was ${user_alt_label} directly involved in the transaction or dispute in this case?
       % endif
     field: directly_involved_transaction_or_dispute
     datatype: yesnoradio
@@ -678,7 +668,7 @@ question: |
  % if are_you_filing:
  We need some more information about you.
  % else:
- We need some more information about ${text_in_para}.
+ We need some more information about ${user_alt_label}.
  % endif
 continue button field: need_some_more_information
 ---
@@ -739,13 +729,13 @@ question: |
   % if are_you_filing:
   The next step is to figure out where you should file your case.
   % else:
-  The next step is to figure out where ${text_in_para} should file this case.
+  The next step is to figure out where ${user_alt_label} should file this case.
   % endif
 subquestion: |
   % if are_you_filing:
   You must file your case in the right court, or it may be dismissed. If your case is dismissed you will lose your filing fee and have to file again in the right court.
   % else:
-  You must file ${text_in_para}'s case in the right court, or it may be dismissed. If ${text_in_para}'s case is dismissed you will lose the filing fee and have to file again in the right court.
+  You must file ${user_alt_label}'s case in the right court, or it may be dismissed. If ${user_alt_label}'s case is dismissed you will lose the filing fee and have to file again in the right court.
   % endif
 continue button field: where_should_file_claim
 ---
@@ -763,7 +753,7 @@ id: past_or_current_court_case
 question: |
   Past or current court cases
 fields:
-  - Is there a past or current court case between ${text_in_para if text_in_para != 'You' else 'you'} and ${ defendants[0].name.first }?: past_or_current_court_case
+  - Is there a past or current court case between ${user_alt_label if user_alt_label != 'You' else 'you'} and ${ defendants[0].name.first }?: past_or_current_court_case
     datatype: yesnoradio
 ---
 id: about_same_thing_as_this_case
@@ -817,6 +807,7 @@ subquestion: |
 fields:
   - Judge: judge
     required: False
+    label above field: False
 ---
 id: amount
 question: |
@@ -826,11 +817,11 @@ fields:
       % if are_you_filing:
       How much money are you asking for?
       % else:
-      How much money is ${text_in_para} asking for?
+      How much money is ${user_alt_label} asking for?
       % endif
     field: amount
     datatype: currency
-    max: 7000.00
+    max: 7000
 under: ${ collapse_template(amount_explanation) }
 ---
 template: amount_explanation
@@ -1050,10 +1041,10 @@ question: |
   % if are_you_filing:
   What is your address?
   % else:
-  What is ${text_in_para}'s address?
+  What is ${user_alt_label}'s address?
   % endif
 subquestion: |
-  Use an address where ${text_in_para if text_in_para != 'You' else 'you'} can be contacted.
+  Use an address where ${user_alt_label if user_alt_label != 'You' else 'you'} can be contacted.
 fields:
   - code: |
       users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE, show_country=False)
@@ -1120,12 +1111,12 @@ continue button field: sign_your_claim
 ---
 objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
-  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True, default_overflow_message="(See '7. Date(s) Claim Arose' in Addendum)")
-  - claim_affidavit_additional: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False, default_overflow_message=" (See '7. Date(s) Claim Arose' in Addendum)")
+  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True)
+  - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_additional], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_additional], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
@@ -1153,61 +1144,33 @@ attachment:
   docx template file: claim_affidavit_Addendum.docx
 ---
 code: |
-  claim_affidavit.overflow_fields['list_all_dates'].overflow_trigger = 40
-  claim_affidavit.overflow_fields['list_all_dates'].label = "(7. Date(s) Claim Arose in Addendum)"
+  claim_affidavit.overflow_fields['list_all_dates'].overflow_trigger = 70
+  claim_affidavit.overflow_fields['list_all_dates'].label = "7. The date(s) the claim arose is/are"
+  
+  claim_affidavit.overflow_fields['reasons_for_your_claim'].overflow_trigger = 1
+  claim_affidavit.overflow_fields['reasons_for_your_claim'].label = "9. The reasons for the claim are"
+  claim_affidavit.overflow_fields['reasons_for_your_claim'].input_width = 1
+  
   claim_affidavit.overflow_fields.gathered = True
 ---
 attachment:
   name: Judgment - DC 85
   filename: Judgment - DC 85
-  variable name: claim_affidavit_additional[i]
+  variable name: claim_affidavit_judgement[i]
   editable: False
   pdf template file: Judgment_-_DC_85.pdf
   fields:
       - "District": ${ the_court.number }
-      - "CASE NO": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else ''}
-      - "Judge": ${judge if (past_or_current_court_case and about_same_thing_as_this_case) else ''}
-      - "Court telephone no": ${ the_court.phone }
+      - "Court telephone no": ${ phone_number_formatted(the_court.phone) }
       - "Court address": ${ the_court.address }
-      - "JUDGMENT": No
-      - "For 1": 
-      - "For 2": 
       - "Plaintiffs name and address": |
-          ${users[0].name.first if (are_you_filing == False) else users[0].name}
-          ${users[0].address}
-      - "Personal service": No
-      - "Against 1": 
-      - "Against 2": 
-      - "After trial": No
-      - "Consent": No
-      - "Nonappearance default": No
+          ${users[0].name.first if not are_you_filing and Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other" else users[0].name}
+          ${users[0].address.line_one()}
+          ${users[0].address.line_two()}
       - "Defendants name and address": |
-          ${ defendants[0].name}
-          ${defendants[0].address}
-      - "DISMISSAL": No
-      - "Personal service_2": No
-      - "Without prejudice": No
-      - "With prejudice": No
-      - "undefined": 
-      - "undefined_2": 
-      - "Other specify": 
-      - "undefined_3": 
-      - "undefined_4": 
-      - "1 The defendant must pay the judgment to": No
-      - "full": No
-      - "Name type or print": 
-      - "installments of": No
-      - "weekly": No
-      - "biweekly": No
-      - "monthly starting": No
-      - "undefined_5": 
-      - "Date": 
-      - "3 Other": No
-      - "Other": 
-      - "Date_2": 
-      - "Text3": 
-      - "Date_3": 
-      - "Text4": 
+          ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first}
+          ${defendants[0].address.line_one()}
+          ${defendants[0].address.line_two()}
 ---
 attachment:
   name: Affidavit and Claim - DC 84
@@ -1217,18 +1180,15 @@ attachment:
   pdf template file: Affidavit_and_Claim_-_DC_84.pdf
   fields:
       - "state_of_michigan": ${ the_court.number }
-      - "case_no": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else ''}
-      - "judge_no": ${judge if (past_or_current_court_case and about_same_thing_as_this_case) else ''}
-      - "Court telephone no": ${ the_court.phone }
-      - "court_telephone_no": ${ the_court.phone }
+      - "court_telephone_no": ${ phone_number_formatted(the_court.phone) }
       - "court_address": ${ the_court.address.on_one_line() }
       - "plaintiff_name": ${users[0].name.first if not are_you_filing and Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other" else users[0].name}
       - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
-      - "plaintiff_telephone_no": ${users[0].phone_number}
+      - "plaintiff_telephone_no": ${"Does not have phone" if users[0].no_phone_number else phone_number_formatted(users[0].phone_number)}
       - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
       - "defendant_name": ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first}
       - "defendant_address": ${defendants[0].address.address+" "+defendants[0].address.unit}
-      - "defendant_telephone_no": ${defendants[0].phone_number}
+      - "defendant_telephone_no": ${"Unknown" if defendants[0].no_phone_number else phone_number_formatted(defendants[0].phone_number)}
       - "defendant_city_state_zip":  ${defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip}
       - "has_prev_action": ${True if(past_or_current_court_case and about_same_thing_as_this_case) else False}
       - "has_this_court": ${case_filed_in_same_court if (past_or_current_court_case and about_same_thing_as_this_case ) else False}
@@ -1239,7 +1199,7 @@ attachment:
       - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
       - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
-      - "has_i_am_the_plaintiff": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
+      - "has_i_am_the_plaintiff": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
       - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
       - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
       - "has_plaintiff_individual": ${True if are_you_filing else False}
@@ -1253,12 +1213,9 @@ attachment:
       - "has_defendant_other": ${True if (defendant_is=='Other') else False}
       - "defendant_other": ${type_of_entity if (defendant_is=='Other') else ''}
       - "has_defendant_corporation": ${True if (defendant_is=='A corporation') else False}
-      - "date_claim_arose": ${ claim_affidavit.safe_value('list_all_dates') }
-      - "amount_of_money_claimed": ${amount}
-      - "claim_reason_1": ${reasons_for_your_claim}
-      - "claim_reason_2": ${reasons_for_your_claim}
-      - "claim_reason_3": 
-      - "claim_reason_4": 
+      - "date_claim_arose": ${ claim_affidavit.original_or_overflow_message("list_all_dates", "See attachment.") }
+      - "amount_of_money_claimed": ${thousands(amount,show_decimals=True)}
+      - "claim_reason": ${ claim_affidavit.original_or_overflow_message("reasons_for_your_claim", "See attachment.") }
       - "`43": ''
       - "has_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
       - "has_not_mentally_competent": ${not(is_mentally_competent) if defendant_is == "An individual" else ""}
