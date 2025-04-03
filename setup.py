@@ -53,7 +53,7 @@ setup(name='docassemble.SmallClClaimAndAffidavit',
       license='The MIT License',
       url='https://courtformsonline.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.ALAnyState>=0.1.0', 'docassemble.AssemblyLine>=3.2.0'],
+      install_requires=['docassemble.ALAnyState>=0.1.0', 'docassemble.AssemblyLine>=3.2.0', 'docassemble.mlhframework', 'docassemble.ALToolbox'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/SmallClClaimAndAffidavit/', package='docassemble.SmallClClaimAndAffidavit'),
      )
