@@ -251,7 +251,7 @@ subquestion: |
    
   1. **Neither side can have a lawyer.** This includes not being allowed to get help from a lawyer if you win the case and you need to collect the judgment.
   1. **You can only ask for money.** If you want to ask for something of yours to be returned -- like your car or your dog -- you might be able to use a claim and delivery case. You can [search for a lawyer](https://michiganlegalhelp.org/resources/going-court/limited-scope-representation-lsr-more-affordable-way-hire-lawyer) or use the [Claim and Delivery](https://www.courts.michigan.gov/4a6ed0/siteassets/forms/scao-approved/mc35.pdf) court form. 
-  1. **You can only ask for up to $7000.** If the other person owes more than $7000, you can still use small claims, but the court can only order up to $7000 in the judgment. If you want to ask for more, you can search for a lawyer to help you or use the [SCAO forms page](https://www.courts.michigan.gov/SCAO-forms/) to find out if there is a form for your kind of case.
+  1. **You can only ask for up to $7,000.** If the other person owes more than $7,000, you can still use small claims, but the court can only order up to $7,000 in the judgment. If you want to ask for more, you can search for a lawyer to help you or use the [SCAO forms page](https://www.courts.michigan.gov/SCAO-forms/) to find out if there is a form for your kind of case.
   1. **You can't appeal decisions** in Small Claims Court unless the court has a magistrate on the case. If a magistrate makes the decision in your case, you are allowed to make a very limited appeal to a Small Claims judge.
   1. **You can't have a jury trial.**
 
@@ -856,6 +856,18 @@ question: |
 fields:
   - List all dates: list_all_dates
     datatype: area
+under: ${ collapse_template(dates_explanation) }
+---
+template: dates_explanation
+subject: |
+  What kinds of dates should I enter?
+content: |
+  You can enter the dates when something happened or was supposed to happen. You can also enter dates when you communicated with the defendant.
+  
+  For example:
+  
+  - Jan 1, 2024 -- I signed the contract with John Doe; April 15, 2024 -- I painted John Doe's house; May 1, 2024 -- payment was due, but never made.
+  - Feb 1, 2025 -- Jane Doe destroyed my fence; Feb 5, 2025 -- Jane Doe agreed to cover the cost of replacing the fence by the end of February; March 15, 2025 -- Jane Doe hasn't paid for the damages.
 ---
 id: what_court_was_case_in
 question: |
@@ -1195,14 +1207,21 @@ attachment:
       - "other_court_name": ${what_court_was_case_in if (past_or_current_court_case and about_same_thing_as_this_case and case_filed_in_same_court == False) else ''}
       - "has_other_court": ${True if (past_or_current_court_case and about_same_thing_as_this_case and case_filed_in_same_court == False) else False}
       - "prev_action_assigned_judge": ${judge if (past_or_current_court_case and about_same_thing_as_this_case ) else ''}
-      - "prev_action_case_number": ${case_number if (past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case) else 'Unknown'}
+      - "prev_action_case_number": |
+          % if past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case:
+          ${ case_number }
+          % elif past_or_current_court_case and about_same_thing_as_this_case and not know_case_number_of_the_other_case:
+          ${ 'Unknown' }
+          % else:
+          ${ '' }
+          % endif
       - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
-      - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
+      - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A corporation" or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
       - "has_i_am_the_plaintiff": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
+      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and not fulltime_salaried_employee_of_partnership else False}
       - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
-      - "has_plaintiff_individual": ${True if are_you_filing else False}
+      - "has_plaintiff_individual": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
       - "has_plaintiff_other": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Other' else False}
       - "plaintiff_other": ${users[0].name if not are_you_filing and Who_are_you_filing_claim_for=="Other" else ''}
       - "has_plaintiff_sole_proprietor": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False}
