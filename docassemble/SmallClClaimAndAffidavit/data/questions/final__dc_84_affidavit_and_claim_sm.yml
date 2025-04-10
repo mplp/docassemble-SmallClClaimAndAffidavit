@@ -1211,7 +1211,7 @@ attachment:
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
       - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A corporation" or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
       - "has_i_am_the_plaintiff": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and not is_owner_or_partner else False}
+      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
       - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
       - "has_plaintiff_individual": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
       - "has_plaintiff_other": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Other' else False}
