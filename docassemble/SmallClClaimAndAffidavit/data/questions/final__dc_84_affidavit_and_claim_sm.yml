@@ -130,8 +130,7 @@ code: |
 id: interview_order_business_or_other
 code: |
   if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
-    who_are_you
-    if not who_are_you:
+    if not is_owner_or_partner:
       fulltime_salaried_employee_of_partnership
       if not fulltime_salaried_employee_of_partnership:
         fulltime_salaried_employee_of_partnership_kick_out
@@ -952,16 +951,12 @@ subject: Learn more.
 content: |
   If a person is unable to represent themselves in court, someone else might be able to do it for that person. A guardian is appointed by a probate court to make personal decisions for someone. These include day-to-day decisions, such as those involving health care and education. A conservator is appointed by a probate court to care for the personal property and finances of a person. A next friend is a concerned person, usually a relative, appointed by a court who can appear in court for a child or incapacitated adult.
 ---
-id: who_are_you
+id: is_owner_or_partner
 question: |
   % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
   Ownership
   % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
   Partnership
-  % elif Who_are_you_filing_claim_for == "A corporation":
-  Corporation
-  % else:
-  Government authorization
   % endif
 fields:
   - label: |
@@ -969,12 +964,8 @@ fields:
       Are you the owner?
       % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
       Are you one of the partners?
-      % elif Who_are_you_filing_claim_for == "A corporation":
-      Are you a full-time salaried employee of the corporation and do you have knowledge of the facts in the claim?
-      % else:
-      Are you authorized by the governing body of the county, city, village, township, or local or intermediate school district to file the claim?
       % endif
-    field: who_are_you
+    field: is_owner_or_partner
     datatype: yesnoradio
 ---
 code: |
@@ -1219,7 +1210,7 @@ attachment:
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
       - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A corporation" or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
       - "has_i_am_the_plaintiff": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and not fulltime_salaried_employee_of_partnership else False}
+      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
       - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
       - "has_plaintiff_individual": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
       - "has_plaintiff_other": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Other' else False}
