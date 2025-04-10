@@ -130,8 +130,7 @@ code: |
 id: interview_order_business_or_other
 code: |
   if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
-    is_owner_or_partner
-    if not who_are_you:
+    if not is_owner_or_partner:
       fulltime_salaried_employee_of_partnership
       if not fulltime_salaried_employee_of_partnership:
         fulltime_salaried_employee_of_partnership_kick_out
