@@ -131,21 +131,21 @@ id: interview_order_business_or_other
 code: |
   if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
     if not is_owner_or_partner:
-      fulltime_salaried_employee_of_partnership
-      if not fulltime_salaried_employee_of_partnership:
-        fulltime_salaried_employee_of_partnership_kick_out
+      fulltime_salaried_employee
+      if not fulltime_salaried_employee:
+        fulltime_salaried_employee_kick_out
 
   if Who_are_you_filing_claim_for == "A corporation":
-    fulltime_salaried_employee_of_partnership
-    if not fulltime_salaried_employee_of_partnership:
-        fulltime_salaried_employee_of_partnership_kick_out
+    fulltime_salaried_employee
+    if not fulltime_salaried_employee:
+        fulltime_salaried_employee_kick_out
 
   if Who_are_you_filing_claim_for == "Other":
     elected_or_appointed
     if elected_or_appointed:
-      fulltime_salaried_employee_of_partnership
-      if not fulltime_salaried_employee_of_partnership:
-        fulltime_salaried_employee_of_partnership_kick_out
+      fulltime_salaried_employee
+      if not fulltime_salaried_employee:
+        fulltime_salaried_employee_kick_out
     else:
       what_type_of_entity
 
@@ -352,16 +352,16 @@ buttons:
   - Leave: leave
     url: https://michiganlegalhelp.org/
 ---
-id: fulltime_salaried_employee_of_partnership_claims_kick_out
-event: fulltime_salaried_employee_of_partnership_kick_out
+id: fulltime_salaried_employee_claims_kick_out
+event: fulltime_salaried_employee_kick_out
 question: |
-  % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" and not fulltime_salaried_employee_of_partnership:
+  % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" and not fulltime_salaried_employee:
   You cannot file this Small Claims case because you are not the owner or a full-time salaried employee of the owner who knows the facts of the claim.
-  % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" and not fulltime_salaried_employee_of_partnership:
+  % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" and not fulltime_salaried_employee:
   You cannot file a Small Claims case because you are not one of the partners or a full-time salaried employee of the partnership who knows the facts of the claim.
-  % elif Who_are_you_filing_claim_for == "A corporation" and not fulltime_salaried_employee_of_partnership:
+  % elif Who_are_you_filing_claim_for == "A corporation" and not fulltime_salaried_employee:
   You cannot file a Small Claims case for this corporation because you are not a full-time salaried employee of the corporation who knows the facts of the claim.
-  % elif Who_are_you_filing_claim_for == "Other" and not fulltime_salaried_employee_of_partnership:
+  % elif Who_are_you_filing_claim_for == "Other" and not fulltime_salaried_employee:
   You cannot file a Small Claims case for this county, city, village, township, or local or intermediate school district because you are not its full-time salaried employee, authorized to file the claim who knows the facts of the claim.
   % endif
 subquestion: |
@@ -375,7 +375,7 @@ event: has_court_appointed_you_as_kick_out
 question: |
   % if not has_court_appointed_you_as:
   You cannot file a Small Claims case for this person. 
-  % elif not fulltime_salaried_employee_of_partnership:
+  % elif not fulltime_salaried_employee:
   You cannot file this Small Claims case because you are not the owner or a full-time salaried employee of the owner who knows the facts of the claim.
   % else:
   You cannot file a Small Claims case because you are not one of the partners or a full-time salaried employee of the partnership who knows the facts of the claim.
@@ -859,14 +859,14 @@ under: ${ collapse_template(dates_explanation) }
 ---
 template: dates_explanation
 subject: |
-  What kinds of dates should I enter?
+  What dates should I enter?
 content: |
-  You can enter the dates when something happened or was supposed to happen. You can also enter dates when you communicated with the defendant.
+  You can enter dates when something happened or was supposed to happen. You can also enter dates when you communicated with the defendant.
   
   For example:
   
   - Jan 1, 2024 -- I signed the contract with John Doe; April 15, 2024 -- I painted John Doe's house; May 1, 2024 -- payment was due, but never made.
-  - Feb 1, 2025 -- Jane Doe destroyed my fence; Feb 5, 2025 -- Jane Doe agreed to cover the cost of replacing the fence by the end of February; March 15, 2025 -- Jane Doe hasn't paid for the damages.
+  - Jan 1, 2024 – I signed a lease with Defendant to rent an apartment and I paid him $1,500 for a security deposit; December 31, 2024 -- I moved out of the apartment and gave my new address to the Defendant; March 1, 2025 – I sent Defendant a letter asking for my deposit back.
 ---
 id: what_court_was_case_in
 question: |
@@ -1052,7 +1052,7 @@ fields:
   - code: |
       users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE, show_country=False)
 ---
-id: fulltime_salaried_employee_of_partnership
+id: fulltime_salaried_employee
 question: |
   Authorization
 fields:
@@ -1066,7 +1066,7 @@ fields:
       % elif Who_are_you_filing_claim_for == "Other":
       Are you authorized by the governing body of the county, city, village, township, or local or intermediate school district to file the claim?
       % endif
-    field: fulltime_salaried_employee_of_partnership
+    field: fulltime_salaried_employee
     datatype: yesnoradio
 under: ${ collapse_template(what_does_that_mean_salaried_employee_template) }
 ---
@@ -1208,7 +1208,7 @@ attachment:
           % endif
       - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
-      - "has_i_am_full_time_employee": ${True if (not(are_you_filing) and (Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A corporation" or Who_are_you_filing_claim_for=="Other") and fulltime_salaried_employee_of_partnership) else False}
+      - "has_i_am_full_time_employee": ${True if not(are_you_filing) and (((Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A sole proprietor (a business that is not a corporation, but is owned by one person)") and not(is_owner_or_partner)) or Who_are_you_filing_claim_for=="A corporation" or (Who_are_you_filing_claim_for=="Other" and elected_or_appointed)) and fulltime_salaried_employee else False}
       - "has_i_am_the_plaintiff": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
       - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
       - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
