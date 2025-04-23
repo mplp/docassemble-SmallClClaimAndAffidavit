@@ -1,0 +1,21 @@
+---
+modules:
+  - docassemble.demo.accordion
+---
+features:
+  css: docassemble.demo:data/static/accordion.css
+---
+id: small claims order review screen
+event: review_full
+question: |
+  Review your answers
+review:
+  - raw html: |
+      ${ start_accordion('<h2 class="h5">Your Information</h2>') }
+  - Edit: 
+      - are_you_filing
+    button: |-
+      **Are you filing this claim for yourself as an individual?**
+
+      ${ word(yesno(are_you_filing)) }
+---
