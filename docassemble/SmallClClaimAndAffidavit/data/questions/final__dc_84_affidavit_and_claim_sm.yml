@@ -72,8 +72,8 @@ code: |
 
   ### gather user info ###
   nav.set_section('signpost_your_info')
-  are_you_filing
-  if not are_you_filing:
+  filing_as_individual
+  if not filing_as_individual:
     Who_are_you_filing_claim_for
     if Who_are_you_filing_claim_for == "Another person":
       users[0].name.first
@@ -141,13 +141,7 @@ code: |
         fulltime_salaried_employee_kick_out
 
   if Who_are_you_filing_claim_for == "Other":
-    elected_or_appointed
-    if elected_or_appointed:
-      fulltime_salaried_employee
-      if not fulltime_salaried_employee:
-        fulltime_salaried_employee_kick_out
-    else:
-      what_type_of_entity
+    other_plaintiff_kickout
 
   interview_order_business_or_other = True
 ---
@@ -235,11 +229,11 @@ code: |
   defendants.there_is_another = False
 ---
 code: |
-  if are_you_filing:
+  if filing_as_individual:
     user_alt_label = "You"
-  elif not are_you_filing and Who_are_you_filing_claim_for == "Another person": 
+  elif not filing_as_individual and Who_are_you_filing_claim_for == "Another person": 
     user_alt_label = users[0].name
-  elif not are_you_filing and (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" or Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other"):  
+  elif not filing_as_individual and (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" or Who_are_you_filing_claim_for == "A corporation"):  
     user_alt_label = users[0].name.first
 ---
 id: understands_rules
@@ -305,7 +299,7 @@ id: existing_case_kickout
 event: existing_case_kickout
 question: |
   % if is_lawyer_representing:
-    % if are_you_filing: 
+    % if filing_as_individual: 
     You can't have a lawyer in a small claims case.
     % else: 
     ${user_alt_label} can't have a lawyer in a small claims case.
@@ -333,7 +327,7 @@ event: claims_kick_out
 question: |
   % if claims_suit_against_state:
   ${user_alt_label} can't file a Small Claims case against the state or a state agency.
-  % elif are_you_filing:
+  % elif filing_as_individual:
   ${user_alt_label} cannot file this case in Small Claims Court because ${user_alt_label if user_alt_label != 'You' else 'you'} were not directly involved in the transaction or dispute.
   % else:
   ${user_alt_label} cannot file this case in Small Claims Court because ${user_alt_label if user_alt_label != 'You' else 'you'} was not directly involved in the transaction or dispute.
@@ -341,7 +335,7 @@ question: |
 subquestion: |
   % if claims_suit_against_state:
   If you want to sue the State of Michigan or a state agency, you may want to talk to a lawyer about what other options you have.
-  % elif are_you_filing:
+  % elif filing_as_individual:
   If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, you may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % else:
   If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${user_alt_label if user_alt_label != 'You' else 'you'} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
@@ -361,8 +355,6 @@ question: |
   You cannot file a Small Claims case because you are not one of the partners or a full-time salaried employee of the partnership who knows the facts of the claim.
   % elif Who_are_you_filing_claim_for == "A corporation" and not fulltime_salaried_employee:
   You cannot file a Small Claims case for this corporation because you are not a full-time salaried employee of the corporation who knows the facts of the claim.
-  % elif Who_are_you_filing_claim_for == "Other" and not fulltime_salaried_employee:
-  You cannot file a Small Claims case for this county, city, village, township, or local or intermediate school district because you are not its full-time salaried employee, authorized to file the claim who knows the facts of the claim.
   % endif
 subquestion: |
   If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Leave** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
@@ -390,11 +382,23 @@ buttons:
   - Leave: leave
     url: https://michiganlegalhelp.org/
 ---
-id: are_you_filing
+id: other plaintiff kickout
+event: other_plaintiff_kickout
+question: |
+  You can't use this tool.
+subquestion: |
+  You can only use this tool to prepare small claims forms if you are filing the claim for yourself or for certain other people or businesses.
+  
+  If you think you made a mistake, tap **Undo** and change your answer. Otherwise, tap the **Leave** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
+buttons:
+  - Leave: leave
+    url: https://michiganlegalhelp.org/
+---
+id: filing_as_individual
 question: |
   Claim type
 fields:
-  - Are you filing this claim for yourself as an individual?: are_you_filing
+  - Are you filing this claim for yourself as an individual?: filing_as_individual
     datatype: yesnoradio
 under: ${ collapse_template(what_does_that_mean_individual_template) }
 ---
@@ -409,7 +413,7 @@ question: |
   Do you have a lawyer?
 fields:
   - label: |
-      % if are_you_filing:
+      % if filing_as_individual:
       Is a lawyer representing you in this case?
       % else: 
       Is a lawyer representing ${ user_alt_label } in this case?
@@ -422,7 +426,7 @@ question: |
   Jury trial
 fields:
   - label: |
-      % if are_you_filing:
+      % if filing_as_individual:
       Do you want to have a jury trial?
       % else: 
       Does ${ user_alt_label } want to have a jury trial?
@@ -599,7 +603,7 @@ question: |
   Small claims cases
 fields:
   - label: |
-      % if are_you_filing:
+      % if filing_as_individual:
       Have you filed five small claims cases in the past week?
       % else:
       Has ${user_alt_label} filed five small claims cases in the past week?
@@ -609,7 +613,7 @@ fields:
 ---
 id: cannot_file_case
 question: |
-  % if are_you_filing:
+  % if filing_as_individual:
   You cannot file this case now.
   % else:
   ${user_alt_label} cannot file this case now.
@@ -635,14 +639,14 @@ buttons:
 ---
 id: directly_involved_transaction_or_dispute
 question: |
-  % if are_you_filing:
+  % if filing_as_individual:
   Your connection to the case 
   % else:
   ${user_alt_label}'s connection to the case
   % endif
 fields:
   - label: |
-      % if are_you_filing:
+      % if filing_as_individual:
       Were you directly involved in the transaction or dispute in this case?
       % else:
       Was ${user_alt_label} directly involved in the transaction or dispute in this case?
@@ -668,7 +672,7 @@ content: |
 ---
 id: need_some_more_information
 question: |
- % if are_you_filing:
+ % if filing_as_individual:
  We need some more information about you.
  % else:
  We need some more information about ${user_alt_label}.
@@ -731,7 +735,7 @@ id: where_should_file_claim
 question: |
   The next step is to figure out where to file this case.
 subquestion: |
-  % if are_you_filing:
+  % if filing_as_individual:
   You must file your case in the right court, or it may be dismissed. If your case is dismissed you will lose your filing fee and have to file again in the right court.
   % else:
   You must file ${user_alt_label}'s case in the right court, or it may be dismissed. If ${user_alt_label}'s case is dismissed you will lose the filing fee and have to file again in the right court.
@@ -813,7 +817,7 @@ question: |
   Case total
 fields:
   - label: |
-      % if are_you_filing:
+      % if filing_as_individual:
       How much money are you asking for?
       % else:
       How much money is ${user_alt_label} asking for?
@@ -969,7 +973,7 @@ fields:
     datatype: yesnoradio
 ---
 code: |
-  if are_you_filing:
+  if filing_as_individual:
     Who_are_you_filing_claim_for = False
 ---
 id: user_name
@@ -979,58 +983,46 @@ sets:
   - users[0].name.middle
   - users[0].name.suffix
 question: |
-  % if are_you_filing:
+  % if filing_as_individual:
   Enter your full name
   % elif Who_are_you_filing_claim_for == "Another person":
   Who are you filing this claim for?
-  % elif Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" and not are_you_filing:
+  % elif Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" and not filing_as_individual:
   What is the name of the business?
-  % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" and not are_you_filing:
+  % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" and not filing_as_individual:
   What is the name of the partnership?
-  % elif Who_are_you_filing_claim_for == "A corporation" and not are_you_filing:
+  % elif Who_are_you_filing_claim_for == "A corporation" and not filing_as_individual:
   What is the name of the corporation?
-  % elif Who_are_you_filing_claim_for == "Other" and elected_or_appointed and not are_you_filing:
-    What is the name of the county, city, village, township, or local or intermediate school district?
-  % elif Who_are_you_filing_claim_for == "Other" and not elected_or_appointed and not are_you_filing:
-    What is the name of this entity?
   % endif
 fields:
   - First Name: users[0].name.first
     show if: 
       code: |
-        are_you_filing or not are_you_filing and Who_are_you_filing_claim_for == "Another person"
+        filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for == "Another person"
   - Middle Name: users[0].name.middle
     required: False
     show if: 
       code: |
-        are_you_filing or not are_you_filing and Who_are_you_filing_claim_for == "Another person"
+        filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for == "Another person"
   - Last Name: users[0].name.last
     show if: 
       code: |
-        are_you_filing or not are_you_filing and Who_are_you_filing_claim_for == "Another person"
+        filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for == "Another person"
   - Suffix: users[0].name.suffix
     required: False
     show if: 
       code: |
-        are_you_filing or not are_you_filing and Who_are_you_filing_claim_for == "Another person"
+        filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for == "Another person"
     code: |
       name_suffix()
   - Corporation's name: users[0].name.first
     show if: 
       code: |
-        not are_you_filing and Who_are_you_filing_claim_for == "A corporation"
+        not filing_as_individual and Who_are_you_filing_claim_for == "A corporation"
   - Business name: users[0].name.first
     show if: 
       code: |
-        not are_you_filing and Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" and not are_you_filing or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"
-  - Name: users[0].name.first
-    show if: 
-      code: |
-        not are_you_filing and Who_are_you_filing_claim_for == "Other" and elected_or_appointed
-  - ${ what_type_of_entity } name: users[0].name.first
-    show if:
-      code: |
-        not are_you_filing and Who_are_you_filing_claim_for == "Other" and not elected_or_appointed
+        not filing_as_individual and Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" and not filing_as_individual or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"
 ---
 id: your address
 sets:
@@ -1041,7 +1033,7 @@ sets:
   - users[0].address.state
 #  - users[0].address.country
 question: |
-  % if are_you_filing:
+  % if filing_as_individual:
   What is your address?
   % else:
   What is ${user_alt_label}'s address?
@@ -1063,8 +1055,6 @@ fields:
       Are you a full-time salaried employee of the partnership and do you know about the facts in the claim?
       % elif Who_are_you_filing_claim_for == "A corporation":
       Are you a full-time salaried employee of the corporation and do you know about the facts in the claim?
-      % elif Who_are_you_filing_claim_for == "Other":
-      Are you authorized by the governing body of the county, city, village, township, or local or intermediate school district to file the claim?
       % endif
     field: fulltime_salaried_employee
     datatype: yesnoradio
@@ -1090,20 +1080,6 @@ code: |
     has_not_military_service = True
     has_do_not_know_military_service = False
     
----
-id: elected_or_appointed
-question: |
-  Officer or employee
-fields:
-  - Are you an elected or appointed officer or employee of the county, city, village, township, or local or intermediate school district who knows about the facts of the claim?: elected_or_appointed
-    datatype: yesnoradio
----
-id: what_type_of_entity
-question: |
-  Type of entity
-fields:
-  - What type of entity are you filing this claim for?: what_type_of_entity
-    datatype: area
 ---
 id: sign_your_claim
 question: |
@@ -1167,7 +1143,7 @@ attachment:
       - "Court telephone no": ${ phone_number_formatted(the_court.phone) }
       - "Court address": ${ the_court.address }
       - "Plaintiffs name and address": |
-          ${users[0].name.first if not are_you_filing and Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other" else users[0].name}
+          ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for == "A corporation" else users[0].name}
           ${users[0].address.line_one()}
           ${users[0].address.line_two()}
       - "Defendants name and address": |
@@ -1185,7 +1161,7 @@ attachment:
       - "state_of_michigan": ${ the_court.number }
       - "court_telephone_no": ${ phone_number_formatted(the_court.phone) }
       - "court_address": ${ the_court.address.on_one_line() }
-      - "plaintiff_name": ${users[0].name.first if not are_you_filing and Who_are_you_filing_claim_for == "A corporation" or Who_are_you_filing_claim_for == "Other" else users[0].name}
+      - "plaintiff_name": ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for == "A corporation" else users[0].name}
       - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
       - "plaintiff_telephone_no": ${"Does not have phone" if users[0].no_phone_number else phone_number_formatted(users[0].phone_number)}
       - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
@@ -1208,15 +1184,15 @@ attachment:
           % endif
       - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
-      - "has_i_am_full_time_employee": ${True if not(are_you_filing) and (((Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A sole proprietor (a business that is not a corporation, but is owned by one person)") and not(is_owner_or_partner)) or Who_are_you_filing_claim_for=="A corporation" or (Who_are_you_filing_claim_for=="Other" and elected_or_appointed)) and fulltime_salaried_employee else False}
-      - "has_i_am_the_plaintiff": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-      - "has_i_am_partner": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
-      - "has_plaintiff_partnership": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
-      - "has_plaintiff_individual": ${True if are_you_filing or not are_you_filing and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-      - "has_plaintiff_other": ${True if not are_you_filing and Who_are_you_filing_claim_for=='Other' else False}
-      - "plaintiff_other": ${users[0].name if not are_you_filing and Who_are_you_filing_claim_for=="Other" else ''}
-      - "has_plaintiff_sole_proprietor": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False}
-      - "has_plaintiff_corporation": ${True if not are_you_filing and Who_are_you_filing_claim_for=='A corporation' else False}
+      - "has_i_am_full_time_employee": ${True if not(filing_as_individual) and (((Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A sole proprietor (a business that is not a corporation, but is owned by one person)") and not(is_owner_or_partner)) or Who_are_you_filing_claim_for=="A corporation") and fulltime_salaried_employee else False}
+      - "has_i_am_the_plaintiff": ${True if filing_as_individual or not filing_as_individual and (Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' or (Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as)) else False}
+      - "has_i_am_partner": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
+      - "has_plaintiff_partnership": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
+      - "has_plaintiff_individual": ${True if filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
+#      - "has_plaintiff_other": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='Other' else False}
+#      - "plaintiff_other": ${users[0].name if not filing_as_individual and Who_are_you_filing_claim_for=="Other" else ''}
+      - "has_plaintiff_sole_proprietor": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False}
+      - "has_plaintiff_corporation": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A corporation' else False}
       - "has_defendant_sole_proprietor": ${True if (defendant_is=='A sole proprietor') else False}
       - "has_defendant_partnership": ${True if (defendant_is=='A partnership') else False}
       - "has_defendant_individual": ${True if (defendant_is=='An individual') else False}
