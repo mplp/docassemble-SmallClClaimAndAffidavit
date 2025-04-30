@@ -191,6 +191,23 @@ code: |
 
   interview_order_claim_qualifiers = True
 ---
+code: |
+  undefine('users[0].name.first')
+  undefine('users[0].name.middle')
+  undefine('users[0].name.last')
+  undefine('users[0].name.suffix')
+
+  reset_individual_name = True
+---
+code: |
+  if Who_are_you_filing_claim_for == "Another person":
+    undefine('users[0].name.first')
+    undefine('users[0].name.middle')
+    undefine('users[0].name.last')
+    undefine('users[0].name.suffix')
+
+  reset_another_person_name = True
+---
 # override default welcome message
 template: MLH_welcome_message     
 content: |
