@@ -11,11 +11,286 @@ question: |
   Review your answers
 review:
   - raw html: |
-      ${ start_accordion('<h2 class="h5">Your Information</h2>') }
+      ${ start_accordion('<h2 class="h5">Petitioner</h2>') }
   - Edit: 
-      - are_you_filing
+      - filing_as_individual
+      - recompute:
+        - Who_are_you_filing_claim_for
     button: |-
       **Are you filing this claim for yourself as an individual?**
 
-      ${ word(yesno(are_you_filing)) }
+      ${ word(yesno(filing_as_individual)) }
+  - Edit: 
+      - Who_are_you_filing_claim_for
+    button: |-
+        **What type of party are you filing this claim for?**
+        
+        % if Who_are_you_filing_claim_for == "Another person":
+        Another person
+        % elif Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+        A sole proprietor (a business that is not a corporation, but is owned by one person)
+        % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        A partnership (a business that is not a corporation, but is owned by two or more people)
+        % elif Who_are_you_filing_claim_for == "A corporation":
+        A corporation
+        % endif
+    show if: (not filing_as_individual) and defined('Who_are_you_filing_claim_for')
+  - Edit: 
+      - is_owner_or_partner
+    button: |-
+     % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+      **Are you the owner?**
+      % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+      **Are you one of the partners?**
+      % endif 
+
+      ${ word(yesno(is_owner_or_partner)) }
+    show if: Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"
+  - Edit: 
+      - fulltime_salaried_employee
+    button: |-
+      % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+      **Are you a full-time salaried employee of the owner and do you know about the facts in the claim?**
+      % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+      **Are you a full-time salaried employee of the partnership and do you know about the facts in the claim?**
+      % elif Who_are_you_filing_claim_for == "A corporation":
+      **Are you a full-time salaried employee of the corporation and do you know about the facts in the claim?**
+      % endif
+
+      ${ word(yesno(fulltime_salaried_employee)) }
+    show if: ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and (not is_owner_or_partner)) or (Who_are_you_filing_claim_for == "A corporation") 
+  - Edit: 
+        - users[0].name.first
+        - users[0].address.address
+        - users[0].no_phone_number
+    button: |-
+        **Who is the Plaintiff?** 
+        
+        ${ users[0].name_full() }
+        ${ users[0].address.on_one_line() }
+        % if users[0].no_phone_number:
+        Unknown phone
+        % else:
+        ${ phone_number_formatted(users[0].phone_number) }
+        % endif
+  - raw html: |
+      ${ next_accordion('<h2 class="h5">Defendant</h2>') }
+  - Edit: 
+      - defendant_is
+    button: |-
+        **The defendant is:**
+
+        % if defendant_is == "Other":
+        ${ type_of_entity }
+        % else:
+        ${ defendant_is }
+        % endif
+  - Edit: 
+      - defendants[0].name.first
+    button: |-
+        **Who is the Defendant?**
+
+        % if defendant_is != "An individual":
+        ${ defendants[0].name.first }
+        %  else:
+        ${ defendants[0].name_full() }
+        % endif
+  - Edit: 
+      - defendants[0].address.address
+    button: |-
+        **What is the Defendant's address?**
+
+        ${ defendants[0].address }
+  - Edit: 
+      - defendants[0].no_phone_number
+    button: |-
+        **What is the Defendant's phone number?**
+
+        ${ word("None") if defendants[0].no_phone_number else defendants[0].phone_numbers() }
+  - Edit: 
+      - is_mentally_competent
+    button: |-
+      **As far as you know, is ${ defendants[0] } mentally competent?**
+
+      ${ word(yesno(is_mentally_competent)) }
+    show if: defendant_is == "An individual"
+  - Edit: 
+      - age_years_or_older
+    button: |-
+      **As far as you know, is ${ defendants[0] } 18 years or older?**
+
+      ${ word(yesno(age_years_or_older)) }
+    show if: defendant_is == "An individual"
+  - Edit: 
+      - military_service
+    button: |-
+      **As far as you know, is ${ defendants[0] } in the military?**
+
+      ${ word(yesno(military_service)) }
+    show if: defendant_is == "An individual"
+  - raw html: |
+      ${ next_accordion('<h2 class="h5">Current Claim</h2>') }
+  - Edit: 
+      - is_lawyer_representing
+    button: |-
+      **Do you have a lawyer?**
+
+      ${ word(yesno(is_lawyer_representing)) }
+  - Edit: 
+      - want_to_have_jury_trial
+    button: |-
+      **Do you want a jury trial?**
+
+      ${ word(yesno(want_to_have_jury_trial)) }
+  - Edit: 
+      - amount
+    button: |-
+      **How much money are you asking for?**
+
+      ${ amount }
+  - Edit: 
+      - claim_for_damages
+    button: |-
+      **Is this a claim for damages against someone who harmed you on purpose?**
+
+      ${ word(yesno(claim_for_damages)) }
+  - Edit: 
+      - claim_for_damages_yes
+    button: |-
+      **Does the claim involve one of these exceptions?**
+
+      * a dishonored check (a check someone wrote to Sample Name that the bank did not pay)
+      * a consumer protection violation (harm by someone’s deceptive business practices)
+      * a recreational trespass (someone went on Sample Name’s property without permission during a recreational activity)
+
+      ${ word(yesno(claim_for_damages_yes)) }
+  - Edit: 
+      - claims_suit_against_state
+    button: |-
+      **Are you filing this case against the State of Michigan or a state agency?**
+
+      ${ word(yesno(claims_suit_against_state)) }
+  - Edit: 
+      - claim_against_local_government
+    button: |-
+      **Is this claim against a local government?**
+
+      ${ word(yesno(claim_against_local_government)) }
+  - Edit: 
+      - governmental_immunity
+    button: |-
+      **Does the claim involve one of these exceptions?**
+
+      * Employee negligence when operating a government owned vehicle
+      * Failure to maintain public roads or publicly owned buildings
+      * Proprietary or profit-making activities by the government
+
+      ${ word(yesno(governmental_immunity)) }
+    show if: claim_against_local_government
+  - Edit: 
+      - five_small_claims_cases
+    button: |-
+      **Have you filed five small claims cases in the past week?**
+
+      ${ word(yesno(five_small_claims_cases)) }
+  - Edit: 
+      - cannot_file_case
+    button: |-
+      **Will you wait a week before filing this Affidavit and Claim?**
+
+      ${ word(yesno(cannot_file_case)) }
+    show if: five_small_claims_cases
+  - Edit: 
+      - directly_involved_transaction_or_dispute
+    button: |-
+      **Were you directly involved in the transaction or dispute in this case?**
+
+      ${ word(yesno(directly_involved_transaction_or_dispute)) }
+  - Edit: 
+      - directly_involved_transaction_or_dispute
+    button: |-
+      **Were you directly involved in the transaction or dispute in this case?**
+
+      ${ word(yesno(directly_involved_transaction_or_dispute)) }
+  - Edit: 
+      - county_choice
+    button: |-
+      **In what county are you filing the case?**
+
+      ${ county_choice } County
+  - Edit: 
+      - reasons_for_your_claim
+    button: |-
+        **What are the reasons for your claim?**
+        
+        ${ reasons_for_your_claim }
+  - Edit: 
+      - list_all_dates
+    button: |-
+        **List all dates relevant to your claim:**
+        
+        ${ list_all_dates }
+  - raw html: |
+      ${ next_accordion('<h2 class="h5">Other Claim</h2>') }
+  - Edit: 
+      - past_or_current_court_case
+    button: |-
+      **Is there a past or current court case between ${ users[0] } and ${ defendants[0] }?**
+
+      ${ word(yesno(past_or_current_court_case)) }
+  - Edit: 
+      - about_same_thing_as_this_case
+    button: |-
+      **Is there another (past or current) court case between ${ users[0] } and ${ defendants[0] } about the same issue as this case?**
+
+      ${ word(yesno(about_same_thing_as_this_case)) }
+    show if: past_or_current_court_case
+  - Edit: 
+      - is_the_case_over
+    button: |-
+      **Is the other court case between ${ users[0] } and ${ defendants[0] } over?**
+
+      ${ word(yesno(is_the_case_over)) }
+    show if: about_same_thing_as_this_case
+  - Edit: 
+      - case_filed_in_same_court
+    button: |-
+      **Was the other court case between ${ users[0] } and ${ defendants[0] } filed in the same court as this case?**
+
+      ${ word(yesno(case_filed_in_same_court)) }
+    show if: not is_the_case_over
+  - Edit: 
+      - what_court_was_case_in
+    button: |-
+      **Which court was the other court case between ${ users[0] } and ${ defendants[0] } filed in?**
+
+      ${ what_court_was_case_in }
+    show if: not case_filed_in_same_court
+  - Edit: 
+      - know_case_number_of_the_other_case
+    button: |-
+      **Do you know the case number of the other case?**
+
+      ${ word(yesno(know_case_number_of_the_other_case)) }
+    show if: about_same_thing_as_this_case
+  - Edit: 
+      - case_number
+    button: |-
+      **What was the case number of the other case?**
+
+      ${ case_number }
+    show if: know_case_number_of_the_other_case
+  - Edit: 
+      - judge
+    button: |-
+        **Who was the judge for the other case?**
+        
+        % if defined('judge'):
+        ${ judge }
+        % else:
+        *No judge entered.*
+        % endif
+    show if: about_same_thing_as_this_case
+  - raw html: |
+      ${ end_accordion() }
 ---

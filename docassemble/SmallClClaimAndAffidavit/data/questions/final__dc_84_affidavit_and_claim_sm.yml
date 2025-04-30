@@ -4,6 +4,7 @@ include:
   - docassemble.ALAnyState:any_state.yml
   - docassemble.mlhframework:mlh_interview_framework.yml
   - docassemble.ALToolbox:collapse_template.yml
+  - review.yml
 ---
 metadata:
   title: Small Claims Affidavit and Claim
