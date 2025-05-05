@@ -18,6 +18,8 @@ review:
         - Who_are_you_filing_claim_for
         - reset_individual_name
         - users[0].name.first
+        - reset_owner_or_partner
+        - reset_fulltime_employee
     button: |-
       **Are you filing this claim for yourself as an individual?**
 
@@ -25,8 +27,13 @@ review:
   - Edit: 
       - Who_are_you_filing_claim_for
       - recompute:
+        - other_kickout
         - reset_another_person_name
         - users[0].name.first
+        - reset_owner_or_partner
+        - reset_fulltime_employee
+        - regather_owner_partner
+        - regather_fulltime_employee
     button: |-
         **What type of party are you filing this claim for?**
         
