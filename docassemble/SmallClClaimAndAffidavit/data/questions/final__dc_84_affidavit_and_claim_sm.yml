@@ -219,13 +219,15 @@ code: |
   reset_fulltime_employee = True
 ---
 code: |
-  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
+  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
+  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
     is_owner_or_partner
       
   regather_owner_partner = True
 ---
 code: |
-  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
+  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
+  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
     if not is_owner_or_partner:
       fulltime_salaried_employee
       if not fulltime_salaried_employee:
@@ -239,10 +241,19 @@ code: |
   regather_fulltime_employee = True
 ---
 code: |
+  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
+  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") \
+  or Who_are_you_filing_claim_for == "A corporation":
+    if not fulltime_salaried_employee:
+      fulltime_salaried_employee_kick_out
+
+  review_employee_kickout = True
+---
+code: |
   if Who_are_you_filing_claim_for == "Other":
     other_plaintiff_kickout
-    
-  other_kickout = True
+
+  review_other_kickout = True
 ---
 # override default welcome message
 template: MLH_welcome_message     
