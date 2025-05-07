@@ -255,6 +255,60 @@ code: |
 
   review_other_kickout = True
 ---
+code: |
+  if is_lawyer_representing:
+    existing_case_kickout
+
+  review_lawyer_kickout = True
+---
+code: |
+  if want_to_have_jury_trial:
+    existing_case_kickout
+
+  review_jury_trial_kickout = True
+---
+code: |
+  if not claim_for_damages_yes:
+    claim_for_damages_yes_kickout
+
+  review_damages_claim_kickout = True
+---
+code: |
+  if not claim_for_damages:
+    undefine('claim_for_damages_yes')
+
+  reset_damage_claim_exceptions = True
+---
+code: |
+  if claims_suit_against_state:
+    claims_kick_out
+
+  review_state_claim_kickout = True
+---
+code: |
+  if not claim_against_local_government:
+    undefine('governmental_immunity')
+
+  reset_gov_immunity_exceptions = True
+---
+code: |
+  if not governmental_immunity:
+    governmental_immunity_no
+
+  review_gov_immunity_kickout = True
+---
+code: |
+  if not five_small_claims_cases:
+    undefine('cannot_file_case')
+
+  reset_cannot_file_case = True
+---
+code: |
+  if not cannot_file_case:
+    cannot_file_case_kickout
+
+  review_wait_week_kickout = True
+---
 # override default welcome message
 template: MLH_welcome_message     
 content: |

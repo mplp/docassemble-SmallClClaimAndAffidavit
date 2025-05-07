@@ -152,7 +152,7 @@ review:
   - Edit: 
       - is_lawyer_representing
       - recompute:
-        - existing_case_kickout
+        - review_lawyer_kickout
     button: |-
       % if filing_as_individual:
       **Do you have a lawyer?**
@@ -164,7 +164,7 @@ review:
   - Edit: 
       - want_to_have_jury_trial
       - recompute:
-        - existing_case_kickout
+        - review_jury_trial_kickout
     button: |-
       % if filing_as_individual:
       **Do you want a jury trial?**
@@ -181,12 +181,20 @@ review:
       ${ amount }
   - Edit: 
       - claim_for_damages
+      - recompute:
+        - reset_damage_claim_exceptions
     button: |-
+      % if filing_as_individual:
       **Is this a claim for damages against someone who harmed you on purpose?**
+      % else:
+      **Is this a claim for damages against someone who harmed ${ users[0].name_full() } on purpose?**
+      % endif
 
       ${ word(yesno(claim_for_damages)) }
   - Edit: 
       - claim_for_damages_yes
+      - recompute:
+        - review_damages_claim_kickout
     button: |-
       **Does the claim involve one of these exceptions?**
 
@@ -197,18 +205,24 @@ review:
       ${ word(yesno(claim_for_damages_yes)) }
   - Edit: 
       - claims_suit_against_state
+      - recompute:
+        - review_state_claim_kickout
     button: |-
       **Are you filing this case against the State of Michigan or a state agency?**
 
       ${ word(yesno(claims_suit_against_state)) }
   - Edit: 
       - claim_against_local_government
+      - recompute:
+        - reset_gov_immunity_exceptions
     button: |-
       **Is this claim against a local government?**
 
       ${ word(yesno(claim_against_local_government)) }
   - Edit: 
       - governmental_immunity
+      - recompute:
+        - review_gov_immunity_kickout
     button: |-
       **Does the claim involve one of these exceptions?**
 
@@ -220,23 +234,21 @@ review:
     show if: claim_against_local_government
   - Edit: 
       - five_small_claims_cases
+      - recompute:
+        - reset_cannot_file_case
     button: |-
       **Have you filed five small claims cases in the past week?**
 
       ${ word(yesno(five_small_claims_cases)) }
   - Edit: 
       - cannot_file_case
+      - recompute:
+        - review_wait_week_kickout
     button: |-
       **Will you wait a week before filing this Affidavit and Claim?**
 
       ${ word(yesno(cannot_file_case)) }
     show if: five_small_claims_cases
-  - Edit: 
-      - directly_involved_transaction_or_dispute
-    button: |-
-      **Were you directly involved in the transaction or dispute in this case?**
-
-      ${ word(yesno(directly_involved_transaction_or_dispute)) }
   - Edit: 
       - directly_involved_transaction_or_dispute
     button: |-
