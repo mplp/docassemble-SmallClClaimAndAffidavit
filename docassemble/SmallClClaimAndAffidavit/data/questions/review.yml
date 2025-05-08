@@ -10,8 +10,15 @@ event: review_full
 question: |
   Review your answers
 review:
+  - note: |
+      % if defined('filing_as_individual'):
+      ${ review_accordion_explainer }
+      % else:
+      ${ review_empty_explainer }
+      % endif
   - raw html: |
-      ${ start_accordion('<h2 class="h5">Petitioner</h2>') }
+      ${ start_accordion('<h2 class="h5">Plaintiff</h2>') }
+    show if: defined('filing_as_individual')
   - Edit: 
       - filing_as_individual
       - recompute:
@@ -77,23 +84,25 @@ review:
     show if: ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and (not is_owner_or_partner)) or (Who_are_you_filing_claim_for == "A corporation") 
   - Edit: 
         - users[0].name.first
-        - users[0].address.address
-        - users[0].no_phone_number
     button: |-
         **Who is the Plaintiff?** 
         
-        **Name**: ${ users[0].name_full() }
+        ${ users[0].name_full() }
+  - Edit: 
+        - users[0].address.address
+    button: |-
+        **What is the Plaintiff's address?** 
 
-        **Address**: ${ users[0].address.on_one_line() }
-        % if users[0].no_phone_number:
+        ${ users[0].address.on_one_line() }
+  - Edit: 
+        - users[0].no_phone_number
+    button: |-
+        **What is the Plaintiff's phone number?**
 
-        **Phone**: None
-        % else:
-
-        **Phone**: ${ phone_number_formatted(users[0].phone_number) }
-        % endif
+        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() } 
   - raw html: |
       ${ next_accordion('<h2 class="h5">Defendant</h2>') }
+    show if: defined('defendant_is')
   - Edit: 
       - defendant_is
       - recompute:
@@ -129,7 +138,7 @@ review:
     button: |-
         **What is the Defendant's phone number?**
 
-        ${ word("None") if defendants[0].no_phone_number else defendants[0].phone_numbers() }
+        ${ word("None provided") if defendants[0].no_phone_number else defendants[0].phone_numbers() }
   - Edit: 
       - is_mentally_competent
     button: |-
@@ -157,7 +166,8 @@ review:
       % endif
     show if: defendant_is == "An individual"
   - raw html: |
-      ${ next_accordion('<h2 class="h5">Current Claim</h2>') }
+      ${ next_accordion('<h2 class="h5">This Case</h2>') }
+    show if: defined('is_lawyer_representing')
   - Edit: 
       - is_lawyer_representing
       - recompute:
@@ -285,7 +295,8 @@ review:
         
         ${ list_all_dates }
   - raw html: |
-      ${ next_accordion('<h2 class="h5">Other Claim</h2>') }
+      ${ next_accordion('<h2 class="h5">Other Case</h2>') }
+    show if: defined('past_or_current_court_case')
   - Edit: 
       - past_or_current_court_case
       - recompute:
@@ -355,4 +366,5 @@ review:
     show if: about_same_thing_as_this_case
   - raw html: |
       ${ end_accordion() }
+    show if: defined('filing_as_individual')
 ---
