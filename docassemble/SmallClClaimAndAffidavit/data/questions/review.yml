@@ -288,14 +288,18 @@ review:
       ${ next_accordion('<h2 class="h5">Other Claim</h2>') }
   - Edit: 
       - past_or_current_court_case
+      - recompute:
+        - reset_other_case_variables
     button: |-
       **Is there a past or current court case between ${ users[0] } and ${ defendants[0] }?**
 
       ${ word(yesno(past_or_current_court_case)) }
   - Edit: 
       - about_same_thing_as_this_case
+      - recompute:
+        - reset_other_case_variables_2
     button: |-
-      **Is there another (past or current) court case between ${ users[0] } and ${ defendants[0] } about the same issue as this case?**
+      **Is the other court case between ${ users[0] } and ${ defendants[0] } about the same issue as this case?**
 
       ${ word(yesno(about_same_thing_as_this_case)) }
     show if: past_or_current_court_case
@@ -308,6 +312,8 @@ review:
     show if: about_same_thing_as_this_case
   - Edit: 
       - case_filed_in_same_court
+      - recompute:
+        - reset_other_case_court
     button: |-
       **Was the other court case between ${ users[0] } and ${ defendants[0] } filed in the same court as this case?**
 
@@ -322,6 +328,8 @@ review:
     show if: not case_filed_in_same_court
   - Edit: 
       - know_case_number_of_the_other_case
+      - recompute:
+        - reset_other_case_number
     button: |-
       **Do you know the case number of the other case?**
 

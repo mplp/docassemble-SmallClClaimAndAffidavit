@@ -331,6 +331,41 @@ code: |
 
   reset_individual_defendant_attributes = True
 ---
+code: |
+  if not past_or_current_court_case:
+    undefine('about_same_thing_as_this_case')
+    undefine('is_the_case_over')
+    undefine('case_filed_in_same_court')
+    undefine('what_court_was_case_in')
+    undefine('know_case_number_of_the_other_case')
+    undefine('case_number')
+    undefine('judge')
+
+  reset_other_case_variables = True
+---
+code: |
+  if not about_same_thing_as_this_case:
+    undefine('is_the_case_over')
+    undefine('case_filed_in_same_court')
+    undefine('what_court_was_case_in')
+    undefine('know_case_number_of_the_other_case')
+    undefine('case_number')
+    undefine('judge')
+
+  reset_other_case_variables_2 = True
+---
+code: |
+  if case_filed_in_same_court:
+    undefine('what_court_was_case_in')
+
+  reset_other_case_court = True
+---
+code: |
+  if not know_case_number_of_the_other_case:
+    undefine('case_number')
+
+  reset_other_case_number = True
+---
 # override default welcome message
 template: MLH_welcome_message     
 content: |
