@@ -309,6 +309,28 @@ code: |
 
   review_wait_week_kickout = True
 ---
+code: |
+  if not directly_involved_transaction_or_dispute:
+    claims_kick_out
+
+  review_directly_involved_kickout = True
+---
+code: |
+  undefine('defendants[0].name.first')
+  undefine('defendants[0].name.middle')
+  undefine('defendants[0].name.last')
+  undefine('defendants[0].name.suffix')
+
+  reset_defendant_name = True
+---
+code: |
+  if defendant_is != "An individual":
+    undefine('is_mentally_competent')
+    undefine('age_years_or_older')
+    undefine('military_service')
+
+  reset_individual_defendant_attributes = True
+---
 # override default welcome message
 template: MLH_welcome_message     
 content: |

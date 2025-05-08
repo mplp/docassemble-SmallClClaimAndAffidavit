@@ -96,6 +96,10 @@ review:
       ${ next_accordion('<h2 class="h5">Defendant</h2>') }
   - Edit: 
       - defendant_is
+      - recompute:
+        - reset_defendant_name
+        - defendants[0].name.first
+        - reset_individual_defendant_attributes
     button: |-
         **The defendant is:**
 
@@ -144,8 +148,13 @@ review:
       - military_service
     button: |-
       **As far as you know, is ${ defendants[0] } in the military?**
+      % if military_service is None:
+
+      *I don't know*
+      % else:
 
       ${ word(yesno(military_service)) }
+      % endif
     show if: defendant_is == "An individual"
   - raw html: |
       ${ next_accordion('<h2 class="h5">Current Claim</h2>') }
@@ -251,6 +260,8 @@ review:
     show if: five_small_claims_cases
   - Edit: 
       - directly_involved_transaction_or_dispute
+      - recompute:
+        - review_directly_involved_kickout
     button: |-
       **Were you directly involved in the transaction or dispute in this case?**
 
