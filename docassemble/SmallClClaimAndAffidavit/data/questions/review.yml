@@ -215,11 +215,11 @@ review:
       - recompute:
         - review_damages_claim_kickout
     button: |-
-      **Does the claim involve one of these exceptions?**
+      **Does your claim involve one of the following exceptions for cases dealing with intentional harm?**
 
-      * a dishonored check (a check someone wrote to Sample Name that the bank did not pay)
-      * a consumer protection violation (harm by someone’s deceptive business practices)
-      * a recreational trespass (someone went on Sample Name’s property without permission during a recreational activity)
+      * **A dishonored check (a check someone wrote to Sample Name that the bank did not pay).**
+      * **A consumer protection violation (harm by someone’s deceptive business practices).**
+      * **A recreational trespass (someone went on Sample Name’s property without permission during a recreational activity).**
 
       ${ word(yesno(claim_for_damages_yes)) }
   - Edit: 
@@ -243,11 +243,11 @@ review:
       - recompute:
         - review_gov_immunity_kickout
     button: |-
-      **Does the claim involve one of these exceptions?**
+      **Does your claim involve one of the following exceptions to government immunity?**
 
-      * Employee negligence when operating a government owned vehicle
-      * Failure to maintain public roads or publicly owned buildings
-      * Proprietary or profit-making activities by the government
+      * **Employee negligence when operating a government owned vehicle.**
+      * **Failure to maintain public roads or publicly owned buildings.**
+      * **Proprietary or profit-making activities by the government.**
 
       ${ word(yesno(governmental_immunity)) }
     show if: claim_against_local_government
