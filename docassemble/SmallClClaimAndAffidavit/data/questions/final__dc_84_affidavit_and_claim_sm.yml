@@ -4,6 +4,7 @@ include:
   - docassemble.ALAnyState:any_state.yml
   - docassemble.mlhframework:mlh_interview_framework.yml
   - docassemble.ALToolbox:collapse_template.yml
+  - review.yml
 ---
 metadata:
   title: Small Claims Affidavit and Claim
@@ -189,6 +190,181 @@ code: |
     claims_kick_out
 
   interview_order_claim_qualifiers = True
+---
+code: |
+  undefine('users[0].name.first')
+  undefine('users[0].name.middle')
+  undefine('users[0].name.last')
+  undefine('users[0].name.suffix')
+
+  reset_individual_name = True
+---
+code: |
+  if Who_are_you_filing_claim_for == "Another person":
+    undefine('users[0].name.first')
+    undefine('users[0].name.middle')
+    undefine('users[0].name.last')
+    undefine('users[0].name.suffix')
+
+  reset_another_person_name = True
+---
+code: |
+  undefine('is_owner_or_partner')
+    
+  reset_owner_or_partner = True
+---
+code: |
+  undefine('fulltime_salaried_employee')
+
+  reset_fulltime_employee = True
+---
+code: |
+  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
+  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
+    is_owner_or_partner
+      
+  regather_owner_partner = True
+---
+code: |
+  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
+  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
+    if not is_owner_or_partner:
+      fulltime_salaried_employee
+      if not fulltime_salaried_employee:
+        fulltime_salaried_employee_kick_out
+
+  if Who_are_you_filing_claim_for == "A corporation":
+    fulltime_salaried_employee
+    if not fulltime_salaried_employee:
+      fulltime_salaried_employee_kick_out
+      
+  regather_fulltime_employee = True
+---
+code: |
+  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
+  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") \
+  or Who_are_you_filing_claim_for == "A corporation":
+    if not fulltime_salaried_employee:
+      fulltime_salaried_employee_kick_out
+
+  review_employee_kickout = True
+---
+code: |
+  if Who_are_you_filing_claim_for == "Other":
+    other_plaintiff_kickout
+
+  review_other_kickout = True
+---
+code: |
+  if is_lawyer_representing:
+    existing_case_kickout
+
+  review_lawyer_kickout = True
+---
+code: |
+  if want_to_have_jury_trial:
+    existing_case_kickout
+
+  review_jury_trial_kickout = True
+---
+code: |
+  if not claim_for_damages_yes:
+    claim_for_damages_yes_kickout
+
+  review_damages_claim_kickout = True
+---
+code: |
+  if not claim_for_damages:
+    undefine('claim_for_damages_yes')
+
+  reset_damage_claim_exceptions = True
+---
+code: |
+  if claims_suit_against_state:
+    claims_kick_out
+
+  review_state_claim_kickout = True
+---
+code: |
+  if not claim_against_local_government:
+    undefine('governmental_immunity')
+
+  reset_gov_immunity_exceptions = True
+---
+code: |
+  if not governmental_immunity:
+    governmental_immunity_no
+
+  review_gov_immunity_kickout = True
+---
+code: |
+  if not five_small_claims_cases:
+    undefine('cannot_file_case')
+
+  reset_cannot_file_case = True
+---
+code: |
+  if not cannot_file_case:
+    cannot_file_case_kickout
+
+  review_wait_week_kickout = True
+---
+code: |
+  if not directly_involved_transaction_or_dispute:
+    claims_kick_out
+
+  review_directly_involved_kickout = True
+---
+code: |
+  undefine('defendants[0].name.first')
+  undefine('defendants[0].name.middle')
+  undefine('defendants[0].name.last')
+  undefine('defendants[0].name.suffix')
+
+  reset_defendant_name = True
+---
+code: |
+  if defendant_is != "An individual":
+    undefine('is_mentally_competent')
+    undefine('age_years_or_older')
+    undefine('military_service')
+
+  reset_individual_defendant_attributes = True
+---
+code: |
+  if not past_or_current_court_case:
+    undefine('about_same_thing_as_this_case')
+    undefine('is_the_case_over')
+    undefine('case_filed_in_same_court')
+    undefine('what_court_was_case_in')
+    undefine('know_case_number_of_the_other_case')
+    undefine('case_number')
+    undefine('judge')
+
+  reset_other_case_variables = True
+---
+code: |
+  if not about_same_thing_as_this_case:
+    undefine('is_the_case_over')
+    undefine('case_filed_in_same_court')
+    undefine('what_court_was_case_in')
+    undefine('know_case_number_of_the_other_case')
+    undefine('case_number')
+    undefine('judge')
+
+  reset_other_case_variables_2 = True
+---
+code: |
+  if case_filed_in_same_court:
+    undefine('what_court_was_case_in')
+
+  reset_other_case_court = True
+---
+code: |
+  if not know_case_number_of_the_other_case:
+    undefine('case_number')
+
+  reset_other_case_number = True
 ---
 # override default welcome message
 template: MLH_welcome_message     
