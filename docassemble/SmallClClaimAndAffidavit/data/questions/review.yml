@@ -255,6 +255,7 @@ review:
       - five_small_claims_cases
       - recompute:
         - reset_cannot_file_case
+        - reask_cannot_file_case
     button: |-
       **Have you filed five small claims cases in the past week?**
 
