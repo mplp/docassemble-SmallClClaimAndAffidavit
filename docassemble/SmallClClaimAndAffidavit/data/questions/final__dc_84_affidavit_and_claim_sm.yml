@@ -304,6 +304,15 @@ code: |
   reset_cannot_file_case = True
 ---
 code: |
+  if five_small_claims_cases:
+    cannot_file_case
+
+    if not cannot_file_case:
+      cannot_file_case_kickout
+      
+  reask_cannot_file_case = True
+---
+code: |
   if not cannot_file_case:
     cannot_file_case_kickout
 
