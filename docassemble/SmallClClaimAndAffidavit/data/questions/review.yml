@@ -41,6 +41,7 @@ review:
         - reset_fulltime_employee
         - regather_owner_partner
         - regather_fulltime_employee
+        - reset_next_friend_appointment
     button: |-
         **What type of party are you filing this claim for?**
         

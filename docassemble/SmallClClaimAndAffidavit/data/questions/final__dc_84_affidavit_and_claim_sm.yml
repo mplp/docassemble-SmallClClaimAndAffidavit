@@ -241,6 +241,12 @@ code: |
   regather_fulltime_employee = True
 ---
 code: |
+  if Who_are_you_filing_claim_for != "Another person":
+    undefine('has_court_appointed_you_as')
+
+  reset_next_friend_appointment = True
+---
+code: |
   if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
   or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") \
   or Who_are_you_filing_claim_for == "A corporation":
@@ -1361,7 +1367,14 @@ attachment:
       - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
       - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
       - "has_i_am_full_time_employee": ${True if not(filing_as_individual) and (((Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A sole proprietor (a business that is not a corporation, but is owned by one person)") and not(is_owner_or_partner)) or Who_are_you_filing_claim_for=="A corporation") and fulltime_salaried_employee else False}
-      - "has_i_am_the_plaintiff": ${True if filing_as_individual or not filing_as_individual and (Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' or (Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as)) else False}
+      - "has_i_am_the_plaintiff": |
+          % if filing_as_individual:
+          ${ True }
+          % elif (not filing_as_individual) and (Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as):
+          ${ True }
+          % else:
+          ${ False }
+          % endif
       - "has_i_am_partner": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
       - "has_plaintiff_partnership": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
       - "has_plaintiff_individual": ${True if filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
