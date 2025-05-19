@@ -44,7 +44,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.SmallClClaimAndAffidavit',
-      version='1.0.4',
+      version='1.0.5',
       description=('Small Claims Affidavit and Claim'),
       long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nZani Doumbia\r\nRebecca Izzo\r\n\r\n',
       long_description_content_type='text/markdown',
@@ -53,7 +53,7 @@ setup(name='docassemble.SmallClClaimAndAffidavit',
       license='The MIT License',
       url='https://courtformsonline.org',
       packages=find_namespace_packages(),
-      install_requires=['docassemble.ALAnyState>=0.1.0', 'docassemble.AssemblyLine>=3.2.0'],
+      install_requires=['docassemble.ALAnyState @ git+https://github.com/SuffolkLITLab/docassemble-ALAnyState.git@main', 'docassemble.AssemblyLine @ git+https://github.com/suffolklitlab/docassemble-assemblyline.git@main'],
       zip_safe=False,
       package_data=find_package_data(where='docassemble/SmallClClaimAndAffidavit/', package='docassemble.SmallClClaimAndAffidavit'),
      )
