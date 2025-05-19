@@ -292,6 +292,15 @@ code: |
   reset_gov_immunity_exceptions = True
 ---
 code: |
+  if claim_against_local_government:
+    governmental_immunity
+
+    if not governmental_immunity:
+      governmental_immunity_no
+
+  reask_governmental_immunity = True
+---
+code: |
   if not governmental_immunity:
     governmental_immunity_no
 
