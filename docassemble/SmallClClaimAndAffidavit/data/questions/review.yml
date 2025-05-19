@@ -197,7 +197,7 @@ review:
     button: |-
       **How much money are you asking for?**
 
-      ${ amount }
+      ${ currency(amount, symbol=u'$') }
   - Edit: 
       - claim_for_damages
       - recompute:
