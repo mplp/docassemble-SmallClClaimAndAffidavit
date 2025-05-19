@@ -1010,6 +1010,8 @@ fields:
     field: amount
     datatype: currency
     max: 7000
+    min: 0
+    currency symbol: $
 under: ${ collapse_template(amount_explanation) }
 ---
 template: amount_explanation
