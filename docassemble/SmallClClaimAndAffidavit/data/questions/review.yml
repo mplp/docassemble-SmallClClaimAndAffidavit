@@ -234,6 +234,7 @@ review:
       - claim_against_local_government
       - recompute:
         - reset_gov_immunity_exceptions
+        - reask_governmental_immunity
     button: |-
       **Is this claim against a local government?**
 
