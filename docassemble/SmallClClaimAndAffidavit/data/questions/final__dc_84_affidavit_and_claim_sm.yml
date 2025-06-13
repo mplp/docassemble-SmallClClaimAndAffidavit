@@ -600,7 +600,10 @@ question: |
 fields:
   - Are you filing this claim for yourself as an individual?: filing_as_individual
     datatype: yesnoradio
-under: ${ collapse_template(what_does_that_mean_individual_template) }
+under: |
+  ${ collapse_template(what_does_that_mean_individual_template) }
+
+  ${ sign_in_message }
 ---
 id: what_does_that_mean_individual_template
 template: what_does_that_mean_individual_template
@@ -669,6 +672,8 @@ fields:
     datatype: yesnoradio
 under: |
   ${ collapse_template(claim_for_damages_help_template) }
+
+  ${ sign_in_message }
 ---
 id: claim_for_damages_help_template
 template: claim_for_damages_help_template
@@ -693,6 +698,8 @@ fields:
     datatype: yesnoradio
 under: |
   ${ collapse_template(claim_for_damages_help_template_two) }
+
+  ${ sign_in_message }
 ---
 id: claim_for_damages_help_template_two
 template: claim_for_damages_help_template_two
@@ -733,7 +740,10 @@ question: |
 fields:
   - Are you filing this case against the State of Michigan or a state agency?: claims_suit_against_state
     datatype: yesnoradio
-under: ${ collapse_template(state_agency_explanation) }
+under: |
+  ${ collapse_template(state_agency_explanation) }
+
+  ${ sign_in_message }
 ---
 template: state_agency_explanation
 subject: |
@@ -763,7 +773,10 @@ subquestion: |
 fields:
   - Does the claim involve one of those exceptions?: governmental_immunity
     datatype: yesnoradio
-under: ${ collapse_template(governmental_immunity_help) }
+under: |
+  ${ collapse_template(governmental_immunity_help) }
+
+  ${ sign_in_message }
 ---
 id: governmental_immunity_help
 template: governmental_immunity_help
@@ -853,7 +866,10 @@ fields:
       % endif
     field: directly_involved_transaction_or_dispute
     datatype: yesnoradio
-under: ${ collapse_template(directly_involved_transaction_explanation) }
+under: |
+  ${ collapse_template(directly_involved_transaction_explanation) }
+
+  ${ sign_in_message }
 ---
 template: directly_involved_transaction_explanation
 subject: |
@@ -902,7 +918,10 @@ fields:
     show if:
       variable: defendant_is
       is: Other
-under: ${ collapse_template(type_of_defendant_explanation) }
+under: |
+  ${ collapse_template(type_of_defendant_explanation) }
+  
+  ${ sign_in_message }
 ---
 template: type_of_defendant_explanation
 subject: |
@@ -979,7 +998,10 @@ question: |
 fields:
   - Was that case filed in the same court as this case?: case_filed_in_same_court
     datatype: yesnoradio
-under: ${ collapse_template(case_filed_in_same_court_explanation) }
+under: |
+  ${ collapse_template(case_filed_in_same_court_explanation) }
+
+  ${ sign_in_message }
 ---
 template: case_filed_in_same_court_explanation
 subject: |
@@ -1027,7 +1049,10 @@ fields:
     max: 7000
     min: 0
     currency symbol: $
-under: ${ collapse_template(amount_explanation) }
+under: |
+  ${ collapse_template(amount_explanation) }
+
+  ${ sign_in_message }
 ---
 template: amount_explanation
 subject: |
@@ -1061,7 +1086,10 @@ question: |
 fields:
   - List all dates: list_all_dates
     datatype: area
-under: ${ collapse_template(dates_explanation) }
+under: |
+  ${ collapse_template(dates_explanation) }
+
+  ${ sign_in_message }
 ---
 template: dates_explanation
 subject: |
@@ -1149,7 +1177,10 @@ question: |
 fields:
   - Has a court appointed you as ${users[0].name.first}'s guardian, conservator, or next friend?: has_court_appointed_you_as
     datatype: yesnoradio
-under: ${ collapse_template(learn_more_guardian_template) }
+under: |
+  ${ collapse_template(learn_more_guardian_template) }
+
+  ${ sign_in_message }
 ---
 id: learn_more_guardian_template
 template: learn_more_guardian_template
@@ -1260,7 +1291,10 @@ fields:
       % endif
     field: fulltime_salaried_employee
     datatype: yesnoradio
-under: ${ collapse_template(what_does_that_mean_salaried_employee_template) }
+under: |
+  ${ collapse_template(what_does_that_mean_salaried_employee_template) }
+
+  ${ sign_in_message }
 ---
 id: what_does_that_mean_salaried_employee_template
 template: what_does_that_mean_salaried_employee_template
