@@ -282,6 +282,7 @@ review:
   - Edit: 
       - county_choice
       - recompute:
+        - court_count
         - court_index
         - the_court
     button: |-
