@@ -289,9 +289,9 @@ review:
         - court_index
         - the_court
     button: |-
-      **In what county are you filing the case?**
+      **Court where you plan to file:** 
 
-      ${ county_choice } County
+      ${ the_court.name }, ${ county_choice } County (${ the_court.address.on_one_line() })
   - Edit: 
       - reasons_for_your_claim
     button: |-
