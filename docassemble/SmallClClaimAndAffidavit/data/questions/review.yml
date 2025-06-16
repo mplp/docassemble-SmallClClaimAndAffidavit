@@ -283,6 +283,9 @@ review:
       - county_choice
       - recompute:
         - court_count
+      - follow up:
+        - court_index_for_multi_district
+      - recompute:
         - court_index
         - the_court
     button: |-

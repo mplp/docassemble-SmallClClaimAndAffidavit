@@ -471,20 +471,13 @@ continue button field: start_the_claim
 id: Choose a court
 question: |
   In what county are you filing the case?
-subquestion: |
-  % if al_form_type != 'starts_case':
-  ${ collapse_template(help_user_choose_court_template) }
-  % endif
 fields:
   - County: county_choice
     code: court_list._load_courts()["address_county"].unique()
 ---
+if: court_count > 1
 id: county court choice
 question: Which District Court in ${ county_choice } County do you need to file this case in?
-subquestion: |
-  % if al_form_type != 'starts_case':
-  ${ collapse_template(help_user_choose_court_template) }
-  % endif
 fields:
   - Select a Court: court_index_for_multi_district
     code: court_list.filter_courts_by_2([county_choice], ['district'], column_1='address_county', column_2='type')
