@@ -201,8 +201,10 @@ review:
       ${ currency(amount, symbol=u'$') }
   - Edit: 
       - claim_for_damages
+      - follow up:
+        - claim_for_damages_yes
       - recompute:
-        - reset_damage_claim_exceptions
+        - review_damages_claim_kickout
     button: |-
       % if filing_as_individual:
       **Is this a claim for damages against someone who harmed you on purpose?**
@@ -211,18 +213,12 @@ review:
       % endif
 
       ${ word(yesno(claim_for_damages)) }
-  - Edit: 
-      - claim_for_damages_yes
-      - recompute:
-        - review_damages_claim_kickout
-    button: |-
-      **Does your claim involve one of the following exceptions for cases dealing with intentional harm?**
 
-      * **A dishonored check (a check someone wrote to Sample Name that the bank did not pay).**
-      * **A consumer protection violation (harm by someone’s deceptive business practices).**
-      * **A recreational trespass (someone went on Sample Name’s property without permission during a recreational activity).**
+      % if claim_for_damages:
+      **Does your claim involve an exception for cases dealing with intentional harm?**
 
       ${ word(yesno(claim_for_damages_yes)) }
+      % endif
   - Edit: 
       - claims_suit_against_state
       - recompute:

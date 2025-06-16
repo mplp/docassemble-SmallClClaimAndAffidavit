@@ -274,16 +274,11 @@ code: |
   review_jury_trial_kickout = True
 ---
 code: |
-  if not claim_for_damages_yes:
-    claim_for_damages_yes_kickout
+  if claim_for_damages:
+    if not claim_for_damages_yes:
+      claim_for_damages_yes_kickout
 
   review_damages_claim_kickout = True
----
-code: |
-  if not claim_for_damages:
-    undefine('claim_for_damages_yes')
-
-  reset_damage_claim_exceptions = True
 ---
 code: |
   if claims_suit_against_state:
@@ -676,6 +671,7 @@ content: |
 
   If you are not sure whether your case involves intentional wrongdoing, you may want to talk to a lawyer. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) to find a lawyer or a legal services office in your area.
 ---
+if: claim_for_damages
 id: claim_for_damages_yes
 question: |
   Cases in which someone caused harm on purpose cannot usually be filed in small claims court.
