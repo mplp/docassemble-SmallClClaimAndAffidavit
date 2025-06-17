@@ -34,14 +34,15 @@ review:
   - Edit: 
       - Who_are_you_filing_claim_for
       - recompute:
-        - review_other_kickout
         - reset_another_person_name
         - users[0].name.first
         - reset_owner_or_partner
         - reset_fulltime_employee
         - regather_owner_partner
-        - regather_fulltime_employee
         - reset_next_friend_appointment
+      - follow up:
+        - is_owner_or_partner
+        - fulltime_salaried_employee
     button: |-
         **What type of party are you filing this claim for?**
         
@@ -54,35 +55,29 @@ review:
         % elif Who_are_you_filing_claim_for == "A corporation":
         A corporation
         % endif
+        
+        % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+        **Are you the owner?**
+        % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        **Are you one of the partners?**
+        % endif 
+
+        ${ word(yesno(is_owner_or_partner)) }
+        % endif
+    
+        % if ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and not is_owner_or_partner) or Who_are_you_filing_claim_for == "A corporation":
+        % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+        **Are you a full-time salaried employee of the owner and do you know about the facts in the claim?**
+        % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        **Are you a full-time salaried employee of the partnership and do you know about the facts in the claim?**
+        % elif Who_are_you_filing_claim_for == "A corporation":
+        **Are you a full-time salaried employee of the corporation and do you know about the facts in the claim?**
+        % endif
+
+        ${ word(yesno(fulltime_salaried_employee)) }
+        % endif
     show if: (not filing_as_individual) and defined('Who_are_you_filing_claim_for')
-  - Edit: 
-      - is_owner_or_partner
-      - recompute:
-        - regather_fulltime_employee
-    button: |-
-     % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
-      **Are you the owner?**
-      % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
-      **Are you one of the partners?**
-      % endif 
-
-      ${ word(yesno(is_owner_or_partner)) }
-    show if: Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"
-  - Edit: 
-      - fulltime_salaried_employee
-      - recompute:
-        - review_employee_kickout
-    button: |-
-      % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
-      **Are you a full-time salaried employee of the owner and do you know about the facts in the claim?**
-      % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
-      **Are you a full-time salaried employee of the partnership and do you know about the facts in the claim?**
-      % elif Who_are_you_filing_claim_for == "A corporation":
-      **Are you a full-time salaried employee of the corporation and do you know about the facts in the claim?**
-      % endif
-
-      ${ word(yesno(fulltime_salaried_employee)) }
-    show if: ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and (not is_owner_or_partner)) or (Who_are_you_filing_claim_for == "A corporation") 
   - Edit: 
         - users[0].name.first
     button: |-
@@ -215,8 +210,6 @@ review:
       % endif
   - Edit: 
       - claims_suit_against_state
-      - recompute:
-        - review_state_claim_kickout
     button: |-
       **Are you filing this case against the State of Michigan or a state agency?**
 
@@ -232,8 +225,6 @@ review:
       ${ word(yesno(claim_against_local_government)) }
   - Edit: 
       - governmental_immunity
-      - recompute:
-        - review_gov_immunity_kickout
     button: |-
       **Does your claim involve one of the following exceptions to government immunity?**
 
@@ -254,8 +245,6 @@ review:
       ${ word(yesno(five_small_claims_cases)) }
   - Edit: 
       - cannot_file_case
-      - recompute:
-        - review_wait_week_kickout
     button: |-
       **Will you wait a week before filing this Affidavit and Claim?**
 
@@ -263,8 +252,6 @@ review:
     show if: five_small_claims_cases
   - Edit: 
       - directly_involved_transaction_or_dispute
-      - recompute:
-        - review_directly_involved_kickout
     button: |-
       **Were you directly involved in the transaction or dispute in this case?**
 

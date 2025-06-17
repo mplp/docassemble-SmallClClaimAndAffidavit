@@ -92,9 +92,6 @@ code: |
         fulltime_salaried_employee
         if not fulltime_salaried_employee:
             fulltime_salaried_employee_kick_out
-    
-      if Who_are_you_filing_claim_for == "Other":
-        other_plaintiff_kickout
   
   users[0].name.first
   users[0].address.address
@@ -214,46 +211,10 @@ code: |
   regather_owner_partner = True
 ---
 code: |
-  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
-  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
-    if not is_owner_or_partner:
-      fulltime_salaried_employee
-      if not fulltime_salaried_employee:
-        fulltime_salaried_employee_kick_out
-
-  if Who_are_you_filing_claim_for == "A corporation":
-    fulltime_salaried_employee
-    if not fulltime_salaried_employee:
-      fulltime_salaried_employee_kick_out
-      
-  regather_fulltime_employee = True
----
-code: |
   if Who_are_you_filing_claim_for != "Another person":
     undefine('has_court_appointed_you_as')
 
   reset_next_friend_appointment = True
----
-code: |
-  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
-  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") \
-  or Who_are_you_filing_claim_for == "A corporation":
-    if not fulltime_salaried_employee:
-      fulltime_salaried_employee_kick_out
-
-  review_employee_kickout = True
----
-code: |
-  if Who_are_you_filing_claim_for == "Other":
-    other_plaintiff_kickout
-
-  review_other_kickout = True
----
-code: |
-  if claims_suit_against_state:
-    claims_kick_out
-
-  review_state_claim_kickout = True
 ---
 code: |
   if not claim_against_local_government:
@@ -271,12 +232,6 @@ code: |
   reask_governmental_immunity = True
 ---
 code: |
-  if not governmental_immunity:
-    governmental_immunity_no
-
-  review_gov_immunity_kickout = True
----
-code: |
   if not five_small_claims_cases:
     undefine('cannot_file_case')
 
@@ -290,18 +245,6 @@ code: |
       cannot_file_case_kickout
       
   reask_cannot_file_case = True
----
-code: |
-  if not cannot_file_case:
-    cannot_file_case_kickout
-
-  review_wait_week_kickout = True
----
-code: |
-  if not directly_involved_transaction_or_dispute:
-    claims_kick_out
-
-  review_directly_involved_kickout = True
 ---
 code: |
   undefine('defendants[0].name.first')
@@ -535,18 +478,6 @@ subquestion: |
   % endif
   
   If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Leave** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
-buttons:
-  - Leave: leave
-    url: https://michiganlegalhelp.org/
----
-id: other plaintiff kickout
-event: other_plaintiff_kickout
-question: |
-  You can't use this tool.
-subquestion: |
-  You can only use this tool to prepare small claims forms if you are filing the claim for yourself or for certain other people or businesses.
-  
-  If you think you made a mistake, tap **Undo** and change your answer. Otherwise, tap the **Leave** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
 buttons:
   - Leave: leave
     url: https://michiganlegalhelp.org/
@@ -1111,13 +1042,29 @@ fields:
 id: Who_are_you_filing_claim_for
 question: |
   Who are you filing this claim for?
-field: Who_are_you_filing_claim_for
-choices:
-  - Another person
-  - A sole proprietor (a business that is not a corporation, but is owned by one person)
-  - A partnership (a business that is not a corporation, but is owned by two or more people)
-  - A corporation
-  - Other
+fields: 
+  - no label: Who_are_you_filing_claim_for
+    datatype: radio
+    choices:
+    - Another person
+    - A sole proprietor (a business that is not a corporation, but is owned by one person)
+    - A partnership (a business that is not a corporation, but is owned by two or more people)
+    - A corporation
+    - None of these apply
+  - note: |
+      You can only use this tool to prepare small claims forms if you are filing the claim for yourself or for certain other people or businesses.
+  
+      If you think you made a mistake:
+      
+      * change your answer above and/or 
+      * tap **Undo** if you're filing for yourself as an individual. 
+      
+      Otherwise, return to [Michigan Legal Help](https://michiganlegalhelp.org) for other legal resources.
+    js show if: |
+      val('Who_are_you_filing_claim_for') == "None of these apply"
+validation code: |
+  if Who_are_you_filing_claim_for == "None of these apply":
+    validation_error("You can only continue if you are filing this claim for yourself or for one of the options below.")
 ---
 id: Who_you_filing
 question: |
@@ -1146,6 +1093,7 @@ subject: Learn more.
 content: |
   If a person is unable to represent themselves in court, someone else might be able to do it for that person. A guardian is appointed by a probate court to make personal decisions for someone. These include day-to-day decisions, such as those involving health care and education. A conservator is appointed by a probate court to care for the personal property and finances of a person. A next friend is a concerned person, usually a relative, appointed by a court who can appear in court for a child or incapacitated adult.
 ---
+if: Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"
 id: is_owner_or_partner
 question: |
   % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
@@ -1235,6 +1183,7 @@ fields:
   - code: |
       users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE, show_country=False)
 ---
+if: ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and not is_owner_or_partner) or Who_are_you_filing_claim_for == "A corporation"
 id: fulltime_salaried_employee
 question: |
   Authorization
@@ -1382,7 +1331,7 @@ attachment:
       - "has_i_am_the_plaintiff": |
           % if filing_as_individual:
           ${ True }
-          % elif (not filing_as_individual) and (Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as):
+          % elif (not filing_as_individual) and ((Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as) or (Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' and is_owner_or_partner)):
           ${ True }
           % else:
           ${ False }
