@@ -205,9 +205,12 @@ review:
       % else:
       **Is this a claim for damages against someone who harmed ${ users[0].name_full() } on purpose?**
       % endif
+      
       ${ word(yesno(claim_for_damages)) }
+      
       % if claim_for_damages:
       **Does your claim involve an exception for cases dealing with intentional harm?**
+      
       ${ word(yesno(claim_for_damages_yes)) }
       % endif
   - Edit: 
