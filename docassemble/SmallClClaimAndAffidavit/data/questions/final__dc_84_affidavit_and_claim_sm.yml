@@ -204,13 +204,6 @@ code: |
   reset_fulltime_employee = True
 ---
 code: |
-  if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" \
-  or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
-    is_owner_or_partner
-      
-  regather_owner_partner = True
----
-code: |
   if Who_are_you_filing_claim_for != "Another person":
     undefine('has_court_appointed_you_as')
 

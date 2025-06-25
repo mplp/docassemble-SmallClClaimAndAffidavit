@@ -40,7 +40,6 @@ review:
         - set_user_alt_label
         - reset_owner_or_partner
         - reset_fulltime_employee
-        - regather_owner_partner
         - reset_next_friend_appointment
       - follow up:
         - is_owner_or_partner
