@@ -25,6 +25,7 @@ review:
         - Who_are_you_filing_claim_for
         - reset_individual_name
         - users[0].name.first
+        - set_user_alt_label
         - reset_owner_or_partner
         - reset_fulltime_employee
     button: |-
@@ -36,6 +37,7 @@ review:
       - recompute:
         - reset_another_person_name
         - users[0].name.first
+        - set_user_alt_label
         - reset_owner_or_partner
         - reset_fulltime_employee
         - regather_owner_partner
