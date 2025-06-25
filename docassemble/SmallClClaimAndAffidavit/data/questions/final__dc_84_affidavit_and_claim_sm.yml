@@ -1281,7 +1281,7 @@ attachment:
       - "Court telephone no": ${ phone_number_formatted(the_court.phone) }
       - "Court address": ${ the_court.address }
       - "Plaintiffs name and address": |
-          ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for == "A corporation" else users[0].name}
+          ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for != "Another person" else users[0].name}
           ${users[0].address.line_one()}
           ${users[0].address.line_two()}
       - "Defendants name and address": |
@@ -1299,7 +1299,7 @@ attachment:
       - "state_of_michigan": ${ the_court.number }
       - "court_telephone_no": ${ phone_number_formatted(the_court.phone) }
       - "court_address": ${ the_court.address.on_one_line() }
-      - "plaintiff_name": ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for == "A corporation" else users[0].name}
+      - "plaintiff_name": ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for != "Another person" else users[0].name}
       - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
       - "plaintiff_telephone_no": ${"Does not have phone" if users[0].no_phone_number else phone_number_formatted(users[0].phone_number)}
       - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
