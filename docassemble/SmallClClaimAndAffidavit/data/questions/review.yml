@@ -25,6 +25,7 @@ review:
         - Who_are_you_filing_claim_for
         - reset_individual_name
         - users[0].name.first
+        - set_user_alt_label
         - reset_owner_or_partner
         - reset_fulltime_employee
     button: |-
@@ -34,14 +35,15 @@ review:
   - Edit: 
       - Who_are_you_filing_claim_for
       - recompute:
-        - review_other_kickout
         - reset_another_person_name
         - users[0].name.first
+        - set_user_alt_label
         - reset_owner_or_partner
         - reset_fulltime_employee
-        - regather_owner_partner
-        - regather_fulltime_employee
         - reset_next_friend_appointment
+      - follow up:
+        - is_owner_or_partner
+        - fulltime_salaried_employee
     button: |-
         **What type of party are you filing this claim for?**
         
@@ -54,41 +56,33 @@ review:
         % elif Who_are_you_filing_claim_for == "A corporation":
         A corporation
         % endif
-    show if: (not filing_as_individual) and defined('Who_are_you_filing_claim_for')
-  - Edit: 
-      - is_owner_or_partner
-      - recompute:
-        - regather_fulltime_employee
-    button: |-
-     % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
-      **Are you the owner?**
-      % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
-      **Are you one of the partners?**
-      % endif 
 
-      ${ word(yesno(is_owner_or_partner)) }
-    show if: Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"
-  - Edit: 
-      - fulltime_salaried_employee
-      - recompute:
-        - review_employee_kickout
-    button: |-
-      % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
-      **Are you a full-time salaried employee of the owner and do you know about the facts in the claim?**
-      % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
-      **Are you a full-time salaried employee of the partnership and do you know about the facts in the claim?**
-      % elif Who_are_you_filing_claim_for == "A corporation":
-      **Are you a full-time salaried employee of the corporation and do you know about the facts in the claim?**
-      % endif
-
-      ${ word(yesno(fulltime_salaried_employee)) }
-    show if: ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and (not is_owner_or_partner)) or (Who_are_you_filing_claim_for == "A corporation") 
-  - Edit: 
-        - users[0].name.first
-    button: |-
-        **Who is the Plaintiff?** 
+        **Plaintiff's name:** 
         
         ${ users[0].name_full() }
+        
+        % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+        **Are you the owner?**
+        % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        **Are you one of the partners?**
+        % endif 
+
+        ${ word(yesno(is_owner_or_partner)) }
+        % endif
+    
+        % if ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and not is_owner_or_partner) or Who_are_you_filing_claim_for == "A corporation":
+        % if Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)":
+        **Are you a full-time salaried employee of the owner and do you know about the facts in the claim?**
+        % elif Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)":
+        **Are you a full-time salaried employee of the partnership and do you know about the facts in the claim?**
+        % elif Who_are_you_filing_claim_for == "A corporation":
+        **Are you a full-time salaried employee of the corporation and do you know about the facts in the claim?**
+        % endif
+
+        ${ word(yesno(fulltime_salaried_employee)) }
+        % endif
+    show if: (not filing_as_individual) and defined('Who_are_you_filing_claim_for')
   - Edit: 
         - users[0].address.address
     button: |-
@@ -171,8 +165,6 @@ review:
     show if: defined('is_lawyer_representing')
   - Edit: 
       - is_lawyer_representing
-      - recompute:
-        - review_lawyer_kickout
     button: |-
       % if filing_as_individual:
       **Do you have a lawyer?**
@@ -183,8 +175,6 @@ review:
       ${ word(yesno(is_lawyer_representing)) }
   - Edit: 
       - want_to_have_jury_trial
-      - recompute:
-        - review_jury_trial_kickout
     button: |-
       % if filing_as_individual:
       **Do you want a jury trial?**
@@ -201,32 +191,24 @@ review:
       ${ currency(amount, symbol=u'$') }
   - Edit: 
       - claim_for_damages
-      - recompute:
-        - reset_damage_claim_exceptions
+      - follow up:
+        - claim_for_damages_yes
     button: |-
       % if filing_as_individual:
       **Is this a claim for damages against someone who harmed you on purpose?**
       % else:
       **Is this a claim for damages against someone who harmed ${ users[0].name_full() } on purpose?**
       % endif
-
+      
       ${ word(yesno(claim_for_damages)) }
-  - Edit: 
-      - claim_for_damages_yes
-      - recompute:
-        - review_damages_claim_kickout
-    button: |-
-      **Does your claim involve one of the following exceptions for cases dealing with intentional harm?**
-
-      * **A dishonored check (a check someone wrote to Sample Name that the bank did not pay).**
-      * **A consumer protection violation (harm by someone’s deceptive business practices).**
-      * **A recreational trespass (someone went on Sample Name’s property without permission during a recreational activity).**
-
+      
+      % if claim_for_damages:
+      **Does your claim involve an exception for cases dealing with intentional harm?**
+      
       ${ word(yesno(claim_for_damages_yes)) }
+      % endif
   - Edit: 
       - claims_suit_against_state
-      - recompute:
-        - review_state_claim_kickout
     button: |-
       **Are you filing this case against the State of Michigan or a state agency?**
 
@@ -242,8 +224,6 @@ review:
       ${ word(yesno(claim_against_local_government)) }
   - Edit: 
       - governmental_immunity
-      - recompute:
-        - review_gov_immunity_kickout
     button: |-
       **Does your claim involve one of the following exceptions to government immunity?**
 
@@ -264,8 +244,6 @@ review:
       ${ word(yesno(five_small_claims_cases)) }
   - Edit: 
       - cannot_file_case
-      - recompute:
-        - review_wait_week_kickout
     button: |-
       **Will you wait a week before filing this Affidavit and Claim?**
 
@@ -273,8 +251,6 @@ review:
     show if: five_small_claims_cases
   - Edit: 
       - directly_involved_transaction_or_dispute
-      - recompute:
-        - review_directly_involved_kickout
     button: |-
       **Were you directly involved in the transaction or dispute in this case?**
 
@@ -282,12 +258,20 @@ review:
   - Edit: 
       - county_choice
       - recompute:
+        - court_count
+      - follow up:
+        - court_index_for_multi_district
+      - recompute:
         - court_index
         - the_court
     button: |-
-      **In what county are you filing the case?**
+      **Court you will file this case in:** 
 
-      ${ county_choice } County
+      ${ the_court.name }, ${ county_choice } County 
+      
+      *Address: ${ the_court.address.on_one_line() }*
+      
+      *Phone: ${ phone_number_formatted(the_court.phone) }*
   - Edit: 
       - reasons_for_your_claim
     button: |-
