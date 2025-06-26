@@ -37,9 +37,11 @@ sections:
 code: |
   resource_page_url_only = "https://michiganlegalhelp.org/node/1617"
   resource_page_name = "Small Claims"
----
-code: |
   survey_link_url_only = "https://www.surveymonkey.com/r/YX7ZGDL"
+  cover_sheet_header = "Your small claims forms are ready. Well done!"
+  has_whats_next_text = True
+  whats_next_text_message = "Text 2050 to (734) 275-2201 to get automated text messages about the next steps in a small claims case."
+  cover_sheet_complete_1 = f"DO NOT sign your forms until you're in front of a notary or court clerk. Use our instructions to learn about next steps. Go to the next page in this document to see the instructions."
 ---
 template: survey_embed_script
 content: |
