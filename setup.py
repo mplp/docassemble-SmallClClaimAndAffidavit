@@ -44,9 +44,9 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.SmallClClaimAndAffidavit',
-      version='1.0.6',
+      version='1.1.0',
       description=('Small Claims Affidavit and Claim'),
-      long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nZani Doumbia\r\nRebecca Izzo\r\n\r\n',
+      long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nMichigan Legal Help\r\nLemma Legal\r\n\r\n## Changelog:\r\n* 6/30/25  1.1.0 launch\r\n\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Zani Doumbia',
       author_email='zdoumbia@su.suffolk.edu',

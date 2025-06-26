@@ -65,6 +65,7 @@ code: |
 
   ### intro pages ###
   nav.set_section('signpost_intro')
+  snapshot_start
   MLH_standard_intro_pages
   start_the_claim
   understands_rules
@@ -174,6 +175,7 @@ code: |
   sign_your_claim
   MLH_outro_filing_information
   MLH_outro_saving_answers
+  snapshot_download
   MLH_download
 ---
 code: |
