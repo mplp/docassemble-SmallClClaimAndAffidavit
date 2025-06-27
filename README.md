@@ -4,6 +4,10 @@ Small Claims Affidavit and Claim
 
 ## Author
 
-Zani Doumbia
-Rebecca Izzo
+Michigan Legal Help
+Lemma Legal
+
+## Changelog:
+* 6/30/25  1.1.0 launch
+
 

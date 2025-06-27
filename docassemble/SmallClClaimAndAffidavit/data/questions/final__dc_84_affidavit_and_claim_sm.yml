@@ -37,9 +37,11 @@ sections:
 code: |
   resource_page_url_only = "https://michiganlegalhelp.org/node/1617"
   resource_page_name = "Small Claims"
----
-code: |
   survey_link_url_only = "https://www.surveymonkey.com/r/YX7ZGDL"
+  cover_sheet_header = "Your small claims forms are ready. Well done!"
+  has_whats_next_text = True
+  whats_next_text_message = "Text 2050 to (734) 275-2201 to get automated text messages about the next steps in a small claims case."
+  cover_sheet_complete_1 = f"DO NOT sign your forms until you're in front of a notary or court clerk. Use our instructions to learn about next steps. Go to the next page in this document to see the instructions."
 ---
 template: survey_embed_script
 content: |
@@ -65,6 +67,7 @@ code: |
 
   ### intro pages ###
   nav.set_section('signpost_intro')
+  snapshot_start
   MLH_standard_intro_pages
   start_the_claim
   understands_rules
@@ -174,6 +177,7 @@ code: |
   sign_your_claim
   MLH_outro_filing_information
   MLH_outro_saving_answers
+  snapshot_download
   MLH_download
 ---
 code: |
@@ -1232,8 +1236,8 @@ objects:
   - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms to download for your records", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
