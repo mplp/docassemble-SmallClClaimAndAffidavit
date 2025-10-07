@@ -1,6 +1,7 @@
 name: Build docassemble interviews and check DOCX files
 
 on:
+  pull_request:
   push:
   workflow_dispatch:
   
