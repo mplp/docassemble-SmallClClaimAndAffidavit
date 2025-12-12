@@ -44,13 +44,13 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.SmallClClaimAndAffidavit',
-      version='1.1.1',
+      version='1.1.2',
       description=('Small Claims Affidavit and Claim'),
-      long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nMichigan Legal Help\r\nLemma Legal\r\n\r\n## Changelog:\r\n* 10/7/25  1.1.1 Minor update to instructions fees info\r\n* 6/30/25  1.1.0 launch\r\n\r\n\r\n',
+      long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nMichigan Legal Help\r\nLemma Legal\r\n\r\n## Changelog:\r\n* 12/12/25 1.1.2 update embedded survey\r\n* 10/7/25  1.1.1 Minor update to instructions fees info\r\n* 6/30/25  1.1.0 launch\r\n\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Emily Miller',
       author_email='ekressmiller@lsscm.org',
-      license='MIT',
+      license='',
       url='https://courtformsonline.org',
       packages=find_namespace_packages(),
       install_requires=['docassemble.ALAnyState @ git+https://github.com/SuffolkLITLab/docassemble-ALAnyState.git@main', 'docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main'],
