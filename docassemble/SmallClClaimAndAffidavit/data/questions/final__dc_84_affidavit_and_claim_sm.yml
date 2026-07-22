@@ -1234,10 +1234,11 @@ objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
   - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True)
   - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
+  - proof_of_service: ALDocument.using(title="Proof of Service - DC 84p", filename="Proof of Service - DC 84p.pdf", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
@@ -1275,47 +1276,46 @@ code: |
   claim_affidavit.overflow_fields.gathered = True
 ---
 attachment:
-  name: Judgment - DC 85
-  filename: Judgment - DC 85
-  variable name: claim_affidavit_judgement[i]
-  editable: False
-  pdf template file: Judgment_-_DC_85.pdf
-  fields:
-      - "District": ${ the_court.number }
-      - "Court telephone no": ${ phone_number_formatted(the_court.phone) }
-      - "Court address": ${ the_court.address }
-      - "Plaintiffs name and address": |
-          ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for != "Another person" else users[0].name}
-          ${users[0].address.line_one()}
-          ${users[0].address.line_two()}
-      - "Defendants name and address": |
-          ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first}
-          ${defendants[0].address.line_one()}
-          ${defendants[0].address.line_two()}
----
-attachment:
   name: Affidavit and Claim - DC 84
   filename: Affidavit and Claim - DC 84
   variable name: claim_affidavit[i]
   editable: False
-  pdf template file: Affidavit_and_Claim_-_DC_84.pdf
+  pdf template file: affidavit_claim_notice_dc_84.pdf
   fields:
-      - "state_of_michigan": ${ the_court.number }
+      - "state_of_michigan": |
+          ${ the_court.number } Judicial District
       - "court_telephone_no": ${ phone_number_formatted(the_court.phone) }
       - "court_address": ${ the_court.address.on_one_line() }
-      - "plaintiff_name": ${users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for != "Another person" else users[0].name}
-      - "plaintiff_address": ${users[0].address.address+" "+users[0].address.unit}
-      - "plaintiff_telephone_no": ${"Does not have phone" if users[0].no_phone_number else phone_number_formatted(users[0].phone_number)}
-      - "plaintiff_city_state_zip": ${users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip}
-      - "defendant_name": ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first}
-      - "defendant_address": ${defendants[0].address.address+" "+defendants[0].address.unit}
-      - "defendant_telephone_no": ${"Unknown" if defendants[0].no_phone_number else phone_number_formatted(defendants[0].phone_number)}
-      - "defendant_city_state_zip":  ${defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip}
-      - "has_prev_action": ${True if(past_or_current_court_case and about_same_thing_as_this_case) else False}
-      - "has_this_court": ${case_filed_in_same_court if (past_or_current_court_case and about_same_thing_as_this_case ) else False}
-      - "other_court_name": ${what_court_was_case_in if (past_or_current_court_case and about_same_thing_as_this_case and case_filed_in_same_court == False) else ''}
-      - "has_other_court": ${True if (past_or_current_court_case and about_same_thing_as_this_case and case_filed_in_same_court == False) else False}
-      - "prev_action_assigned_judge": ${judge if (past_or_current_court_case and about_same_thing_as_this_case ) else ''}
+      - "plaintiff_name": ${ users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for != "Another person" else users[0].name }
+      - "plaintiff_address": ${ users[0].address.address+" "+users[0].address.unit }
+      - "plaintiff_telephone_no": ${ "Does not have phone" if users[0].no_phone_number else phone_number_formatted(users[0].phone_number) }
+      - "plaintiff_city_state_zip": ${ users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip }
+      - "defendant_name": ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first }
+      - "defendant_address": ${ defendants[0].address.address+" "+defendants[0].address.unit }
+      - "defendant_telephone_no": ${ "Unknown" if defendants[0].no_phone_number else phone_number_formatted(defendants[0].phone_number) }
+      - "defendant_city_state_zip":  ${ defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip }
+      - "has_i_am_partner": ${ True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False }
+      - "has_plaintiff_partnership": ${ True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False }
+      - "has_plaintiff_individual": ${ True if filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False }
+      - "has_plaintiff_sole_proprietor": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False }
+      - "has_plaintiff_corporation": ${ True if not filing_as_individual and Who_are_you_filing_claim_for=='A corporation' else False }
+      - "has_defendant_sole_proprietor": ${ True if (defendant_is=='A sole proprietor') else False }
+      - "has_defendant_partnership": ${ True if (defendant_is=='A partnership') else False }
+      - "has_defendant_individual": ${ True if (defendant_is=='An individual') else False }
+      - "has_defendant_other": ${ True if (defendant_is=='Other') else False }
+      - "defendant_other": ${ type_of_entity if (defendant_is=='Other') else '' }
+      - "has_defendant_corporation": ${ True if (defendant_is=='A corporation') else False }
+      - "has_prev_action": ${ True if(past_or_current_court_case and about_same_thing_as_this_case) else False }
+      - "no_prev_action": ${ True if(not (past_or_current_court_case and about_same_thing_as_this_case)) else False }
+      - "prev_action_court_name": | 
+          % if (past_or_current_court_case and about_same_thing_as_this_case):
+          % if case_filed_in_same_court:
+          ${ the_court.number } Judicial District
+          % else:
+          ${ what_court_was_case_in }
+          % endif
+          % endif
+      - "prev_action_assigned_judge": ${ judge if (past_or_current_court_case and about_same_thing_as_this_case ) else '' }
       - "prev_action_case_number": |
           % if past_or_current_court_case and about_same_thing_as_this_case and know_case_number_of_the_other_case:
           ${ case_number }
@@ -1324,39 +1324,41 @@ attachment:
           % else:
           ${ '' }
           % endif
-      - "has_prev_action_remains": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False}
-      - "has_prev_action_no_longer_pending": ${True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False}
-      - "has_i_am_full_time_employee": ${True if not(filing_as_individual) and (((Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' or Who_are_you_filing_claim_for=="A sole proprietor (a business that is not a corporation, but is owned by one person)") and not(is_owner_or_partner)) or Who_are_you_filing_claim_for=="A corporation") and fulltime_salaried_employee else False}
-      - "has_i_am_the_plaintiff": |
-          % if filing_as_individual:
-          ${ True }
-          % elif (not filing_as_individual) and ((Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as) or (Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' and is_owner_or_partner)):
-          ${ True }
-          % else:
-          ${ False }
-          % endif
-      - "has_i_am_partner": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False}
-      - "has_plaintiff_partnership": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False}
-      - "has_plaintiff_individual": ${True if filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False}
-#      - "has_plaintiff_other": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='Other' else False}
-#      - "plaintiff_other": ${users[0].name if not filing_as_individual and Who_are_you_filing_claim_for=="Other" else ''}
-      - "has_plaintiff_sole_proprietor": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A sole proprietor (a business that is not a corporation, but is owned by one person)' else False}
-      - "has_plaintiff_corporation": ${True if not filing_as_individual and Who_are_you_filing_claim_for=='A corporation' else False}
-      - "has_defendant_sole_proprietor": ${True if (defendant_is=='A sole proprietor') else False}
-      - "has_defendant_partnership": ${True if (defendant_is=='A partnership') else False}
-      - "has_defendant_individual": ${True if (defendant_is=='An individual') else False}
-      - "has_defendant_other": ${True if (defendant_is=='Other') else False}
-      - "defendant_other": ${type_of_entity if (defendant_is=='Other') else ''}
-      - "has_defendant_corporation": ${True if (defendant_is=='A corporation') else False}
+      - "prev_action_pending": ${ True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over==False) else False }
+      - "prev_action_not_pending": ${ True if(past_or_current_court_case and about_same_thing_as_this_case and is_the_case_over ) else False }
       - "date_claim_arose": ${ claim_affidavit.original_or_overflow_message("list_all_dates", "See addendum.") }
-      - "amount_of_money_claimed": ${thousands(amount,show_decimals=True)}
+      - "amount_of_money_claimed": ${ thousands(amount,show_decimals=True) }
       - "claim_reason": ${ claim_affidavit.original_or_overflow_message("reasons_for_your_claim", "See addendum.") }
-      - "`43": ''
-      - "has_mentally_competent": ${is_mentally_competent if defendant_is == "An individual" else ""}
-      - "has_not_mentally_competent": ${not(is_mentally_competent) if defendant_is == "An individual" else ""}
-      - "has_18_years_old": ${age_years_or_older if defendant_is == "An individual" else ""}
-      - "has_not_18_years_old": ${not(age_years_or_older) if defendant_is == "An individual" else ""}
-      - "has_do_not_know_military_service": ${has_do_not_know_military_service if defendant_is == "An individual" else ""}
-      - "has_not_military_service": ${has_not_military_service if defendant_is == "An individual" else ""}
-      - "has_military_service": ${has_military_service if defendant_is == "An individual" else ""}
+---
+attachment:
+  name: Proof of Service - DC 84p 
+  filename: Proof of Service - DC 84p
+  variable name: proof_of_service[i]
+  editable: False
+  pdf template file: proof_of_service_dc_84p.pdf
+  fields:
+      - "state_of_michigan": |
+          ${ the_court.number } Judicial District
+      - "court_telephone_no": ${ phone_number_formatted(the_court.phone) }
+      - "court_address": ${ the_court.address.on_one_line() }
+---
+attachment:
+  name: Judgment - DC 85
+  filename: Judgment - DC 85
+  variable name: claim_affidavit_judgement[i]
+  editable: False
+  pdf template file: dismissal_judgment_dc_85.pdf
+  fields:
+      - "state_of_michigan": |
+          ${ the_court.number } Judicial District
+      - "court_telephone_no": ${ phone_number_formatted(the_court.phone) }
+      - "court_address": ${ the_court.address.on_one_line() }
+      - "plaintiff_name_address": |
+          ${ users[0].name.first if not filing_as_individual and Who_are_you_filing_claim_for != "Another person" else users[0].name }
+          ${ users[0].address.line_one() }
+          ${ users[0].address.line_two() }
+      - "defendant_name_address": |
+          ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first }
+          ${ defendants[0].address.line_one() }
+          ${ defendants[0].address.line_two() }
 ---
