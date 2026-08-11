@@ -105,6 +105,10 @@ code: |
     existing_case_kickout
   if want_to_have_jury_trial:
     existing_case_kickout
+  
+  ### kickout for multiple parties ###
+  if multiple_plaintiffs:
+    multiple_plaintiffs_kickout
 
   ### claim amount limitations ###
   amount
@@ -523,6 +527,26 @@ fields:
       % endif
     field: want_to_have_jury_trial
     datatype: yesnoradio
+---
+id: multiple_plaintiffs
+question: |
+  Additional Plaintiffs
+fields:
+  - Are there any other Plaintiffs in this case?: multiple_plaintiffs
+    datatype: yesnoradio 
+---
+id: multiple_plaintiffs_kickout
+question: |
+  Warning! This tool only allows for one Plaintiff and one Defendant.
+subquestion: |
+  If you choose to continue with this tool, you should complete the [Small Claims Affidavit Addendum](https://www.courts.michigan.gov/49f754/siteassets/forms/scao-approved/recent-revisions/eoc_smallclaims.pdf) and add it to the rest of your documents.
+
+  When you receive your forms, check the box for multiple plaintiffs or defendants on you Small Claims Affidavit, as shown below:
+
+  [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
+  
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer.
+continue button field: multiple_plaintiffs_kickout
 ---
 id: warning_for_claim
 question: |

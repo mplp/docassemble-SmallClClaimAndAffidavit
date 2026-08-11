@@ -184,6 +184,12 @@ review:
       
       ${ word(yesno(want_to_have_jury_trial)) }
   - Edit: 
+      - multiple_plaintiffs
+    button: |-
+      **Are there other Plaintiffs in this case?**
+      
+      ${ word(yesno(multiple_plaintiffs)) }
+  - Edit: 
       - amount
     button: |-
       **How much money are you asking for?**
