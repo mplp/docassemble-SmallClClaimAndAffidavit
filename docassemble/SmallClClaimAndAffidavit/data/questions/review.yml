@@ -94,7 +94,13 @@ review:
     button: |-
         **What is the Plaintiff's phone number?**
 
-        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() } 
+        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() }
+  - Edit: 
+        - users[0].email
+    button: |-
+        **What is the Plaintiff's email address?** 
+
+        ${ word("None provided") if users[0].email == "" else users[0].email }
   - raw html: |
       ${ next_accordion('<h2 class="h5">Defendant</h2>') }
     show if: defined('defendant_is')
@@ -134,6 +140,12 @@ review:
         **What is the Defendant's phone number?**
 
         ${ word("None provided") if defendants[0].no_phone_number else defendants[0].phone_numbers() }
+  - Edit: 
+        - defendants[0].email
+    button: |-
+        **What is the Defendant's email address?** 
+
+        ${ word("None provided") if defendants[0].email == "" else defendants[0].email }
   - Edit: 
       - is_mentally_competent
     button: |-
