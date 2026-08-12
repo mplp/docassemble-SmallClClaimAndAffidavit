@@ -1,6 +1,6 @@
 # docassemble.FinalDc84AffidavitAndClaimSm
 
-Small Claims Affidavit and Claim
+Small Claims Affidavit
 
 ## Author
 

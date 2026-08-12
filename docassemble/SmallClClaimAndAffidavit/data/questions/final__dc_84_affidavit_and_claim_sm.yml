@@ -7,7 +7,7 @@ include:
   - review.yml
 ---
 metadata:
-  title: Small Claims Affidavit and Claim
+  title: Small Claims Affidavit
   short title: Small Claims Case
   subtitle: Helps you start a case in Small Claims Court.
   description: |
@@ -299,7 +299,7 @@ template: MLH_welcome_message
 content: |
   Welcome to the ${ MLH_interview_short_title } tool.
 
-  This tool will help you prepare an *Affidavit and Claim* and a partially completed *Small Claims Judgment*. You can use these forms to start a new small claims case in Michigan.
+  This tool will help you prepare a *Small Claims Affidavit* and a partially completed *Small Claims Judgment*. You can use these forms to start a new small claims case in Michigan.
 ---
 generic object: ALIndividual
 code: |
@@ -603,7 +603,7 @@ question: |
 subquestion: |
   If you are not sure whether your case involves intentional wrongdoing, you may want to talk to a lawyer. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
 
-  Would you like to proceed with this interview and finish your Affidavit and Claim, or would you like to leave this interview?
+  Would you like to proceed with this interview and finish your Small Claims Affidavit, or would you like to leave this interview?
 buttons:
   - Proceed with Interview: continue
   - Leave this Interview: leave
@@ -670,7 +670,7 @@ id: governmental_immunity_help
 template: governmental_immunity_help
 subject: What if I'm not sure?
 content: |
-  If your case involves governmental immunity, it will be dismissed and there will be no refund of the money paid to file this Affidavit and Claim or any related costs.
+  If your case involves governmental immunity, it will be dismissed and there will be no refund of the money paid to file this Small Claims Affidavit or any related costs.
 
   If you are not sure whether your case involves governmental immunity, you may want talk to a lawyer. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) to find a lawyer or a legal services office in your area.
 ---
@@ -692,7 +692,7 @@ question: |
 subquestion: |
   If your case involves governmental immunity, it will be dismissed and there will be no refund of the court filing fees or any related costs.
 
-  Would you like to proceed with this interview and finish your Affidavit and Claim, or would you like to leave this interview?
+  Would you like to proceed with this interview and finish your Small Claims Affidavit, or would you like to leave this interview?
 buttons:
   - Proceed with Interview: continue
   - Leave this Interview: leave
@@ -723,7 +723,7 @@ subquestion: |
   You can only file five cases a week in Small Claims Court. You can continue this interview if you wait at least a week before filing this case.
   
 fields:
-  - Will you wait a week before filing this Affidavit and Claim?: cannot_file_case
+  - Will you wait a week before filing this Small Claims Affidavit?: cannot_file_case
     datatype: yesnoradio
 ---
 id: cannot_file_case_kickout
@@ -1225,20 +1225,20 @@ code: |
 ---
 id: sign_your_claim
 question: |
-  Do not sign your *Affidavit and Claim* form until you are in front of a notary or court clerk.
+  Do not sign your *Small Claims Affidavit* form until you are in front of a notary or court clerk.
 subquestion: |
-  For more specific instructions on what to do after filling out the *Affidavit and Claim*, read the instructions that you will get with your forms.
+  For more specific instructions on what to do after filling out the *Small Claims Affidavit*, read the instructions that you will get with your forms.
 continue button field: sign_your_claim
 ---
 objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
-  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True)
+  - claim_affidavit: ALDocument.using(title="Small Claims Affidavit - DC 84", filename="Small Claims Affidavit - DC 84.pdf", enabled=True, has_addendum=True)
   - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
   - proof_of_service: ALDocument.using(title="Proof of Service - DC 84p", filename="Proof of Service - DC 84p.pdf", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Small Claims Affidavit - DC 84.pdf", title="All forms and instructions", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Small Claims Affidavit - DC 84.pdf", title="All forms", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
@@ -1276,8 +1276,8 @@ code: |
   claim_affidavit.overflow_fields.gathered = True
 ---
 attachment:
-  name: Affidavit and Claim - DC 84
-  filename: Affidavit and Claim - DC 84
+  name: Small Claims Affidavit - DC 84
+  filename: Small Claims Affidavit - DC 84
   variable name: claim_affidavit[i]
   editable: False
   pdf template file: affidavit_claim_notice_dc_84.pdf
