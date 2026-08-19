@@ -148,6 +148,10 @@ code: |
   ### gather defendant info ###
   nav.set_section('signpost_other_info')
   defendant_information
+
+  if multiple_defendants:
+    multiple_defendants_kickout
+
   defendant_is
   defendants[0].name.first
   defendants[0].address.address
@@ -544,9 +548,30 @@ subquestion: |
   When you receive your forms, check the box for multiple plaintiffs or defendants on you Small Claims Affidavit, as shown below:
 
   [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
-  
+
   If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer.
 continue button field: multiple_plaintiffs_kickout
+---
+id: multiple_defendants_kickout
+question: |
+  Warning! This tool only allows for one Plaintiff and one Defendant.
+subquestion: |
+  If you choose to continue with this tool, you should complete the [Small Claims Affidavit Addendum](https://www.courts.michigan.gov/49f754/siteassets/forms/scao-approved/recent-revisions/eoc_smallclaims.pdf) and add it to the rest of your documents.
+
+  When you receive your forms, check the box for multiple plaintiffs or defendants on you Small Claims Affidavit, as shown below:
+
+  [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
+
+  % if defined('multiple_defendants'):
+  % if multiple_defendants:
+  **If there is more than one defendant**, you can choose any one of them to add using this tool.
+  
+  You will need to add the rest to your affidavit using the Small Claims Affidavit Addendum.
+
+  % endif
+  % endif
+  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer.
+continue button field: multiple_defendants_kickout
 ---
 id: warning_for_claim
 question: |
@@ -809,10 +834,17 @@ continue button field: need_some_more_information
 ---
 id: defendant_information
 question: |
- Next, we need information about the defendant.
+ Next, we need information about the defendant or defendants.
 subquestion: |
-  The defendant is the person or organization that owes you money.
+  A defendant is a person or organization that owes you money.
 continue button field: defendant_information
+---
+id: multiple_defendants
+question: |
+  Multiple defendants
+fields:
+  - Is there **more than one defendant** in this case?: multiple_defendants
+    datatype: yesnoradio
 ---
 id: defendant_is
 question: |
@@ -1329,6 +1361,7 @@ attachment:
       - "has_defendant_other": ${ True if (defendant_is=='Other') else False }
       - "defendant_other": ${ type_of_entity if (defendant_is=='Other') else '' }
       - "has_defendant_corporation": ${ True if (defendant_is=='A corporation') else False }
+      - "multiple_parties": ${ True if (multiple_defendants or multiple_plaintiffs) else False }
       - "has_prev_action": ${ True if(past_or_current_court_case and about_same_thing_as_this_case) else False }
       - "no_prev_action": ${ True if(not (past_or_current_court_case and about_same_thing_as_this_case)) else False }
       - "prev_action_court_name": | 
