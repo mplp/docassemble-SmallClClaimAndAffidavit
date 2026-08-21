@@ -45,8 +45,8 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 
 setup(name='docassemble.SmallClClaimAndAffidavit',
       version='1.1.2',
-      description=('Small Claims Affidavit and Claim'),
-      long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit and Claim\r\n\r\n## Author\r\n\r\nMichigan Legal Help\r\nLemma Legal\r\n\r\n## Changelog:\r\n* 12/12/25 1.1.2 update embedded survey\r\n* 10/7/25  1.1.1 Minor update to instructions fees info\r\n* 6/30/25  1.1.0 launch\r\n\r\n\r\n',
+      description=('Small Claims Affidavit'),
+      long_description='# docassemble.FinalDc84AffidavitAndClaimSm\r\n\r\nSmall Claims Affidavit\r\n\r\n## Author\r\n\r\nMichigan Legal Help\r\nLemma Legal\r\n\r\n## Changelog:\r\n* 12/12/25 1.1.2 update embedded survey\r\n* 10/7/25  1.1.1 Minor update to instructions fees info\r\n* 6/30/25  1.1.0 launch\r\n\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Emily Miller',
       author_email='ekressmiller@lsscm.org',

@@ -236,7 +236,7 @@ review:
   - Edit: 
       - cannot_file_case
     button: |-
-      **Will you wait a week before filing this Affidavit and Claim?**
+      **Will you wait a week before filing this Small Claims Affidavit?**
 
       ${ word(yesno(cannot_file_case)) }
     show if: five_small_claims_cases
