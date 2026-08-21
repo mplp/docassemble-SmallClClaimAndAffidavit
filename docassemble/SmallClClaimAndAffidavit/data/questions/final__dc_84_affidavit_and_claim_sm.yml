@@ -158,6 +158,7 @@ code: |
   defendants[0].name.first
   defendants[0].address.address
   defendants[0].phone_number
+  defendants[0].email
   
   ### gather case info ###
   nav.set_section("signpost_case_info")
