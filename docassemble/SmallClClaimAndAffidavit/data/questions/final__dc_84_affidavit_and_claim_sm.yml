@@ -158,12 +158,7 @@ code: |
   defendants[0].name.first
   defendants[0].address.address
   defendants[0].phone_number
-  defendants[0].email
-  if defendant_is == "An individual":
-    is_mentally_competent
-    age_years_or_older
-    military_service
-
+  
   ### gather case info ###
   nav.set_section("signpost_case_info")
   where_should_file_claim
@@ -261,14 +256,6 @@ code: |
   undefine("defendants[0].name.suffix")
 
   reset_defendant_name = True
----
-code: |
-  if defendant_is != "An individual":
-    undefine("is_mentally_competent")
-    undefine("age_years_or_older")
-    undefine("military_service")
-
-  reset_individual_defendant_attributes = True
 ---
 code: |
   if not past_or_current_court_case:
@@ -874,27 +861,6 @@ subject: |
 content: |
   An "other" type of defendant could be a: county, city, village, township, or local or intermediate school district. 
 ---
-id: is_mentally_competent
-question: |
-  Mental competency
-fields:
-  - As far as you know, is ${ defendants[0].name.first } mentally competent?: is_mentally_competent
-    datatype: yesnoradio
----
-id: age_years_or_older
-question: |
-  Is ${ defendants[0].name.first } an adult?
-fields:
-  - As far as you know, is ${ defendants[0].name.first } 18 years or older?: age_years_or_older
-    datatype: yesnoradio
----
-id: military_service
-question: |
-  Military service
-fields:
-  - As far as you know, is ${ defendants[0].name.first } in military service?: military_service
-    datatype: yesnomaybe
----
 id: where_should_file_claim
 question: |
   The next step is to figure out where to file this case.
@@ -1268,20 +1234,6 @@ template: what_does_that_mean_salaried_employee_template
 subject: What does that mean?
 content: |
   Someone is salaried if they get paid a certain amount of money each year. You are an hourly employee if you get paid a certain amount per hour and are paid based on the number of hours you work.
----
-code: |
-  if military_service:
-    has_military_service = True
-    has_not_military_service = False
-    has_do_not_know_military_service = False
-  elif military_service is None:
-    has_military_service = False
-    has_not_military_service = False
-    has_do_not_know_military_service = True
-  else:
-    has_military_service = False
-    has_not_military_service = True
-    has_do_not_know_military_service = False
 ---
 id: sign_your_claim
 question: |

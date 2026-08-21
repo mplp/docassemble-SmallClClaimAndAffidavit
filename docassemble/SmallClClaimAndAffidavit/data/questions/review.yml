@@ -109,7 +109,6 @@ review:
       - recompute:
         - reset_defendant_name
         - defendants[0].name.first
-        - reset_individual_defendant_attributes
     button: |-
         **The defendant is:**
 
@@ -146,32 +145,6 @@ review:
         **What is the Defendant's email address?** 
 
         ${ word("None provided") if defendants[0].email == "" else defendants[0].email }
-  - Edit: 
-      - is_mentally_competent
-    button: |-
-      **As far as you know, is ${ defendants[0] } mentally competent?**
-
-      ${ word(yesno(is_mentally_competent)) }
-    show if: defendant_is == "An individual"
-  - Edit: 
-      - age_years_or_older
-    button: |-
-      **As far as you know, is ${ defendants[0] } 18 years or older?**
-
-      ${ word(yesno(age_years_or_older)) }
-    show if: defendant_is == "An individual"
-  - Edit: 
-      - military_service
-    button: |-
-      **As far as you know, is ${ defendants[0] } in the military?**
-      % if military_service is None:
-
-      *I don't know*
-      % else:
-
-      ${ word(yesno(military_service)) }
-      % endif
-    show if: defendant_is == "An individual"
   - raw html: |
       ${ next_accordion('<h2 class="h5">This Case</h2>') }
     show if: defined('is_lawyer_representing')
