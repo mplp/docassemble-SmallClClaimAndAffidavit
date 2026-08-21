@@ -94,7 +94,13 @@ review:
     button: |-
         **What is the Plaintiff's phone number?**
 
-        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() } 
+        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() }
+  - Edit: 
+        - users[0].email
+    button: |-
+        **What is the Plaintiff's email address?** 
+
+        ${ word("None provided") if users[0].email == "" else users[0].email }
   - raw html: |
       ${ next_accordion('<h2 class="h5">Defendant</h2>') }
     show if: defined('defendant_is')
@@ -103,7 +109,6 @@ review:
       - recompute:
         - reset_defendant_name
         - defendants[0].name.first
-        - reset_individual_defendant_attributes
     button: |-
         **The defendant is:**
 
@@ -135,31 +140,11 @@ review:
 
         ${ word("None provided") if defendants[0].no_phone_number else defendants[0].phone_numbers() }
   - Edit: 
-      - is_mentally_competent
+        - defendants[0].email
     button: |-
-      **As far as you know, is ${ defendants[0] } mentally competent?**
+        **What is the Defendant's email address?** 
 
-      ${ word(yesno(is_mentally_competent)) }
-    show if: defendant_is == "An individual"
-  - Edit: 
-      - age_years_or_older
-    button: |-
-      **As far as you know, is ${ defendants[0] } 18 years or older?**
-
-      ${ word(yesno(age_years_or_older)) }
-    show if: defendant_is == "An individual"
-  - Edit: 
-      - military_service
-    button: |-
-      **As far as you know, is ${ defendants[0] } in the military?**
-      % if military_service is None:
-
-      *I don't know*
-      % else:
-
-      ${ word(yesno(military_service)) }
-      % endif
-    show if: defendant_is == "An individual"
+        ${ word("None provided") if defendants[0].email == "" else defendants[0].email }
   - raw html: |
       ${ next_accordion('<h2 class="h5">This Case</h2>') }
     show if: defined('is_lawyer_representing')
