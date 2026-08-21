@@ -21,7 +21,11 @@ metadata:
     - Kelly McGuire
 ---
 code:  |
-  github_repo_name = 'docassemble-SmallClClaimAndAffidavit' if get_config('debug') else 'docassemble-UserFeedback'
+  github_repo_name = (
+    "docassemble-SmallClClaimAndAffidavit"
+    if get_config("debug")
+    else "docassemble-UserFeedback"
+  )
 ---
 features:
   labels above fields: True
@@ -63,10 +67,10 @@ objects:
 id: main_interview_order_small_claims
 mandatory: True
 code: |
-  nav.set_section('review_full')
+  nav.set_section("review_full")
 
   ### intro pages ###
-  nav.set_section('signpost_intro')
+  nav.set_section("signpost_intro")
   snapshot_start
   MLH_standard_intro_pages
   start_the_claim
@@ -75,7 +79,7 @@ code: |
     does_not_agree_to_rules_kickout
 
   ### gather user info ###
-  nav.set_section('signpost_your_info')
+  nav.set_section("signpost_your_info")
   filing_as_individual
   if not filing_as_individual:
     Who_are_you_filing_claim_for
@@ -85,20 +89,26 @@ code: |
       if not has_court_appointed_you_as:
         has_court_appointed_you_as_kick_out
     else:
-      if (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)"):
+      if (
+        Who_are_you_filing_claim_for
+        == "A sole proprietor (a business that is not a corporation, but is owned by one person)"
+        or Who_are_you_filing_claim_for
+        == "A partnership (a business that is not a corporation, but is owned by two or more people)"
+      ):
         if not is_owner_or_partner:
           fulltime_salaried_employee
           if not fulltime_salaried_employee:
             fulltime_salaried_employee_kick_out
-    
+
       if Who_are_you_filing_claim_for == "A corporation":
         fulltime_salaried_employee
         if not fulltime_salaried_employee:
-            fulltime_salaried_employee_kick_out
-  
+          fulltime_salaried_employee_kick_out
+
   users[0].name.first
   users[0].address.address
   users[0].no_phone_number
+  users[0].email
 
   ### kickouts for lawyer or jury trial ###
   if is_lawyer_representing:
@@ -118,11 +128,11 @@ code: |
   if claim_for_damages:
     if not claim_for_damages_yes:
       claim_for_damages_yes_kickout
-  
+
   ### against state or local government ###
   claims_suit_against_state
   if claims_suit_against_state:
-      claims_kick_out
+    claims_kick_out
   claim_against_local_government
   if claim_against_local_government:
     governmental_immunity
@@ -142,15 +152,16 @@ code: |
     claims_kick_out
 
   ### gather defendant info ###
-  nav.set_section('signpost_other_info')
+  nav.set_section("signpost_other_info")
   defendant_information
   defendant_is
   defendants[0].name.first
   defendants[0].address.address
   defendants[0].phone_number
+  defendants[0].email
   
   ### gather case info ###
-  nav.set_section('signpost_case_info')
+  nav.set_section("signpost_case_info")
   where_should_file_claim
   Small_claims_cases_info
   county_choice
@@ -167,9 +178,9 @@ code: |
   amount
   reasons_for_your_claim
   list_all_dates
-  
+
   ### user signature warning, outro, and download screen ###
-  nav.set_section('signpost_download')
+  nav.set_section("signpost_download")
   sign_your_claim
   MLH_outro_filing_information
   MLH_outro_saving_answers
@@ -177,41 +188,41 @@ code: |
   MLH_download
 ---
 code: |
-  undefine('users[0].name.first')
-  undefine('users[0].name.middle')
-  undefine('users[0].name.last')
-  undefine('users[0].name.suffix')
+  undefine("users[0].name.first")
+  undefine("users[0].name.middle")
+  undefine("users[0].name.last")
+  undefine("users[0].name.suffix")
 
   reset_individual_name = True
 ---
 code: |
   if Who_are_you_filing_claim_for == "Another person":
-    undefine('users[0].name.first')
-    undefine('users[0].name.middle')
-    undefine('users[0].name.last')
-    undefine('users[0].name.suffix')
+    undefine("users[0].name.first")
+    undefine("users[0].name.middle")
+    undefine("users[0].name.last")
+    undefine("users[0].name.suffix")
 
   reset_another_person_name = True
 ---
 code: |
-  undefine('is_owner_or_partner')
-    
+  undefine("is_owner_or_partner")
+
   reset_owner_or_partner = True
 ---
 code: |
-  undefine('fulltime_salaried_employee')
+  undefine("fulltime_salaried_employee")
 
   reset_fulltime_employee = True
 ---
 code: |
   if Who_are_you_filing_claim_for != "Another person":
-    undefine('has_court_appointed_you_as')
+    undefine("has_court_appointed_you_as")
 
   reset_next_friend_appointment = True
 ---
 code: |
   if not claim_against_local_government:
-    undefine('governmental_immunity')
+    undefine("governmental_immunity")
 
   reset_gov_immunity_exceptions = True
 ---
@@ -226,7 +237,7 @@ code: |
 ---
 code: |
   if not five_small_claims_cases:
-    undefine('cannot_file_case')
+    undefine("cannot_file_case")
 
   reset_cannot_file_case = True
 ---
@@ -236,49 +247,49 @@ code: |
 
     if not cannot_file_case:
       cannot_file_case_kickout
-      
+
   reask_cannot_file_case = True
 ---
 code: |
-  undefine('defendants[0].name.first')
-  undefine('defendants[0].name.middle')
-  undefine('defendants[0].name.last')
-  undefine('defendants[0].name.suffix')
+  undefine("defendants[0].name.first")
+  undefine("defendants[0].name.middle")
+  undefine("defendants[0].name.last")
+  undefine("defendants[0].name.suffix")
 
   reset_defendant_name = True
 ---
 code: |
   if not past_or_current_court_case:
-    undefine('about_same_thing_as_this_case')
-    undefine('is_the_case_over')
-    undefine('case_filed_in_same_court')
-    undefine('what_court_was_case_in')
-    undefine('know_case_number_of_the_other_case')
-    undefine('case_number')
-    undefine('judge')
+    undefine("about_same_thing_as_this_case")
+    undefine("is_the_case_over")
+    undefine("case_filed_in_same_court")
+    undefine("what_court_was_case_in")
+    undefine("know_case_number_of_the_other_case")
+    undefine("case_number")
+    undefine("judge")
 
   reset_other_case_variables = True
 ---
 code: |
   if not about_same_thing_as_this_case:
-    undefine('is_the_case_over')
-    undefine('case_filed_in_same_court')
-    undefine('what_court_was_case_in')
-    undefine('know_case_number_of_the_other_case')
-    undefine('case_number')
-    undefine('judge')
+    undefine("is_the_case_over")
+    undefine("case_filed_in_same_court")
+    undefine("what_court_was_case_in")
+    undefine("know_case_number_of_the_other_case")
+    undefine("case_number")
+    undefine("judge")
 
   reset_other_case_variables_2 = True
 ---
 code: |
   if case_filed_in_same_court:
-    undefine('what_court_was_case_in')
+    undefine("what_court_was_case_in")
 
   reset_other_case_court = True
 ---
 code: |
   if not know_case_number_of_the_other_case:
-    undefine('case_number')
+    undefine("case_number")
 
   reset_other_case_number = True
 ---
@@ -301,10 +312,20 @@ code: |
   if court_count > 1:
     court_index = court_index_for_multi_district
   else:
-    court_index = next(court_list.filter_courts_by_2([county_choice], ['district'], column_1='address_county', column_2='type'))[0]
+    court_index = next(
+      court_list.filter_courts_by_2(
+        [county_choice], ["district"], column_1="address_county", column_2="type"
+      )
+    )[0]
 ---
 code: |
-  court_count = len(list(court_list.filter_courts_by_2([county_choice], ['district'], column_1='address_county', column_2='type')))
+  court_count = len(
+    list(
+      court_list.filter_courts_by_2(
+        [county_choice], ["district"], column_1="address_county", column_2="type"
+      )
+    )
+  )
 ---
 code: |
   defendants[i].name.first
@@ -323,9 +344,15 @@ code: |
 code: |
   if filing_as_individual:
     user_alt_label = "You"
-  elif not filing_as_individual and Who_are_you_filing_claim_for == "Another person": 
+  elif not filing_as_individual and Who_are_you_filing_claim_for == "Another person":
     user_alt_label = users[0].name
-  elif not filing_as_individual and (Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)" or Who_are_you_filing_claim_for == "A corporation"):  
+  elif not filing_as_individual and (
+    Who_are_you_filing_claim_for
+    == "A sole proprietor (a business that is not a corporation, but is owned by one person)"
+    or Who_are_you_filing_claim_for
+    == "A partnership (a business that is not a corporation, but is owned by two or more people)"
+    or Who_are_you_filing_claim_for == "A corporation"
+  ):
     user_alt_label = users[0].name.first
 
   set_user_alt_label = True
@@ -498,6 +525,36 @@ fields:
       % endif
     field: is_lawyer_representing
     datatype: yesnoradio
+---
+id: plaintiff email
+question: |
+  What is your email address?
+subquestion: |
+  Court staff may need to contact you about your case. It's important to give an email address if possible.
+  
+  ${ collapse_template(no_email_template) }
+fields:
+  - Email address: users[0].email
+    datatype: email
+    required: False
+---
+id: defendant email
+question: |
+  What is ${ defendants[0].possessive('email address') }?
+subquestion: |
+  If you **don't know** ${ defendants[0].possessive('email address') }, you can skip this question.
+fields:
+  - Email address: defendants[0].email
+    datatype: email
+    required: False
+---
+id: no_email_template
+template: no_email_template
+subject: What if I don't have an email address?
+content: |
+  You can enter someone else's email address as long as they can safely pass on messages to you. Tell this person that you are using their email address on your court forms.
+
+  If you don't have an email address **and** nobody can safely pass messages to you, you can skip this question.
 ---
 id: want_to_have_jury_trial
 question: |
@@ -1030,7 +1087,9 @@ fields:
       val('Who_are_you_filing_claim_for') == "None of these apply"
 validation code: |
   if Who_are_you_filing_claim_for == "None of these apply":
-    validation_error("You can only continue if you are filing this claim for yourself or for one of the options below.")
+    validation_error(
+      "You can only continue if you are filing this claim for yourself or for one of the options below."
+    )
 ---
 id: Who_you_filing
 question: |
@@ -1147,7 +1206,9 @@ subquestion: |
   Use an address where ${user_alt_label if user_alt_label != 'You' else 'you'} can be contacted.
 fields:
   - code: |
-      users[0].address_fields(country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE, show_country=False)
+      users[0].address_fields(
+        country_code=AL_DEFAULT_COUNTRY, default_state=AL_DEFAULT_STATE, show_country=False
+      )
 ---
 if: ((Who_are_you_filing_claim_for == "A sole proprietor (a business that is not a corporation, but is owned by one person)" or Who_are_you_filing_claim_for == "A partnership (a business that is not a corporation, but is owned by two or more people)") and not is_owner_or_partner) or Who_are_you_filing_claim_for == "A corporation"
 id: fulltime_salaried_employee
@@ -1185,12 +1246,14 @@ continue button field: sign_your_claim
 objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
   - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True)
+  - claim_notice: ALStaticDocument.using(title="Notice of Hearing - DC 84", filename="notice_of_hearing_dc_84.pdf", enabled=True)
+  - claim_affidavit_and_notice: ALDocumentBundle.using(elements=[claim_affidavit, claim_notice], title="Affidavit, Claim, and Notice of Hearing - DC 84", filename="Affidavit, Claim, and Notice of Hearing - DC 84.pdf", enabled=True)
   - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
   - proof_of_service: ALDocument.using(title="Proof of Service - DC 84p", filename="Proof of Service - DC 84p.pdf", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit_and_notice, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit_and_notice, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
@@ -1218,13 +1281,17 @@ attachment:
   docx template file: claim_affidavit_Addendum.docx
 ---
 code: |
-  claim_affidavit.overflow_fields['list_all_dates'].overflow_trigger = 70
-  claim_affidavit.overflow_fields['list_all_dates'].label = "7. The date(s) the claim arose is/are"
-  
-  claim_affidavit.overflow_fields['reasons_for_your_claim'].overflow_trigger = 1
-  claim_affidavit.overflow_fields['reasons_for_your_claim'].label = "9. The reasons for the claim are"
-  claim_affidavit.overflow_fields['reasons_for_your_claim'].input_width = 1
-  
+  claim_affidavit.overflow_fields["list_all_dates"].overflow_trigger = 70
+  claim_affidavit.overflow_fields["list_all_dates"].label = (
+    "7. The date(s) the claim arose is/are"
+  )
+
+  claim_affidavit.overflow_fields["reasons_for_your_claim"].overflow_trigger = 1
+  claim_affidavit.overflow_fields["reasons_for_your_claim"].label = (
+    "9. The reasons for the claim are"
+  )
+  claim_affidavit.overflow_fields["reasons_for_your_claim"].input_width = 1
+
   claim_affidavit.overflow_fields.gathered = True
 ---
 attachment:
@@ -1232,7 +1299,7 @@ attachment:
   filename: Affidavit and Claim - DC 84
   variable name: claim_affidavit[i]
   editable: False
-  pdf template file: affidavit_claim_notice_dc_84.pdf
+  pdf template file: affidavit_claim_dc_84.pdf
   fields:
       - "state_of_michigan": |
           ${ the_court.number } Judicial District
@@ -1242,10 +1309,12 @@ attachment:
       - "plaintiff_address": ${ users[0].address.address+" "+users[0].address.unit }
       - "plaintiff_telephone_no": ${ "Does not have phone" if users[0].no_phone_number else phone_number_formatted(users[0].phone_number) }
       - "plaintiff_city_state_zip": ${ users[0].address.city+" "+users[0].address.state+" "+users[0].address.zip }
+      - "plaintiff_email": ${ users[0].email }
       - "defendant_name": ${ defendants[0].name if defendant_is == "An individual" else defendants[0].name.first }
       - "defendant_address": ${ defendants[0].address.address+" "+defendants[0].address.unit }
       - "defendant_telephone_no": ${ "Unknown" if defendants[0].no_phone_number else phone_number_formatted(defendants[0].phone_number) }
       - "defendant_city_state_zip":  ${ defendants[0].address.city+" "+defendants[0].address.state+" "+defendants[0].address.zip }
+      - "defendant_email": ${ defendants[0].email }
       - "has_i_am_partner": ${ True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' and is_owner_or_partner else False }
       - "has_plaintiff_partnership": ${ True if not filing_as_individual and Who_are_you_filing_claim_for=='A partnership (a business that is not a corporation, but is owned by two or more people)' else False }
       - "has_plaintiff_individual": ${ True if filing_as_individual or not filing_as_individual and Who_are_you_filing_claim_for=='Another person' and has_court_appointed_you_as else False }
