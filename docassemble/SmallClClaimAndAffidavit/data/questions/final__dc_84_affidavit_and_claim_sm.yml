@@ -115,7 +115,7 @@ code: |
     existing_case_kickout
   if want_to_have_jury_trial:
     existing_case_kickout
-  
+
   ### kickout for multiple parties ###
   if multiple_plaintiffs:
     multiple_plaintiffs_kickout
@@ -167,7 +167,7 @@ code: |
   defendants[0].address.address
   defendants[0].phone_number
   defendants[0].email
-  
+
   ### gather case info ###
   nav.set_section("signpost_case_info")
   where_should_file_claim
@@ -1301,15 +1301,15 @@ continue button field: sign_your_claim
 ---
 objects:
   - instructions: ALDocument.using(filename="Instructions - Do not file this", title="Instructions", enabled=True, has_addendum=False)
-  - claim_affidavit: ALDocument.using(title="Affidavit and Claim - DC 84", filename="Affidavit and Claim - DC 84.pdf", enabled=True, has_addendum=True)
+  - claim_affidavit: ALDocument.using(title="Small Claims Affidavit - DC 84", filename="Small Claims Affidavit - DC 84.pdf", enabled=True, has_addendum=True)
   - claim_notice: ALStaticDocument.using(title="Notice of Hearing - DC 84", filename="notice_of_hearing_dc_84.pdf", enabled=True)
   - claim_affidavit_and_notice: ALDocumentBundle.using(elements=[claim_affidavit, claim_notice], title="Affidavit, Claim, and Notice of Hearing - DC 84", filename="Affidavit, Claim, and Notice of Hearing - DC 84.pdf", enabled=True)
   - claim_affidavit_judgement: ALDocument.using(title="Judgment - DC 85", filename="Judgment - DC 85.pdf", enabled=True, has_addendum=False)
   - proof_of_service: ALDocument.using(title="Proof of Service - DC 84p", filename="Proof of Service - DC 84p.pdf", enabled=True, has_addendum=False)
 ---
 objects:
-  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit_and_notice, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms and instructions", enabled=True)
-  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit_and_notice, claim_affidavit_judgement, proof_of_service], filename="Affidavit and Claim - DC 84.pdf", title="All forms", enabled=True)
+  - al_user_bundle: ALDocumentBundle.using(elements=[instructions, claim_affidavit_and_notice, claim_affidavit_judgement, proof_of_service], filename="Small Claims Affidavit - DC 84.pdf", title="All forms and instructions", enabled=True)
+  - al_court_bundle: ALDocumentBundle.using(elements=[claim_affidavit_and_notice, claim_affidavit_judgement, proof_of_service], filename="Small Claims Affidavit - DC 84.pdf", title="All forms", enabled=True)
 ---
 id: download screen
 event: claim_and_affidavit_download
