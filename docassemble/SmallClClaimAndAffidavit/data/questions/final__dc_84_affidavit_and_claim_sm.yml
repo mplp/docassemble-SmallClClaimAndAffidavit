@@ -586,36 +586,28 @@ fields:
 ---
 id: multiple_plaintiffs_kickout
 question: |
-  Warning! This tool only allows for one Plaintiff and one Defendant.
+  Warning! This tool only adds one Plaintiff and one Defendant to your forms.
 subquestion: |
-  If you choose to continue with this tool, you should complete the [Small Claims Affidavit Addendum](https://www.courts.michigan.gov/49f754/siteassets/forms/scao-approved/recent-revisions/eoc_smallclaims.pdf) and add it to the rest of your documents.
+  If you choose to continue with this tool and want to add another Plaintiff, you should:
+  
+  1. Complete the [Small Claims Affidavit Addendum](https://www.courts.michigan.gov/49f399/siteassets/forms/scao-approved/dc84a.pdf) and add it to the rest of your documents.
 
-  When you receive your forms, check the box for multiple plaintiffs or defendants on you Small Claims Affidavit, as shown below:
+  2. When you receive your forms, check the box for multiple plaintiffs or defendants on your Small Claims Affidavit, as shown below:
 
   [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
-
-  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer.
 continue button field: multiple_plaintiffs_kickout
 ---
 id: multiple_defendants_kickout
 question: |
-  Warning! This tool only allows for one Plaintiff and one Defendant.
+  Warning! This tool only adds one Plaintiff and one Defendant  to your forms.
 subquestion: |
-  If you choose to continue with this tool, you should complete the [Small Claims Affidavit Addendum](https://www.courts.michigan.gov/49f754/siteassets/forms/scao-approved/recent-revisions/eoc_smallclaims.pdf) and add it to the rest of your documents.
+  Enter information about the first Defendant on the following screens. If you choose to continue with this tool and want to add another Defendant, you should:
+  
+  1. Complete the [Small Claims Affidavit Addendum](https://www.courts.michigan.gov/49f399/siteassets/forms/scao-approved/dc84a.pdf) and add it to the rest of your documents.
 
-  When you receive your forms, check the box for multiple plaintiffs or defendants on you Small Claims Affidavit, as shown below:
+  2. When you receive your forms, check the box for multiple plaintiffs or defendants on your Small Claims Affidavit, as shown below:
 
   [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
-
-  % if defined('multiple_defendants'):
-  % if multiple_defendants:
-  **If there is more than one defendant**, you can choose any one of them to add using this tool.
-  
-  You will need to add the rest to your affidavit using the Small Claims Affidavit Addendum.
-
-  % endif
-  % endif
-  If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer.
 continue button field: multiple_defendants_kickout
 ---
 id: warning_for_claim
@@ -888,7 +880,7 @@ id: multiple_defendants
 question: |
   Multiple defendants
 fields:
-  - Is there **more than one defendant** in this case?: multiple_defendants
+  - Do you want to sue **more than one defendant** in this case?: multiple_defendants
     datatype: yesnoradio
 ---
 id: defendant_is
