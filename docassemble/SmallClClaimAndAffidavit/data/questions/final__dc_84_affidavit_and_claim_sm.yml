@@ -365,6 +365,12 @@ code: |
 
   set_user_alt_label = True
 ---
+objects:
+  - multiple_plaintiffs_defendants_checkbox: |
+      DAStaticFile.using(
+        filename="multiple_plaintiffs_defendants_checkbox.png",
+        alt_text=word("Part of a court form. There is a blank checkbox, followed by 'Complete and attach Small Claims Affidavit Addendum (Form DC 84a).'"))
+---
 id: understands_rules
 question: |
   Small Claims Rules
