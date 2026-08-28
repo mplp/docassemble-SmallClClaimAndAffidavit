@@ -58,3 +58,48 @@
   color: var(--bs-primary);
   text-decoration: underline;
 }
+
+.mlh-mobile-review-link {
+  margin: 1.5rem 0 0 0;
+}
+
+.mlh-mobile-review-link a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem;
+  border: 2px solid #005a7c;
+  border-radius: 9999px;
+  background-color: #fff;
+  color: #005a7c;
+  font-weight: 550;
+  text-align: center;
+  text-decoration: none;
+  max-width: 175px;
+}
+
+.mlh-mobile-review-link a::after {
+  content: "";
+  display: inline-block;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  background-image: url("edit-icon-blue.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transform: translateY(-0.025em);
+}
+
+.mlh-mobile-review-link a:hover,
+.mlh-mobile-review-link a:focus {
+  border-color: #005a7c;
+  background-color: #005a7c;
+  color: #fff;
+}
+
+.mlh-mobile-review-link a:hover::after,
+.mlh-mobile-review-link a:focus::after {
+  background-image: url("edit-icon-white.png");
+}

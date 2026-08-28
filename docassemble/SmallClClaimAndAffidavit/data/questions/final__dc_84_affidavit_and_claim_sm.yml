@@ -33,6 +33,13 @@ features:
     - review_nav_test_2.css
     - undo_button_test.css
 ---
+default screen parts:
+  pre: |
+    <div class="d-md-none mlh-mobile-review-link">
+      <a href="${ url_action('review_full') }">Review / Edit</a>
+    </div>
+  right: |
+---
 sections:
   - review_full: "<u>Review / Edit</u>"
   - signpost_intro: "Introduction"
