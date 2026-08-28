@@ -29,14 +29,17 @@ code:  |
 ---
 features:
   labels above fields: True
+  css:
+    - review_nav_test_2.css
+    - undo_button_test.css
 ---
 sections:
+  - review_full: "<u>Review / Edit</u>"
   - signpost_intro: "Introduction"
   - signpost_your_info: "Your Information"
   - signpost_other_info: "Other Side Information"
   - signpost_case_info: "Case Information"
   - signpost_download: "Get Your Forms"
-  - review_full: "✎ <u>Review / Edit</u>"
 ---
 code: |
   resource_page_url_only = "https://michiganlegalhelp.org/node/1617"

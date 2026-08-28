@@ -1,0 +1,33 @@
+.daquestionbackbutton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 0;
+  background-color: transparent;
+  color: #005a7c;
+  box-shadow: none;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.daquestionbackbutton .fa-chevron-left {
+  font-size: 0.7em;
+  line-height: 1;
+  text-decoration: none;
+  transform: translateY(0.02em);
+}
+
+.daquestionbackbutton:hover,
+.daquestionbackbutton:focus {
+  border: 0;
+  background-color: transparent;
+  color: #005a7c;
+  box-shadow: none;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.daquestionbackbutton:hover .fa-chevron-left,
+.daquestionbackbutton:focus .fa-chevron-left {
+  font-weight: 900;
+}

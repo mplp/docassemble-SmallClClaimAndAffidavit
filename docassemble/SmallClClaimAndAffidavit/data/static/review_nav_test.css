@@ -1,0 +1,47 @@
+.danav-vertical .danavlink[data-key="review_full"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--bs-border-radius);
+  background-color: var(--bs-primary);
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+}
+
+.danav-vertical .danavlink[data-key="review_full"]::before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  background-image: url("edit-icon-white.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.danav-vertical .danavlink[data-key="review_full"]:hover,
+.danav-vertical .danavlink[data-key="review_full"]:focus {
+  background-color: #004765;
+  color: #fff;
+}
+
+.danav.danav-vertical.nav-pills .nav-link.danavlink.active:not([data-key="review_full"]) {
+  background-color: transparent;
+  color: var(--bs-primary);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.danav.danav-vertical.nav-pills .nav-link.danavlink.active:not([data-key="review_full"]):hover,
+.danav.danav-vertical.nav-pills .nav-link.danavlink.active:not([data-key="review_full"]):focus {
+  background-color: transparent;
+  color: var(--bs-primary);
+  text-decoration: underline;
+}
