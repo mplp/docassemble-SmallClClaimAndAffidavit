@@ -30,17 +30,39 @@ code:  |
 features:
   labels above fields: True
   css:
-    - review_nav_test_2.css
+    # Part of usability testing. Previous Review/Edit placement experiment.
+    # - review_nav_test_3.css
+    # Part of usability testing. Positions Review/Edit from the button area toward the nav column.
+    - review_nav_test_4.css
     - undo_button_test.css
 ---
+### Part of usability testing. To be used with review_nav_test.css and review_nav_test_2.css ###
+# default screen parts:
+#   under: |
+#     <div class="mlh-review-link">
+#       <a href="${ url_action('review_full') }">Review / Edit</a>
+#     </div>
+#   right: |
+---
+### Part of usability testing. To be used with review_nav_test_4.css ###
 default screen parts:
-  pre: |
-    <div class="d-md-none mlh-mobile-review-link">
-      <a href="${ url_action('review_full') }">Review / Edit</a>
-    </div>
+  under: |
+    ${ review_edit_link }
   right: |
 ---
+### Part of usability testing. To be used with review_nav_test_4.css ###
+template: review_edit_link
+content: |
+  <!-- Part of usability testing. Previous Review/Edit under-buttons markup. -->
+  <!-- <div class="mlh-review-link"> -->
+  <div class="d-md-none mlh-review-link">
+    <a href="${ url_action('review_full') }">Review / Edit</a>
+  </div>
+---
 sections:
+  # Part of usability testing. Previous nav-column Review/Edit link.
+  # - review_full: "<u>Review / Edit</u>"
+  # Part of usability testing. Desktop Review/Edit link restored to nav column for review_nav_test_4.css.
   - review_full: "<u>Review / Edit</u>"
   - signpost_intro: "Introduction"
   - signpost_your_info: "Your Information"
@@ -77,7 +99,8 @@ objects:
 id: main_interview_order_small_claims
 mandatory: True
 code: |
-  nav.set_section("review_full")
+  # Part of usability testing. Previous nav-column Review/Edit link.
+  # nav.set_section("review_full")
 
   ### intro pages ###
   nav.set_section("signpost_intro")
@@ -521,6 +544,8 @@ fields:
   - Are you filing this claim for yourself as an individual?: filing_as_individual
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(what_does_that_mean_individual_template) }
 
   ${ sign_in_message }
@@ -654,6 +679,8 @@ fields:
   - Is this claim for harm done on purpose, like the examples listed above?: claim_for_damages
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(claim_for_damages_help_template) }
 
   ${ sign_in_message }
@@ -681,6 +708,8 @@ fields:
   - Does the claim involve one of those exceptions?: claim_for_damages_yes
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(claim_for_damages_help_template_two) }
 
   ${ sign_in_message }
@@ -725,6 +754,8 @@ fields:
   - Are you filing this case against the State of Michigan or a state agency?: claims_suit_against_state
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(state_agency_explanation) }
 
   ${ sign_in_message }
@@ -758,6 +789,8 @@ fields:
   - Does the claim involve one of those exceptions?: governmental_immunity
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(governmental_immunity_help) }
 
   ${ sign_in_message }
@@ -851,6 +884,8 @@ fields:
     field: directly_involved_transaction_or_dispute
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(directly_involved_transaction_explanation) }
 
   ${ sign_in_message }
@@ -910,6 +945,8 @@ fields:
       variable: defendant_is
       is: Other
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(type_of_defendant_explanation) }
   
   ${ sign_in_message }
@@ -969,6 +1006,8 @@ fields:
   - Was that case filed in the same court as this case?: case_filed_in_same_court
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(case_filed_in_same_court_explanation) }
 
   ${ sign_in_message }
@@ -1020,6 +1059,8 @@ fields:
     min: 0
     currency symbol: $
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(amount_explanation) }
 
   ${ sign_in_message }
@@ -1057,6 +1098,8 @@ fields:
   - List all dates: list_all_dates
     datatype: area
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(dates_explanation) }
 
   ${ sign_in_message }
@@ -1166,6 +1209,8 @@ fields:
   - Has a court appointed you as ${users[0].name.first}'s guardian, conservator, or next friend?: has_court_appointed_you_as
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(learn_more_guardian_template) }
 
   ${ sign_in_message }
@@ -1284,6 +1329,8 @@ fields:
     field: fulltime_salaried_employee
     datatype: yesnoradio
 under: |
+  ${ review_edit_link }
+
   ${ collapse_template(what_does_that_mean_salaried_employee_template) }
 
   ${ sign_in_message }

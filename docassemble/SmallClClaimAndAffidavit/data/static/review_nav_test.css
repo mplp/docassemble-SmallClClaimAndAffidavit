@@ -36,12 +36,12 @@
   background-color: transparent;
   color: var(--bs-primary);
   font-weight: 700;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .danav.danav-vertical.nav-pills .nav-link.danavlink.active:not([data-key="review_full"]):hover,
 .danav.danav-vertical.nav-pills .nav-link.danavlink.active:not([data-key="review_full"]):focus {
   background-color: transparent;
   color: var(--bs-primary);
-  text-decoration: underline;
+  text-decoration: none;
 }
