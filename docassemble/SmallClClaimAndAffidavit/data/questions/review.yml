@@ -101,6 +101,14 @@ review:
         **What is the Plaintiff's email address?** 
 
         ${ word("None provided") if users[0].email == "" else users[0].email }
+  - Edit: 
+      - multiple_plaintiffs
+      - follow up:
+        - multiple_plaintiffs_info
+    button: |-
+      **Are there other Plaintiffs in this case?**
+      
+      ${ word(yesno(multiple_plaintiffs)) }
   - raw html: |
       ${ next_accordion('<h2 class="h5">Defendant</h2>') }
     show if: defined('defendant_is')
@@ -145,6 +153,14 @@ review:
         **What is the Defendant's email address?** 
 
         ${ word("None provided") if defendants[0].email == "" else defendants[0].email }
+  - Edit: 
+      - multiple_defendants
+      - follow up:
+        - multiple_defendants_info
+    button: |-
+      **Is there more than one Defendant in this case?**
+      
+      ${ word(yesno(multiple_defendants)) }
   - raw html: |
       ${ next_accordion('<h2 class="h5">This Case</h2>') }
     show if: defined('is_lawyer_representing')
@@ -168,18 +184,6 @@ review:
       % endif
       
       ${ word(yesno(want_to_have_jury_trial)) }
-  - Edit: 
-      - multiple_plaintiffs
-    button: |-
-      **Are there other Plaintiffs in this case?**
-      
-      ${ word(yesno(multiple_plaintiffs)) }
-  - Edit: 
-      - multiple_defendants
-    button: |-
-      **Is there more than one Defendant in this case?**
-      
-      ${ word(yesno(multiple_defendants)) }
   - Edit: 
       - amount
     button: |-

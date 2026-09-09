@@ -118,7 +118,7 @@ code: |
 
   ### kickout for multiple parties ###
   if multiple_plaintiffs:
-    multiple_plaintiffs_kickout
+    multiple_plaintiffs_info
 
   ### claim amount limitations ###
   amount
@@ -160,7 +160,7 @@ code: |
   defendant_information
 
   if multiple_defendants:
-    multiple_defendants_kickout
+    multiple_defendants_info
 
   defendant_is
   defendants[0].name.first
@@ -538,7 +538,11 @@ id: plaintiff email
 question: |
   What is your email address?
 subquestion: |
-  Court staff may need to contact you about your case. It's important to give an email address if possible.
+  Court staff may need to contact you about your case. You should add an email address only if:
+
+  * You have an email address,
+  * It is safe to share, **and**
+  * You are okay if other people see it.
   
   ${ collapse_template(no_email_template) }
 fields:
@@ -558,11 +562,11 @@ fields:
 ---
 id: no_email_template
 template: no_email_template
-subject: What if I don't have an email address?
+subject: What if I don't have an email address or I want to keep my email private?
 content: |
   You can enter someone else's email address as long as they can safely pass on messages to you. Tell this person that you are using their email address on your court forms.
 
-  If you don't have an email address **and** nobody can safely pass messages to you, you can skip this question.
+  If you want to give the court your own email address but keep it private, you can skip this question and instead use the [Contact Information form, MC 505](https://www.courts.michigan.gov/4a5233/siteassets/forms/scao-approved/mc505.pdf).
 ---
 id: want_to_have_jury_trial
 question: |
@@ -580,11 +584,24 @@ fields:
 id: multiple_plaintiffs
 question: |
   Additional Plaintiffs
+subquestion: |
+  A person or organization that starts a small claims case by filing a Small Claims Affidavit is a Plaintiff. You have already entered one Plaintiff.
+
+  ${collapse_template(multiple_plaintiffs_why)}
 fields:
   - Are there any other Plaintiffs in this case?: multiple_plaintiffs
     datatype: yesnoradio 
 ---
-id: multiple_plaintiffs_kickout
+template: multiple_plaintiffs_why
+subject: Why would there be multiple Plaintiffs?
+content: |
+  It is sometimes possible for multiple Plaintiffs to start a small claims case together. This can happen if multiple people or organizations:
+  
+  * were directly involved and harmed by the same event, **and**
+  * want to file a small claims case together.
+---
+if: multiple_plaintiffs
+id: multiple_plaintiffs_info
 question: |
   Warning! This tool only adds one Plaintiff and one Defendant to your forms.
 subquestion: |
@@ -595,9 +612,10 @@ subquestion: |
   2. When you receive your forms, check the box for multiple plaintiffs or defendants on your Small Claims Affidavit, as shown below:
 
   [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
-continue button field: multiple_plaintiffs_kickout
+continue button field: multiple_plaintiffs_info
 ---
-id: multiple_defendants_kickout
+if: multiple_defendants
+id: multiple_defendants_info
 question: |
   Warning! This tool only adds one Plaintiff and one Defendant  to your forms.
 subquestion: |
@@ -608,7 +626,7 @@ subquestion: |
   2. When you receive your forms, check the box for multiple plaintiffs or defendants on your Small Claims Affidavit, as shown below:
 
   [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
-continue button field: multiple_defendants_kickout
+continue button field: multiple_defendants_info
 ---
 id: warning_for_claim
 question: |
