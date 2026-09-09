@@ -643,11 +643,6 @@ fields:
       - I would like to leave.
       - I understand that I can't get more than $7,000 in a small claims case, but I would like to continue.
 ---
-id: start_the_claim
-question: |
- Before you can start the claim, we will ask you some questions to make sure Small Claims Court is the right place for your case. 
-continue button field: start_the_claim
----
 id: claim for damages
 question: |
   Is this claim for damages to ${user_alt_label if user_alt_label != 'You' else 'you'} by someone who harmed ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose?
