@@ -1,20 +1,24 @@
 [build-system]
 requires = [
-    "setuptools==80.9.0",
+    "setuptools>=80.9.0",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "docassemble.SmallClClaimAndAffidavit"
-version = "1.1.2"
-description = "Small Claims Affidavit and Claim"
+version = "1.2.0"
+description = "Small Claims Affidavit"
 readme = "README.md"
 authors = [
-    { name = "Emily Miller", email = "ekressmiller@lsscm.org" },
+    { name = "Michigan Legal Help and Lemma Legal", email = "ekressmiller@lsscm.org" },
 ]
 dependencies = [
     "docassemble.ALAnyState @ git+https://github.com/SuffolkLITLab/docassemble-ALAnyState.git@main",
     "docassemble.AssemblyLine @ git+https://github.com/SuffolkLITLab/docassemble-AssemblyLine.git@main",
+]
+license = "MIT"
+license-files = [
+    "LICENSE",
 ]
 
 [project.urls]
