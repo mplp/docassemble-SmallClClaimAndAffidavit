@@ -17,7 +17,7 @@ Scenario: Guardianship
     | MLH_esign_tag | (e-signed as allowed by MCR 1.109) |  |
     | MLH_form_type | forms |  |
     | MLH_instructions_included | True |  |
-    | MLH_interview_title | Small Claims Affidavit and Claim |  |
+    | MLH_interview_title | Small Claims Affidavit |  |
     | MLH_intro_agree_no_pii | True |  |
     | MLH_intro_landing | True |  |
     | MLH_materials_included | False |  |
@@ -44,17 +44,17 @@ Scenario: Guardianship
     | claim_affidavit['final'].info['attachment']['name'] | Question_552 |  |
     | claim_affidavit['final'].info['attachment']['number'] | 0 |  |
     | claim_affidavit['final'].info['description'] |  |  |
-    | claim_affidavit['final'].info['filename'] | Affidavit and Claim - DC 84 |  |
+    | claim_affidavit['final'].info['filename'] | Small Claims Affidavit - DC 84 |  |
     | claim_affidavit['final'].info['formats'][0] | pdf |  |
-    | claim_affidavit['final'].info['name'] | Affidavit and Claim - DC 84 |  |
+    | claim_affidavit['final'].info['name'] | Small Claims Affidavit - DC 84 |  |
     | claim_affidavit['final'].info['orig_variable_name'] | claim_affidavit[i] |  |
     | claim_affidavit['final'].info['permissions'] | None |  |
     | claim_affidavit['final'].info['raw'] | False |  |
-    | claim_affidavit['final'].pdf.filename | Affidavit and Claim - DC 84.pdf |  |
+    | claim_affidavit['final'].pdf.filename | Small Claims Affidavit - DC 84.pdf |  |
     | claim_affidavit['final'].pdf.initialized | True |  |
     | claim_affidavit['final'].pdf.number | 72746 |  |
     | claim_affidavit['final'].pdf.ok | True |  |
-    | claim_affidavit['final'].pdf.title | Affidavit and Claim - DC 84 |  |
+    | claim_affidavit['final'].pdf.title | Small Claims Affidavit - DC 84 |  |
     | claim_affidavit.addendum.docx.filename | Document.docx |  |
     | claim_affidavit.addendum.docx.initialized | True |  |
     | claim_affidavit.addendum.docx.number | 72748 |  |
@@ -76,7 +76,7 @@ Scenario: Guardianship
     | claim_affidavit.always_enabled | True |  |
     | claim_affidavit.default_overflow_message | ... |  |
     | claim_affidavit.enabled | True |  |
-    | claim_affidavit.filename | Affidavit and Claim - DC 84.pdf |  |
+    | claim_affidavit.filename | Small Claims Affidavit - DC 84.pdf |  |
     | claim_affidavit.has_addendum | True |  |
     | claim_affidavit.overflow_fields['list_all_dates'].field_name | list_all_dates |  |
     | claim_affidavit.overflow_fields['list_all_dates'].label | 7. The date(s) the claim arose is/are |  |
@@ -88,7 +88,7 @@ Scenario: Guardianship
     | claim_affidavit.overflow_fields.style | overflow_only |  |
     | claim_affidavit.overflow_fields.there_are_any | True |  |
     | claim_affidavit.suffix_to_append | preview |  |
-    | claim_affidavit.title | Affidavit and Claim - DC 84 |  |
+    | claim_affidavit.title | Small Claims Affidavit - DC 84 |  |
     | claim_affidavit_judgement['final'].info['attachment']['name'] | Question_551 |  |
     | claim_affidavit_judgement['final'].info['attachment']['number'] | 0 |  |
     | claim_affidavit_judgement['final'].info['description'] |  |  |
