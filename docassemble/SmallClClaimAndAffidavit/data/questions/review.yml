@@ -94,21 +94,7 @@ review:
     button: |-
         **What is the Plaintiff's phone number?**
 
-        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() }
-  - Edit: 
-        - users[0].email
-    button: |-
-        **What is the Plaintiff's email address?** 
-
-        ${ word("None provided") if users[0].email == "" else users[0].email }
-  - Edit: 
-      - multiple_plaintiffs
-      - follow up:
-        - multiple_plaintiffs_info
-    button: |-
-      **Are there other Plaintiffs in this case?**
-      
-      ${ word(yesno(multiple_plaintiffs)) }
+        ${ word("None provided") if users[0].no_phone_number else users[0].phone_numbers() } 
   - raw html: |
       ${ next_accordion('<h2 class="h5">Defendant</h2>') }
     show if: defined('defendant_is')
@@ -117,6 +103,7 @@ review:
       - recompute:
         - reset_defendant_name
         - defendants[0].name.first
+        - reset_individual_defendant_attributes
     button: |-
         **The defendant is:**
 
@@ -148,19 +135,31 @@ review:
 
         ${ word("None provided") if defendants[0].no_phone_number else defendants[0].phone_numbers() }
   - Edit: 
-        - defendants[0].email
+      - is_mentally_competent
     button: |-
-        **What is the Defendant's email address?** 
+      **As far as you know, is ${ defendants[0] } mentally competent?**
 
-        ${ word("None provided") if defendants[0].email == "" else defendants[0].email }
+      ${ word(yesno(is_mentally_competent)) }
+    show if: defendant_is == "An individual"
   - Edit: 
-      - multiple_defendants
-      - follow up:
-        - multiple_defendants_info
+      - age_years_or_older
     button: |-
-      **Is there more than one Defendant in this case?**
-      
-      ${ word(yesno(multiple_defendants)) }
+      **As far as you know, is ${ defendants[0] } 18 years or older?**
+
+      ${ word(yesno(age_years_or_older)) }
+    show if: defendant_is == "An individual"
+  - Edit: 
+      - military_service
+    button: |-
+      **As far as you know, is ${ defendants[0] } in the military?**
+      % if military_service is None:
+
+      *I don't know*
+      % else:
+
+      ${ word(yesno(military_service)) }
+      % endif
+    show if: defendant_is == "An individual"
   - raw html: |
       ${ next_accordion('<h2 class="h5">This Case</h2>') }
     show if: defined('is_lawyer_representing')
@@ -246,7 +245,7 @@ review:
   - Edit: 
       - cannot_file_case
     button: |-
-      **Will you wait a week before filing this Small Claims Affidavit?**
+      **Will you wait a week before filing this Affidavit and Claim?**
 
       ${ word(yesno(cannot_file_case)) }
     show if: five_small_claims_cases
