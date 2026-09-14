@@ -595,7 +595,7 @@ fields:
 template: multiple_plaintiffs_why
 subject: Why would there be multiple Plaintiffs?
 content: |
-  It is sometimes possible for multiple Plaintiffs to start a small claims case together. This can happen if multiple people or organizations:
+  It is possible for multiple Plaintiffs to start a small claims case together. This can happen if multiple people or organizations:
   
   * were directly involved and harmed by the same event, **and**
   * want to file a small claims case together.
