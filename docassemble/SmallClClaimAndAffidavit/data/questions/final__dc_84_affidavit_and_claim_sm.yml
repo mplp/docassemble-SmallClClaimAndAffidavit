@@ -365,6 +365,12 @@ code: |
 
   set_user_alt_label = True
 ---
+objects:
+  - multiple_plaintiffs_defendants_checkbox: |
+      DAStaticFile.using(
+        filename="multiple_plaintiffs_defendants_checkbox.png",
+        alt_text=word("A section of Form DC 84a. There is an empty checkbox square, followed by the text: 'Check here if there are multiple plaintiffs or defendants. Complete and attach Small Claims Affidavit Addendum (Form DC 84a)'."))
+---
 id: understands_rules
 question: |
   Small Claims Rules
@@ -611,7 +617,7 @@ subquestion: |
 
   2. When you receive your forms, check the box for multiple plaintiffs or defendants on your Small Claims Affidavit, as shown below:
 
-  [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
+  ${ multiple_plaintiffs_defendants_checkbox.show(width="100%") }
 continue button field: multiple_plaintiffs_info
 ---
 if: multiple_defendants
@@ -625,7 +631,7 @@ subquestion: |
 
   2. When you receive your forms, check the box for multiple plaintiffs or defendants on your Small Claims Affidavit, as shown below:
 
-  [FILE multiple_plaintiffs_defendants_checkbox.png, 100%]
+  ${ multiple_plaintiffs_defendants_checkbox.show(width="100%") }
 continue button field: multiple_defendants_info
 ---
 id: warning_for_claim
