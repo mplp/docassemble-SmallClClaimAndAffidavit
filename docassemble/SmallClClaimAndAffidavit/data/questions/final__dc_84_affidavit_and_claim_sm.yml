@@ -911,7 +911,7 @@ id: defendant_information
 question: |
  Next, we need information about the defendant or defendants.
 subquestion: |
-  A defendant is a person or organization that owes you money.
+  A defendant is a person or organization that owes ${ user_alt_label } money.
 continue button field: defendant_information
 ---
 id: multiple_defendants
