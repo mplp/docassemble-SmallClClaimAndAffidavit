@@ -529,26 +529,45 @@ content: |
 ---
 id: is_lawyer_representing
 question: |
-  Do you have a lawyer?
+  % if filing_as_individual:
+  ${ users[0].do_question("have", capitalize=True, person=2) } a lawyer?
+  % else:
+  ${ users[0].do_question("have", capitalize=True, person=3) } a lawyer?
+  % endif
 fields:
-  - label: |
-      % if filing_as_individual:
-      Is a lawyer representing you in this case?
-      % else: 
-      Is a lawyer representing ${ user_alt_label } in this case?
-      % endif
-    field: is_lawyer_representing
+  - Is a lawyer representing ${ user_alt_label } in this case?: is_lawyer_representing
     datatype: yesnoradio
+---
+id: your contact information
+question: |
+  What is ${ users[0].possessive("phone number", person=2 if filing_as_individual else 3) }?
+subquestion: |
+  Court staff may need to call ${ user_alt_label } about the case. It's important to give a phone number if possible.
+
+  ${ collapse_template(what_if_no_number_template) }
+fields:
+  - Phone number: users[0].phone_number
+    show if:
+      variable: users[0].no_phone_number
+      is: False
+  - label: |
+      There's NO reliable way to contact ${ users[0].pronoun_or_name(person=1 if filing_as_individual else 3) } by phone.
+    field: users[0].no_phone_number
+    required: False
+    datatype: yesno
+  - note: |
+      ${ if_check_no_phone_template.content }
+    show if: users[0].no_phone_number
 ---
 id: plaintiff email
 question: |
-  What is your email address?
+  What is ${ users[0].possessive("email address", person=2 if filing_as_individual else 3) }?
 subquestion: |
-  Court staff may need to contact you about your case. You should add an email address only if:
+  Court staff may need to contact ${ user_alt_label } about the case. You should add an email address only if:
 
-  * You have an email address,
+  * ${ users[0].subjective_pronoun_or_name(capitalize=True, person=2 if filing_as_individual else 3) } ${ users[0].does_verb("have", person=2 if filing_as_individual else 3) } an email address,
   * It is safe to share, **and**
-  * You are okay if other people see it.
+  * ${ users[0].subjective_pronoun_or_name(capitalize=True, person=2 if filing_as_individual else 3) } ${ users[0].does_verb("be", person=2 if filing_as_individual else 3) } okay if other people see it.
   
   ${ collapse_template(no_email_template) }
 fields:
@@ -892,7 +911,7 @@ id: defendant_information
 question: |
  Next, we need information about the defendant or defendants.
 subquestion: |
-  A defendant is a person or organization that owes you money.
+  A defendant is a person or organization that owes ${ user_alt_label } money.
 continue button field: defendant_information
 ---
 id: multiple_defendants
@@ -1045,18 +1064,20 @@ content: |
 ---
 id: reasons_for_your_claim
 question: |
-  What are the reasons for your claim?
+  What are the reasons for ${ users[0].possessive("claim", person=2 if filing_as_individual else 3) }?
 subquestion: |
   Include information such as:
   
-  * if you and the defendant had an agreement, what the agreement was;
-  * if you have anything in writing, state that and attach a copy;
+  * if ${ users[0].subjective_pronoun_or_name(person=2 if filing_as_individual else 3) } and the defendant had an agreement, what the agreement was;
+  * if ${ users[0].subjective_pronoun_or_name(person=2 if filing_as_individual else 3) } ${ users[0].does_verb("have", person=2 if filing_as_individual else 3) } anything in writing, state that and attach a copy;
   * what happened that caused the dispute;
   * when and where the dispute happened.
 
   Write in complete sentences. What you type will appear on the court form exactly as you write it.
 fields:
-  - Briefly describe what happened, what you think should happen in court, and why.: reasons_for_your_claim
+  - label: |
+      Briefly describe what happened, what ${ users[0].subjective_pronoun_or_name(person=2 if filing_as_individual else 3) } ${ users[0].does_verb("think", person=2 if filing_as_individual else 3) } should happen in court, and why.
+    field: reasons_for_your_claim
     datatype: area
 ---
 id: list_all_dates
