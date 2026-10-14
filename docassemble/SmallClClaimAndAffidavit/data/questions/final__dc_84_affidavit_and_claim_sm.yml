@@ -351,7 +351,7 @@ code: |
 ---
 code: |
   if filing_as_individual:
-    user_alt_label = "You"
+    user_alt_label = "you"
   elif not filing_as_individual and Who_are_you_filing_claim_for == "Another person":
     user_alt_label = users[0].name
   elif not filing_as_individual and (
@@ -430,10 +430,10 @@ question: |
     % if filing_as_individual: 
     You can't have a lawyer in a small claims case.
     % else: 
-    ${user_alt_label} can't have a lawyer in a small claims case.
+    ${capitalize(user_alt_label)} can't have a lawyer in a small claims case.
     % endif 
   % elif want_to_have_jury_trial:
-  ${user_alt_label} can't have a jury trial in a small claims case. 
+  ${capitalize(user_alt_label)} can't have a jury trial in a small claims case. 
   % else:
   You have tapped the option to leave.
   % endif
@@ -454,11 +454,11 @@ id: claims_kick_out
 event: claims_kick_out
 question: |
   % if claims_suit_against_state:
-  ${user_alt_label} can't file a Small Claims case against the state or a state agency.
+  ${capitalize(user_alt_label)} can't file a Small Claims case against the state or a state agency.
   % elif filing_as_individual:
-  ${user_alt_label} cannot file this case in Small Claims Court because ${user_alt_label if user_alt_label != 'You' else 'you'} were not directly involved in the transaction or dispute.
+  ${capitalize(user_alt_label)} cannot file this case in Small Claims Court because ${user_alt_label} were not directly involved in the transaction or dispute.
   % else:
-  ${user_alt_label} cannot file this case in Small Claims Court because ${user_alt_label if user_alt_label != 'You' else 'you'} was not directly involved in the transaction or dispute.
+  ${capitalize(user_alt_label)} cannot file this case in Small Claims Court because ${user_alt_label} was not directly involved in the transaction or dispute.
   % endif
 subquestion: |
   % if claims_suit_against_state:
@@ -466,7 +466,7 @@ subquestion: |
   % elif filing_as_individual:
   If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, you may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % else:
-  If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${user_alt_label if user_alt_label != 'You' else 'you'} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
+  If a party wants to sue but is not a party to the transaction or dispute, they may be able to file a claim in District or Circuit Court. If so, ${user_alt_label} may want to talk to a lawyer about starting a case in District or Circuit Court. You can use the [Guide to Legal Help](https://michiganlegalhelp.org/guide-to-legal-help) on Michigan Legal Help to find a lawyer or a legal services office in your area.
   % endif
   
   If you think you made a mistake, tap **Undo**. This will take you back to the previous screen and you can change your answer. Otherwise, tap the **Leave** button below to return to [Michigan Legal Help](https://michiganlegalhelp.org/).
@@ -657,9 +657,9 @@ id: warning_for_claim
 question: |
   Warning:
 subquestion: |
-  ${user_alt_label} can continue with the case even if you're asking for more money, but ${user_alt_label if user_alt_label != 'You' else 'you'} won't be able to get more than $7,000.
+  ${capitalize(user_alt_label)} can continue with the case even if you're asking for more money, but ${user_alt_label} won't be able to get more than $7,000.
   
-  If you want to sue for more than $7,000, ${user_alt_label if user_alt_label != 'You' else 'you'} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
+  If you want to sue for more than $7,000, ${user_alt_label} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
   
 fields:
   - Please select one of the following two options:: warning_for_claim
@@ -670,13 +670,13 @@ fields:
 ---
 id: claim for damages
 question: |
-  Is this claim for damages to ${user_alt_label if user_alt_label != 'You' else 'you'} by someone who harmed ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose?
+  Is this claim for damages to ${user_alt_label} by someone who harmed ${user_alt_label} on purpose?
 subquestion: |
   This includes things such as:
   
-  * fraud (someone tricked or deceived ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose)
-  * libel or slander (someone made an untrue statement about ${user_alt_label if user_alt_label != 'You' else 'you'} that hurts your reputation)
-  * assault & battery (someone threatened or hurt ${user_alt_label if user_alt_label != 'You' else 'you'})
+  * fraud (someone tricked or deceived ${user_alt_label} on purpose)
+  * libel or slander (someone made an untrue statement about ${user_alt_label} that hurts your reputation)
+  * assault & battery (someone threatened or hurt ${user_alt_label})
   * malicious destruction of property (someone damaged or destroyed ${'your' if user_alt_label == 'You' else user_alt_label}${"'s" if user_alt_label != 'You' else ""} property on purpose)
 fields:
   - Is this claim for harm done on purpose, like the examples listed above?: claim_for_damages
@@ -701,7 +701,7 @@ question: |
 subquestion: |
   There is an exception if the damage is because of:
   
-  * a dishonored check (a check someone wrote to ${user_alt_label if user_alt_label != 'You' else 'you'} that the bank did not pay)
+  * a dishonored check (a check someone wrote to ${user_alt_label} that the bank did not pay)
   * a consumer protection violation (harm by someone's deceptive business practices)
   * a recreational trespass (someone went on ${'your' if user_alt_label == 'You' else user_alt_label}${"'s" if user_alt_label != 'You' else ""} property without permission during a recreational activity)
   
@@ -736,7 +736,7 @@ continue button field: claim_for_damages_dont_know
 ---
 id: claim_for_damages_yes_kickout
 question: |
-  ${user_alt_label} cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery. 
+  ${capitalize(user_alt_label)} cannot file a case involving intentional wrongdoing, such as fraud, libel, slander, malicious destruction of property, or assault and battery. 
 subquestion: |
   You may want to talk to a lawyer about filing this claim in District or Circuit Court.
   
@@ -838,11 +838,7 @@ fields:
 ---
 id: cannot_file_case
 question: |
-  % if filing_as_individual:
-  You cannot file this case now.
-  % else:
-  ${user_alt_label} cannot file this case now.
-  % endif
+  ${capitalize(user_alt_label)} cannot file this case now.
 subquestion: |
   You can only file five cases a week in Small Claims Court. You can continue this interview if you wait at least a week before filing this case.
   
@@ -973,7 +969,7 @@ id: past_or_current_court_case
 question: |
   Past or current court cases
 fields:
-  - Is there a past or current court case between ${user_alt_label if user_alt_label != 'You' else 'you'} and ${ defendants[0].name.first }?: past_or_current_court_case
+  - Is there a past or current court case between ${user_alt_label} and ${ defendants[0].name.first }?: past_or_current_court_case
     datatype: yesnoradio
 ---
 id: about_same_thing_as_this_case
@@ -1291,7 +1287,7 @@ question: |
   What is ${user_alt_label}'s address?
   % endif
 subquestion: |
-  Use an address where ${user_alt_label if user_alt_label != 'You' else 'you'} can be contacted.
+  Use an address where ${user_alt_label} can be contacted.
 fields:
   - code: |
       users[0].address_fields(
