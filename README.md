@@ -8,7 +8,7 @@ Michigan Legal Help
 Lemma Legal
 
 ## Changelog:
-* 10/14/26 1.2.2 Add more specific language when user is not filing as an individual; refactor user_alt_label
+* 11/3/26  1.2.2 Add more specific language when user is not filing as an individual; refactor user_alt_label; remove assault example for businesses; remove unused code
 * 9/29/26  1.2.1 Add alt text for image
 * 9/9/26   1.2.0 Update for redesigned SCAO forms
 * 12/12/25 1.1.2 update embedded survey

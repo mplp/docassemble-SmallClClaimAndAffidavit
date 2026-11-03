@@ -47,12 +47,6 @@ code: |
   whats_next_text_message = "Text 2050 to (734) 275-2201 to get automated text messages about the next steps in a small claims case."
   cover_sheet_complete_1 = f"DO NOT sign your forms until you're in front of a notary or court clerk. Use our instructions to learn about next steps. Go to the next page in this document to see the instructions."
 ---
-template: survey_embed_script
-content: |
-  <script>
-    (function(t,e,s,n){var o,a,c;t.SMCX=t.SMCX||[],e.getElementById(n)||(o=e.getElementsByTagName(s),a=o[o.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,c.id=n,c.src="https://widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgd8qZ8ON_2FyjUqTzYvfSuztE7vEpVP2C_2FJMjMXs1rg97bC.js",a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");
-  </script>
----
 # set intro landing screen variables
 code: |
   MLH_form_type = "forms"
