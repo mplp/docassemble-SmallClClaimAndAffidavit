@@ -122,10 +122,6 @@ code: |
 
   ### claim amount limitations ###
   amount
-  if amount > 7000.00:
-    warning_for_claim
-    if warning_for_claim == "I would like to leave.":
-      existing_case_kickout
 
   ### claim for damages ###
   claim_for_damages
@@ -634,21 +630,6 @@ subquestion: |
   ${ multiple_plaintiffs_defendants_checkbox.show(width="100%") }
 continue button field: multiple_defendants_info
 ---
-id: warning_for_claim
-question: |
-  Warning:
-subquestion: |
-  ${user_alt_label} can continue with the case even if you're asking for more money, but ${user_alt_label if user_alt_label != 'You' else 'you'} won't be able to get more than $7,000.
-  
-  If you want to sue for more than $7,000, ${user_alt_label if user_alt_label != 'You' else 'you'} can file a case in District Court. You may want to talk to a lawyer about starting a case in District Court.
-  
-fields:
-  - Please select one of the following two options:: warning_for_claim
-    input type: radio
-    choices:
-      - I would like to leave.
-      - I understand that I can't get more than $7,000 in a small claims case, but I would like to continue.
----
 id: claim for damages
 question: |
   Is this claim for damages to ${user_alt_label if user_alt_label != 'You' else 'you'} by someone who harmed ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose?
@@ -657,7 +638,9 @@ subquestion: |
   
   * fraud (someone tricked or deceived ${user_alt_label if user_alt_label != 'You' else 'you'} on purpose)
   * libel or slander (someone made an untrue statement about ${user_alt_label if user_alt_label != 'You' else 'you'} that hurts your reputation)
+  % if filing_as_individual or Who_are_you_filing_claim_for == "Another person":
   * assault & battery (someone threatened or hurt ${user_alt_label if user_alt_label != 'You' else 'you'})
+  % endif
   * malicious destruction of property (someone damaged or destroyed ${'your' if user_alt_label == 'You' else user_alt_label}${"'s" if user_alt_label != 'You' else ""} property on purpose)
 fields:
   - Is this claim for harm done on purpose, like the examples listed above?: claim_for_damages
